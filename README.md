@@ -5,14 +5,17 @@ Java, HTML, and MySQL group project to demonstrate learning requirements for Dat
 ## Checkpoint Requirements
 - [ ] User authentication for different user roles.
     - [X] Member login.
-    - [ ] Employee login.
+    - [X] Employee login.
         - [ ] Access levels with different views.
 - [ ] Data entry forms - to add new data, modify existing data, and 'delete' data.
     - [X] Create / Register new member.
+    - [X] Create / Register new employee.
     - [X] Login portal for members.
+    - [X] Login portal for employee.
 - [ ] Triggers - At least 2.
 - [ ] Data queries - At least 3.
     - [X] Obtaining members and checking credentials for logging in.
+    - [X] Obtaining employees and checking credentials for logging in.
 - [ ] Data reports - At least 3.
     - [ ] Certain roles (access level) have access to this, not all preferably.
     - [ ] Reporting tools exist inside the database systems already.
