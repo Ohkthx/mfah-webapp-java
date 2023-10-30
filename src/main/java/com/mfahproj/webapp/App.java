@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.mfahproj.webapp.models.Employee;
+import com.mfahproj.webapp.models.Member;
 import com.sun.net.httpserver.HttpServer;
 
 public class App {
@@ -14,9 +16,10 @@ public class App {
     // 1000ms * 60 (seconds) * 15 = 15 minutes.
     private static final long TIMEOUT = 1000 * 60 * 15;
 
-    // Holds all of the current employee and member sessions.
+    // Holds all of the current employee and member sessions and timestamp.
+    private static long lastWipe = System.currentTimeMillis();
     private static Map<String, Member> member_sessions = new HashMap<>();
-    // private static Map<String, Employee> employee_sessions = new HashMap<>();
+    private static Map<String, Employee> employee_sessions = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         // This is processed before each request is made. Returns true if redirect
@@ -78,22 +81,29 @@ public class App {
         server.createContext("/login", new MiddlewareHandler(new LoginHandler(), callback));
 
         // Member Homepage
-        server.createContext("/home", new MiddlewareHandler(new HomeHandler(), callback));
+        server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
 
-        // Used for member registeration.
+        // Used for registeration.
         server.createContext("/register", new MiddlewareHandler(new RegisterHandler(), callback));
+        server.createContext("/register-employee", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
         server.setExecutor(null);
 
         // Start the server for listening.
         server.start();
     }
 
-    // Obtains a member session to track logins. Removes sessions the exceed a
-    // timeout to prevent old sessions being refreshed.
-    public static Member getSession(String uuid) {
+    // Checks and removes any expired sessions.
+    private static void checkExpiredSessions() {
+        long maxSeconds = 1000 * 15;
+        if (System.currentTimeMillis() - App.lastWipe < maxSeconds) {
+            // Don't bother processing yet.
+            return;
+        }
+
+        // Maximum age for a session.
         long oldest = System.currentTimeMillis() - App.TIMEOUT;
 
-        // Remove all sessions that exceed the current timeout.
+        // Remove all member sessions that exceed the current timeout.
         for (Map.Entry<String, Member> session : App.member_sessions.entrySet()) {
             Member member = session.getValue();
             if (member.getLastLogin().getTime() < oldest) {
@@ -101,6 +111,24 @@ public class App {
                 App.member_sessions.remove(session.getKey());
             }
         }
+
+        // Remove all employee sessions that exceed the current timeout.
+        for (Map.Entry<String, Employee> session : App.employee_sessions.entrySet()) {
+            Employee employee = session.getValue();
+            if (employee.getLastLogin().getTime() < oldest) {
+                System.out.printf("Expired session: %s\n", employee.getEmailAddress());
+                App.employee_sessions.remove(session.getKey());
+            }
+        }
+
+        // Update last wipe timestamp.
+        App.lastWipe = System.currentTimeMillis();
+    }
+
+    // Obtains a member session to track logins.
+    public static Member getMemberSession(String uuid) {
+        // Clear any expired sessions.
+        App.checkExpiredSessions();
 
         Member member = App.member_sessions.get(uuid);
         if (member == null) {
@@ -115,11 +143,37 @@ public class App {
         return member;
     }
 
-    public static String newSession(Member member) {
+    public static String newMemberSession(Member member) {
         // Create new session.
         String uuid = UUID.randomUUID().toString();
 
         App.member_sessions.put(uuid, member);
+        return uuid;
+    }
+
+    // Obtains a employee session to track logins.
+    public static Employee getEmployeeSession(String uuid) {
+        // Clear any expired sessions.
+        App.checkExpiredSessions();
+
+        Employee employee = App.employee_sessions.get(uuid);
+        if (employee == null) {
+            // No session found.
+            return null;
+        }
+
+        // Update the last login time for the employee to refresh session time.
+        employee.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+        App.employee_sessions.put(uuid, employee);
+
+        return employee;
+    }
+
+    public static String newEmployeeSession(Employee employee) {
+        // Create new session.
+        String uuid = UUID.randomUUID().toString();
+
+        App.employee_sessions.put(uuid, employee);
         return uuid;
     }
 }

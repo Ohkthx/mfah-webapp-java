@@ -1,11 +1,12 @@
 package com.mfahproj.webapp;
 
+import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class HomeHandler implements HttpHandler {
+public class EmployeeHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         // Extrack cookie and see if a valid session exists.
@@ -13,11 +14,11 @@ public class HomeHandler implements HttpHandler {
         if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
             String sessionId = sessionCookie.split("=")[1];
 
-            Member member = App.getSession(sessionId);
-            if (member != null) {
-                // Valid non-timeout sessions found. Send to member home page.
-                String response = Utils.readResourceFile("home.html");
-                response = response.replace("{{emailAddress}}", member.getEmailAddress());
+            Employee employee = App.getEmployeeSession(sessionId);
+            if (employee != null) {
+                // Valid non-timeout sessions found. Send to employee home page.
+                String response = Utils.readResourceFile("employee.html");
+                response = response.replace("{{emailAddress}}", employee.getEmailAddress());
 
                 exchange.sendResponseHeaders(200, response.length());
                 try (OutputStream os = exchange.getResponseBody()) {

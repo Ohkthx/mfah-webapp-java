@@ -1,4 +1,4 @@
-package com.mfahproj.webapp;
+package com.mfahproj.webapp.models;
 
 public class Member {
     // Types of memberships that exist.

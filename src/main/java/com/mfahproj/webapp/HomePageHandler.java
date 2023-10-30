@@ -2,6 +2,8 @@ package com.mfahproj.webapp;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import com.mfahproj.webapp.models.Member;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -12,10 +14,10 @@ public class HomePageHandler implements HttpHandler {
         if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
             String sessionId = sessionCookie.split("=")[1];
 
-            Member member = App.getSession(sessionId);
+            Member member = App.getMemberSession(sessionId);
             if (member != null) {
                 // Active member session found, redirect to the member home page.
-                exchange.getResponseHeaders().add("Location", "/home");
+                exchange.getResponseHeaders().add("Location", "/member");
                 exchange.sendResponseHeaders(302, -1);
                 return;
             }

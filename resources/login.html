@@ -5,24 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <style>
+        /* Optional basic styling */
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
+
 <body>
-    {{credentials}}
-    <h2>Login to Houston Museum of Fine Arts!</h2>
-    <form action="/login" method="post">
-        <div>
+    <div class="form-container">
+        {{credentials}}
+        <h2>Login to Houston Museum of Fine Arts!</h2>
+        <form action="/login" method="post">
             <label for="email">Email Address:</label>
             <input type="email" id="email" name="email" required>
-        </div>
-        <div>
+
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-        </div>
-        <div>
+
+            <label for="loginType">Login Type:</label>
+            <select name="loginType" id="loginType">
+                <option value="MEMBER">Member</option>
+                <option value="EMPLOYEE">Employee</option>
+            </select>
+
             <button type="submit">Login</button>
-        </div>
-    </form>
+        </form>
+    </div>
     <p>Don't have an account? <a href="/register">Register here!</a></p>
 </body>
 

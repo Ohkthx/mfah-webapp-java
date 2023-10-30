@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Map;
 
+import com.mfahproj.webapp.models.Employee;
+import com.mfahproj.webapp.models.Member;
+import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -42,30 +45,50 @@ public class LoginHandler implements HttpHandler {
         Map<String, String> inputs = Utils.parseForm(formData);
         String email = inputs.get("email");
         String password = inputs.get("password");
+        String loginType = inputs.get("loginType");
 
-        Member member = Database.getMember(email, password);
-        if (member != null) {
-            System.out.printf("%s logged in.\n", email);
+        String sessionId = null;
+        if (loginType.toUpperCase().equals("MEMBER")) {
+            Member member = Database.getMember(email, password);
+            if (member != null) {
+                System.out.printf("%s (member) logged in.\n", email);
 
-            // Update the last login.
-            member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-            // TODO: Need to reflect this to database.
+                // Update the last login.
+                member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+                // TODO: Need to reflect this to database.
 
-            // Create a session for the user
-            String sessionId = App.newSession(member);
+                // Create a session for the user
+                sessionId = App.newMemberSession(member);
+            }
+        } else {
+            Employee employee = Database.getEmployee(email, password);
+            if (employee != null) {
+                System.out.printf("%s (employee) logged in.\n", email);
+
+                // Update the last login.
+                employee.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+                // TODO: Need to reflect this to database.
+
+                // Create a session for the user
+                sessionId = App.newEmployeeSession(employee);
+            }
+        }
+
+        if (!StringUtils.isNullOrEmpty(sessionId)) {
             exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
-            exchange.getResponseHeaders().add("Location", "/home");
+            exchange.getResponseHeaders().add("Location", "/" + loginType.toLowerCase());
             exchange.sendResponseHeaders(302, -1);
             return;
-
         }
 
         // Member not found.
         System.out.printf("%s failed to logged in.\n", email);
+
         String response = Utils.readResourceFile("login.html");
         response = response.replace("{{credentials}}", "<p>Invalid credentials, please try again.</p>");
         exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
+        try (
+                OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }

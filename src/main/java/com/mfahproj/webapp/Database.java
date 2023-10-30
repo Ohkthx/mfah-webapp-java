@@ -3,6 +3,8 @@ package com.mfahproj.webapp;
 import java.sql.*;
 import java.util.Properties;
 
+import com.mfahproj.webapp.models.Employee;
+import com.mfahproj.webapp.models.Member;
 import com.mysql.cj.util.StringUtils;
 
 public class Database {
@@ -57,9 +59,14 @@ public class Database {
     }
 
     // Checks if a user has valid credentials, this wraps getMember().
-    public static boolean checkCredentials(String email, String password) {
-        Member member = Database.getMember(email, password);
-        return member == null ? false : true;
+    public static boolean checkCredentials(String email, String password, boolean isMember) {
+        if (isMember) {
+            Member member = Database.getMember(email, password);
+            return member == null ? false : true;
+        }
+
+        Employee employee = Database.getEmployee(email, password);
+        return employee == null ? false : true;
     }
 
     // Obtain a user from the database using credentials.
@@ -80,7 +87,7 @@ public class Database {
             // Execute the query
             results = pstmt.executeQuery();
 
-            // If a record exists, then the credentials are correct
+            // No next results means it failed.
             if (!results.next()) {
                 return null;
             }
@@ -128,7 +135,6 @@ public class Database {
                     + "(FirstName, LastName, MembershipType, BirthDate, EmailAddress, Password, LastLogin) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            System.out.println("CREATING NEW USER");
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, member.getFirstName());
             pstmt.setString(2, member.getLastName());
@@ -137,6 +143,111 @@ public class Database {
             pstmt.setString(5, member.getEmailAddress());
             pstmt.setString(6, member.getPassword());
             pstmt.setDate(7, member.getLastLogin());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a user from the database using credentials.
+    public static Employee getEmployee(String email, String password) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Employee WHERE EmailAddress = ? AND Password = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Employee employee = new Employee();
+            employee.setEmployeeId(results.getInt("EmployeeId"));
+            employee.setMuseumId(results.getInt("MuseumId"));
+            employee.setFirstName(results.getString("FirstName"));
+            employee.setLastName(results.getString("LastName"));
+            employee.setJobTitle(results.getString("JobTitle"));
+            employee.setPhoneNumber(results.getString("PhoneNumber"));
+            employee.setEmailAddress(results.getString("EmailAddress"));
+            employee.setPassword(results.getString("Password"));
+            employee.setSalary(results.getDouble("Salary"));
+            employee.setSupervisorId(results.getInt("SupervisorId"));
+            employee.setAccessLevel(results.getString("AccessLevel"));
+            employee.setLastLogin(results.getDate("LastLogin"));
+
+            return employee;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new employee in the database. Fails on duplicates.
+    public static Result createEmployee(Employee employee) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Employee "
+                    + "(FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, employee.getFirstName());
+            pstmt.setString(2, employee.getLastName());
+            pstmt.setString(3, employee.getJobTitle());
+            pstmt.setString(4, employee.getPhoneNumber());
+            pstmt.setString(5, employee.getEmailAddress());
+            pstmt.setString(6, employee.getPassword());
+            pstmt.setDouble(7, employee.getSalary());
+            pstmt.setInt(8, employee.getMuseumId());
+            pstmt.setInt(9, employee.getSupervisorId());
+            pstmt.setString(10, employee.getAccessLevel());
+            pstmt.setDate(11, employee.getLastLogin());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -157,7 +268,5 @@ public class Database {
                 e.printStackTrace();
             }
         }
-
     }
-
 }

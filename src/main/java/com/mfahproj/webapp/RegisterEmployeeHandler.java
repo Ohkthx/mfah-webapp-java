@@ -9,11 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class RegisterHandler implements HttpHandler {
+public class RegisterEmployeeHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -25,8 +25,8 @@ public class RegisterHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show register form for a new member.
-        String response = Utils.readResourceFile("register.html");
+        // Show register form for a new employee.
+        String response = Utils.readResourceFile("register-employee.html");
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -41,31 +41,31 @@ public class RegisterHandler implements HttpHandler {
 
         // Parse the form data to create a new user.
         Map<String, String> form = Utils.parseForm(formData);
-        Member member = RegisterHandler.createMember(form);
+        Employee employee = RegisterEmployeeHandler.createEmployee(form);
 
         String response;
-        switch (Database.createMember(member)) {
+        switch (Database.createEmployee(employee)) {
             case SUCCESS:
-                // Create a session for the new member.
-                String sessionId = App.newMemberSession(member);
+                // Create a session for the new employee.
+                String sessionId = App.newEmployeeSession(employee);
                 exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
-                exchange.getResponseHeaders().add("Location", "/member");
+                exchange.getResponseHeaders().add("Location", "/employee");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", member.getEmailAddress());
+                System.out.printf("%s created.\n", employee.getEmailAddress());
                 return;
             case DUPLICATE:
-                // Duplicate member detected, point them to login page.
-                System.out.printf("%s is a duplicate member.\n", member.getEmailAddress());
+                // Duplicate employee detected, point them to login page.
+                System.out.printf("%s is a duplicate employee.\n", employee.getEmailAddress());
                 response = "<body>"
-                        + "    <h4>Member already exists, please try to login.</h4>"
+                        + "    <h4>Employee already exists, please try to login.</h4>"
                         + "    <a href='/login'>Login</a>"
                         + "</body>";
 
                 break;
             default:
-                // Could not create member.
-                System.out.printf("%s failed to create.\n", member.getEmailAddress());
+                // Could not create employee.
+                System.out.printf("%s failed to create.\n", employee.getEmailAddress());
                 response = "An unknown error!";
         }
 
@@ -76,24 +76,41 @@ public class RegisterHandler implements HttpHandler {
         }
     }
 
-    // Creates a new member from the form data provided.
-    private static Member createMember(Map<String, String> form) {
-        Member member = new Member();
+    // Creates a new employee from the form data provided.
+    private static Employee createEmployee(Map<String, String> form) {
+        Employee employee = new Employee();
 
-        member.setEmailAddress(form.get("emailAddress"));
-        member.setPassword(form.get("password"));
-        member.setFirstName(form.get("firstName"));
-        member.setLastName(form.get("lastName"));
-        member.setMembershipType(form.get("membershipType").toUpperCase());
+        employee.setFirstName(form.get("firstName"));
+        employee.setLastName(form.get("lastName"));
+        employee.setJobTitle(form.get("jobTitle"));
+        employee.setPhoneNumber(form.get("phoneNumber"));
+        employee.setEmailAddress(form.get("emailAddress"));
+        employee.setPassword(form.get("password"));
+        employee.setAccessLevel(form.get("accessLevel"));
+        employee.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
 
-        // Convert and set dates.
-        member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-        Date birthDate = RegisterHandler.parseDate(form.get("birthDate"));
-        if (birthDate != null) {
-            member.setBirthDate(new java.sql.Date(birthDate.getTime()));
+        // Try to parse salary.
+        try {
+            employee.setSalary(Double.parseDouble(form.get("salary")));
+        } catch (Exception e) {
+            return null;
         }
 
-        return member;
+        // Try to parse museumId.
+        try {
+            employee.setMuseumId(Integer.parseInt(form.get("museumId")));
+        } catch (Exception e) {
+            return null;
+        }
+
+        // Try to parse supervisorId.
+        try {
+            employee.setSupervisorId(Integer.parseInt(form.get("supervisorId")));
+        } catch (Exception e) {
+            return null;
+        }
+
+        return employee;
     }
 
     // Parses a date from string into a usable format.
