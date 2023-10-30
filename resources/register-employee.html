@@ -101,12 +101,19 @@
 
 <body>
     <header>
-        <h1>Register as a Member for Houston Museum of Fine Arts</h1>
+        <h1>Join the MFAH Family!</h1>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        {{clientLoggedIn}}
+        <a href="/register">Member Registration</a>
+        <a href="/register-employee">Employee Registration</a>
+        <a href="/logout">Logout</a>
+    </nav>
     <main>
         <div class="form-container">
-            <h2>Register as an Employee</h2>
-            <p>Click <a href="/register">here</a> if you're a member</p>
+            <h2>Begin your journey by filling out the registration form below.</h2>
+            <p>Click <a href="/register">here</a> if you're looking to become a member.</p>
             <form action="/register-employee" method="post">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" name="firstName" required>

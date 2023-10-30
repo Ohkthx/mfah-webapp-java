@@ -72,17 +72,18 @@ public class App {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
         // Homepage
-        server.createContext("/", new MiddlewareHandler(new HomePageHandler(), callback));
+        server.createContext("/", new MiddlewareHandler(new HomeHandler(), callback));
 
-        // Login Page
+        // Login / Logout Page
         server.createContext("/login", new MiddlewareHandler(new LoginHandler(), callback));
+        server.createContext("/logout", new MiddlewareHandler(new LogoutHandler(), callback));
 
         // Homepages
         server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
         server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
 
         // Used for registeration.
-        server.createContext("/register", new MiddlewareHandler(new RegisterHandler(), callback));
+        server.createContext("/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));
         server.createContext("/register-employee", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
         server.setExecutor(null);
 
@@ -106,7 +107,7 @@ public class App {
             Member member = session.getValue();
             if (member.getLastLogin().getTime() < oldest) {
                 System.out.printf("Expired session: %s\n", member.getEmailAddress());
-                App.member_sessions.remove(session.getKey());
+                App.killSession(session.getKey());
             }
         }
 
@@ -115,7 +116,7 @@ public class App {
             Employee employee = session.getValue();
             if (employee.getLastLogin().getTime() < oldest) {
                 System.out.printf("Expired session: %s\n", employee.getEmailAddress());
-                App.employee_sessions.remove(session.getKey());
+                App.killSession(session.getKey());
             }
         }
 
@@ -133,7 +134,7 @@ public class App {
 
         if (member.getLastLogin().getTime() < System.currentTimeMillis() - App.TIMEOUT) {
             // Timeout exceeded, remove the session and redirect to timeout page.
-            App.member_sessions.remove(uuid);
+            App.killSession(uuid);
             return true;
         }
 
@@ -153,7 +154,7 @@ public class App {
 
         if (employee.getLastLogin().getTime() < System.currentTimeMillis() - App.TIMEOUT) {
             // Timeout exceeded, remove the session and redirect to timeout page.
-            App.employee_sessions.remove(uuid);
+            App.killSession(uuid);
             return true;
         }
 
@@ -181,6 +182,7 @@ public class App {
         return member;
     }
 
+    // Create new member session.
     public static String newMemberSession(Member member) {
         // Create new session.
         String uuid = UUID.randomUUID().toString();
@@ -207,11 +209,18 @@ public class App {
         return employee;
     }
 
+    // Creates a new employee session.
     public static String newEmployeeSession(Employee employee) {
         // Create new session.
         String uuid = UUID.randomUUID().toString();
 
         App.employee_sessions.put(uuid, employee);
         return uuid;
+    }
+
+    // Kill all sessions by UUID session.
+    public static void killSession(String uuid) {
+        App.member_sessions.remove(uuid);
+        App.employee_sessions.remove(uuid);
     }
 }

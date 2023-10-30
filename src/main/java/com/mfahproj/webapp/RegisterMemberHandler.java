@@ -13,7 +13,7 @@ import com.mfahproj.webapp.models.Member;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class RegisterHandler implements HttpHandler {
+public class RegisterMemberHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -25,8 +25,38 @@ public class RegisterHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
+        // Check if a valid session currently exists.
+        boolean isMember = true;
+        String sessionId = null;
+        String sessionCookie = exchange.getRequestHeaders().getFirst("Cookie");
+        if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
+            sessionId = sessionCookie.split("=")[1];
+            if (App.getMemberSession(sessionId) == null) {
+                if (App.getEmployeeSession(sessionId) == null) {
+                    // No active sessions found.
+                    sessionId = null;
+                } else {
+                    // Is not a member but has an active session.
+                    isMember = false;
+                }
+            }
+        }
+
+        // Modify the 'Profile/Login' navigation menu to change if client is logged in
+        String path = "";
+        if (sessionId == null) {
+            path = String.format("<a href=\"/%s\">%s</a>", "login", "Login");
+        } else {
+            String text = isMember ? "member" : "employee";
+            path = String.format("<a href=\"/%s\">%s</a>", text, "Profile");
+        }
+
         // Show register form for a new member.
         String response = Utils.readResourceFile("register.html");
+
+        // Edit the placeholders with dynamic text.
+        response = response.replace("{{clientLoggedIn}}", path);
+
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -41,7 +71,7 @@ public class RegisterHandler implements HttpHandler {
 
         // Parse the form data to create a new user.
         Map<String, String> form = Utils.parseForm(formData);
-        Member member = RegisterHandler.createMember(form);
+        Member member = RegisterMemberHandler.createMember(form);
 
         String response;
         switch (Database.createMember(member)) {
@@ -88,7 +118,7 @@ public class RegisterHandler implements HttpHandler {
 
         // Convert and set dates.
         member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-        Date birthDate = RegisterHandler.parseDate(form.get("birthDate"));
+        Date birthDate = RegisterMemberHandler.parseDate(form.get("birthDate"));
         if (birthDate != null) {
             member.setBirthDate(new java.sql.Date(birthDate.getTime()));
         }

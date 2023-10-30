@@ -70,15 +70,21 @@
 
 <body>
     <header>
-        <h1>MFAH Portal</h1>
+        <h1>MFAH Online Portal</h1>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        {{clientLoggedIn}}
+        <a href="/register">Member Registration</a>
+        <a href="/register-employee">Employee Registration</a>
+        <a href="/logout">Logout</a>
+    </nav>
     <main>
         <section>
-            <h2>Login to MFAH Online Portal!</h2>
-            <nav>
-                <a href='/login'>Login</a>
-                <a href='/register'>Register</a>
-            </nav>
+            <h2>Welcome to MFAH Database Systems Group Project!</h2>
+            <p>Here we demonstrate the objectives we have learned and attempted to master. More information is available
+                on the GitHub repository below.
+            </p>
         </section>
     </main>
     <footer>

@@ -103,6 +103,13 @@
     <header>
         <h1>Login to Houston Museum of Fine Arts!</h1>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        {{clientLoggedIn}}
+        <a href="/register">Member Registration</a>
+        <a href="/register-employee">Employee Registration</a>
+        <a href="/logout">Logout</a>
+    </nav>
     <main>
         <div class="form-container">
             {{credentials}}

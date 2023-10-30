@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member's Home</title>
+    <title>Logout</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("https://static.mfah.com/images/kinder-building-from-above.4932242836019972711.jpg?width=1680");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         header {
@@ -67,33 +70,17 @@
 
 <body>
     <header>
-        <h1>Welcome {{emailAddress}} to the MFAH Member Portal</h1>
+        <h1>Session Logout</h1>
     </header>
     <nav>
         <a href="/">Home</a>
-        <a href="/member">Profile</a>
-        <a href="notifications.html">Notifications</a>
-        <a href="/logout">Logout</a>
+        <a href="/login">Login</a>
+        <a href="/register">Member Registration</a>
+        <a href="/register-employee">Employee Registration</a>
     </nav>
     <main>
         <section>
-            <h2>Announcements</h2>
-            <p>Placeholder annoucement information.</p>
-        </section>
-
-        <section>
-            <h2>Your Details</h2>
-            <ul>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Update Profile</h2>
-            <p>Be sure to keep your profile update to date. <a href="update_member.html">Update now!</a></p>
+            <p>Please login in again to start a new session.</p>
         </section>
     </main>
     <footer>
