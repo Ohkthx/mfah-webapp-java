@@ -33,28 +33,25 @@ public class App {
 
             // Get the members session.
             String sessionId = sessionCookie.split("=")[1];
-            Member member = App.member_sessions.get(sessionId);
-            if (member == null) {
-                // No session found.
-                return false;
+
+            boolean hadExpiration = false;
+            if (App.checkMemberExpiration(sessionId)) {
+                hadExpiration = true;
+            } else if (App.checkEmployeeExpiration(sessionId)) {
+                hadExpiration = true;
             }
 
-            if (member.getLastLogin().getTime() < System.currentTimeMillis() - App.TIMEOUT) {
-                // Timeout exceeded, remove the session and redirect to timeout page.
-                App.member_sessions.remove(sessionId);
-
+            if (hadExpiration) {
                 // Redirect to timeout page.
                 String response = Utils.readResourceFile("timeout.html");
                 exchange.sendResponseHeaders(200, response.length());
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(response.getBytes());
                 }
+
                 return true;
             }
 
-            // Refresh the user session.
-            member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-            App.member_sessions.put(sessionId, member);
             return false;
         };
 
@@ -80,8 +77,9 @@ public class App {
         // Login Page
         server.createContext("/login", new MiddlewareHandler(new LoginHandler(), callback));
 
-        // Member Homepage
+        // Homepages
         server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
+        server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
 
         // Used for registeration.
         server.createContext("/register", new MiddlewareHandler(new RegisterHandler(), callback));
@@ -123,6 +121,46 @@ public class App {
 
         // Update last wipe timestamp.
         App.lastWipe = System.currentTimeMillis();
+    }
+
+    // Checks if the member expired, returns 'true' if so.
+    private static boolean checkMemberExpiration(String uuid) {
+        Member member = App.member_sessions.get(uuid);
+        if (member == null) {
+            // No session found.
+            return false;
+        }
+
+        if (member.getLastLogin().getTime() < System.currentTimeMillis() - App.TIMEOUT) {
+            // Timeout exceeded, remove the session and redirect to timeout page.
+            App.member_sessions.remove(uuid);
+            return true;
+        }
+
+        // Refresh the user session.
+        member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+        App.member_sessions.put(uuid, member);
+        return false;
+    }
+
+    // Checks if the employee expired, returns 'true' if so.
+    private static boolean checkEmployeeExpiration(String uuid) {
+        Employee employee = App.employee_sessions.get(uuid);
+        if (employee == null) {
+            // No session found.
+            return false;
+        }
+
+        if (employee.getLastLogin().getTime() < System.currentTimeMillis() - App.TIMEOUT) {
+            // Timeout exceeded, remove the session and redirect to timeout page.
+            App.employee_sessions.remove(uuid);
+            return true;
+        }
+
+        // Refresh the user session.
+        employee.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+        App.employee_sessions.put(uuid, employee);
+        return false;
     }
 
     // Obtains a member session to track logins.

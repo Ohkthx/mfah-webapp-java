@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import com.mfahproj.webapp.models.Employee;
@@ -93,6 +90,7 @@ public class RegisterEmployeeHandler implements HttpHandler {
         try {
             employee.setSalary(Double.parseDouble(form.get("salary")));
         } catch (Exception e) {
+            System.err.println("Unable to parse salary.");
             return null;
         }
 
@@ -100,6 +98,7 @@ public class RegisterEmployeeHandler implements HttpHandler {
         try {
             employee.setMuseumId(Integer.parseInt(form.get("museumId")));
         } catch (Exception e) {
+            System.err.println("Unable to parse Museum Id.");
             return null;
         }
 
@@ -107,21 +106,10 @@ public class RegisterEmployeeHandler implements HttpHandler {
         try {
             employee.setSupervisorId(Integer.parseInt(form.get("supervisorId")));
         } catch (Exception e) {
+            System.err.println("Unable to parse Supervisor Id.");
             return null;
         }
 
         return employee;
-    }
-
-    // Parses a date from string into a usable format.
-    private static Date parseDate(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            return sdf.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 }
