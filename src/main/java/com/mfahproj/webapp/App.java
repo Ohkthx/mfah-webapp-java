@@ -46,6 +46,9 @@ public class App {
         // Set the database variables.
         Database.setConfiguration(config);
 
+        // Create a thread responsible for just purging expired sessions.
+        Session.startScheduler();
+
         // Create the HTTP server and URIs to handle.
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 

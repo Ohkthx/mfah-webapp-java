@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
@@ -13,17 +16,29 @@ import com.sun.net.httpserver.HttpExchange;
 public class Session {
     // Time until sessions expires with no refreshing.
     // 1000ms * 60 (seconds) * 15 = 15 minutes.
-    private static final long TIMEOUT = 1000 * 60 * 2;
+    private static final long TIMEOUT = 1000 * 60 * 15;
 
     // Holds all of the current employee and member sessions and timestamp.
-    private static long lastWipe = System.currentTimeMillis();
     private static Map<String, Member> member_sessions = new HashMap<>();
     private static Map<String, Employee> employee_sessions = new HashMap<>();
 
     // Controls access to the share referenes.
-    private static Semaphore semWipe = new Semaphore(1, true);
     private static Semaphore semMember = new Semaphore(1, true);
     private static Semaphore semEmployee = new Semaphore(1, true);
+
+    // Starts a scheduled task the cleans up expired sessions.
+    public static void startScheduler() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        Runnable task = new Runnable() {
+            public void run() {
+                System.out.println("Purging expired sessions.");
+                Session.purgeExpiredSessions();
+                System.out.println("Purging expired sessions, complete.");
+            }
+        };
+
+        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.HOURS);
+    }
 
     // Check if a session exists locally.
     public static boolean exists(String sessionId) {
@@ -231,22 +246,7 @@ public class Session {
     // CHECKERs
 
     // Checks and removes any expired sessions.
-    private static void purgeExpiredSessions() {
-        // Prevents
-        long maxSeconds = 1000 * 15;
-        try {
-            Session.semWipe.acquire();
-            if (System.currentTimeMillis() - Session.lastWipe < maxSeconds) {
-                // Don't bother processing yet.
-                return;
-            }
-
-        } catch (Exception e) {
-            System.err.println("Interrupted while waiting for lock obtaining last wipe.");
-        } finally {
-            Session.semWipe.release();
-        }
-
+    public static void purgeExpiredSessions() {
         // Obtain all current member sessions.
         Set<String> sessions = null;
         try {
@@ -289,17 +289,6 @@ public class Session {
                     System.out.printf("Expired session: %s\n", sessionId);
                 }
             }
-        }
-
-        // Update last wipe timestamp.
-        try {
-            Session.semWipe.acquire();
-            Session.lastWipe = System.currentTimeMillis();
-
-        } catch (Exception e) {
-            System.err.println("Interrupted while waiting for lock updating last wipe.");
-        } finally {
-            Session.semWipe.release();
         }
     }
 
