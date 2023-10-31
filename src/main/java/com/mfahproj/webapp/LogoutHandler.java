@@ -17,10 +17,9 @@ public class LogoutHandler implements HttpHandler {
         String response = Utils.readResourceFile("logout.html");
 
         // Kill the session.
-        String sessionCookie = exchange.getRequestHeaders().getFirst("Cookie");
-        if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
-            String sessionId = sessionCookie.split("=")[1];
-            App.killSession(sessionId);
+        String sessionId = Session.extractSessionId(exchange);
+        if (sessionId != null) {
+            Session.killSession(sessionId);
         }
 
         exchange.sendResponseHeaders(200, response.length());

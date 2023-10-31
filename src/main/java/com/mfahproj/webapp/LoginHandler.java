@@ -57,7 +57,7 @@ public class LoginHandler implements HttpHandler {
                 // TODO: Need to reflect this to database.
 
                 // Create a session for the user
-                sessionId = App.newMemberSession(member);
+                sessionId = Session.newMemberSession(member);
             }
         } else {
             Employee employee = Database.getEmployee(email, password);
@@ -69,13 +69,14 @@ public class LoginHandler implements HttpHandler {
                 // TODO: Need to reflect this to database.
 
                 // Create a session for the user
-                sessionId = App.newEmployeeSession(employee);
+                sessionId = Session.newEmployeeSession(employee);
             }
         }
 
         String location = "/" + loginType.toLowerCase();
         if (!StringUtils.isNullOrEmpty(sessionId)) {
-            exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
+            String cookie = String.format("SESSIONID=%s; Max-Age=%d", sessionId, 900);
+            exchange.getResponseHeaders().add("Set-Cookie", cookie);
             exchange.getResponseHeaders().add("Location", location);
             exchange.sendResponseHeaders(302, -1);
             return;

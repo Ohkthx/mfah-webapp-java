@@ -80,18 +80,14 @@ public class Utils {
     public static String dynamicNavigator(HttpExchange exchange, String filename) throws IOException {
         // Check if a valid session currently exists.
         boolean isMember = true;
-        String sessionId = null;
-        String sessionCookie = exchange.getRequestHeaders().getFirst("Cookie");
-        if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
-            sessionId = sessionCookie.split("=")[1];
-            if (App.getMemberSession(sessionId) == null) {
-                if (App.getEmployeeSession(sessionId) == null) {
-                    // No active sessions found.
-                    sessionId = null;
-                } else {
-                    // Is not a member but has an active session.
-                    isMember = false;
-                }
+        String sessionId = Session.extractSessionId(exchange);
+        if (Session.getMemberSession(sessionId) == null) {
+            if (Session.getEmployeeSession(sessionId) == null) {
+                // No active sessions found.
+                sessionId = null;
+            } else {
+                // Is not a member but has an active session.
+                isMember = false;
             }
         }
 

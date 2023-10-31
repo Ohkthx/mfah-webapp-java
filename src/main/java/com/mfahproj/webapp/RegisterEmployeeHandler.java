@@ -51,8 +51,9 @@ public class RegisterEmployeeHandler implements HttpHandler {
         switch (Database.createEmployee(employee)) {
             case SUCCESS:
                 // Create a session for the new employee.
-                String sessionId = App.newEmployeeSession(employee);
-                exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
+                String sessionId = Session.newEmployeeSession(employee);
+                String cookie = String.format("SESSIONID=%s; Max-Age=%d", sessionId, 900);
+                exchange.getResponseHeaders().add("Set-Cookie", cookie);
                 exchange.getResponseHeaders().add("Location", "/employee");
                 exchange.sendResponseHeaders(302, -1);
 
