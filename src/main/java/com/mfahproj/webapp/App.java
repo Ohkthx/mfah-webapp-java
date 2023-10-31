@@ -73,6 +73,7 @@ public class App {
 
         // Homepage
         server.createContext("/", new MiddlewareHandler(new HomeHandler(), callback));
+        server.createContext("/not-implemented", new MiddlewareHandler(new NotImplementedHandler(), callback));
 
         // Login / Logout Page
         server.createContext("/login", new MiddlewareHandler(new LoginHandler(), callback));

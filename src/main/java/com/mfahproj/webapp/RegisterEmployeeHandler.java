@@ -22,37 +22,11 @@ public class RegisterEmployeeHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Check if a valid session currently exists.
-        boolean isMember = true;
-        String sessionId = null;
-        String sessionCookie = exchange.getRequestHeaders().getFirst("Cookie");
-        if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
-            sessionId = sessionCookie.split("=")[1];
-            if (App.getMemberSession(sessionId) == null) {
-                if (App.getEmployeeSession(sessionId) == null) {
-                    // No active sessions found.
-                    sessionId = null;
-                } else {
-                    // Is not a member but has an active session.
-                    isMember = false;
-                }
-            }
-        }
-
-        // Modify the 'Profile/Login' navigation menu to change if client is logged in
-        String path = "";
-        if (sessionId == null) {
-            path = String.format("<a href=\"/%s\">%s</a>", "login", "Login");
-        } else {
-            String text = isMember ? "member" : "employee";
-            path = String.format("<a href=\"/%s\">%s</a>", text, "Profile");
-        }
-
         // Show register form for a new member.
-        String response = Utils.readResourceFile("register-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "register-employee.html");
 
         // Edit the placeholders with dynamic text.
-        response = response.replace("{{clientLoggedIn}}", path);
+        response = response.replace("{{credentials}}", "");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -70,7 +44,10 @@ public class RegisterEmployeeHandler implements HttpHandler {
         Map<String, String> form = Utils.parseForm(formData);
         Employee employee = RegisterEmployeeHandler.createEmployee(form);
 
-        String response;
+        // TODO: Make sure the supervisor Id and museum Id are valid.
+
+        // Load register form.
+        String response = Utils.dynamicNavigator(exchange, "register-employee.html");
         switch (Database.createEmployee(employee)) {
             case SUCCESS:
                 // Create a session for the new employee.
@@ -84,16 +61,12 @@ public class RegisterEmployeeHandler implements HttpHandler {
             case DUPLICATE:
                 // Duplicate employee detected, point them to login page.
                 System.out.printf("%s is a duplicate employee.\n", employee.getEmailAddress());
-                response = "<body>"
-                        + "    <h4>Employee already exists, please try to login.</h4>"
-                        + "    <a href='/login'>Login</a>"
-                        + "</body>";
-
+                response = response.replace("{{credentials}}", "<b style='color:red;'>Member already exists.</b>");
                 break;
             default:
                 // Could not create employee.
                 System.out.printf("%s failed to create.\n", employee.getEmailAddress());
-                response = "An unknown error!";
+                response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
         // Send the response based on the error.
@@ -118,7 +91,7 @@ public class RegisterEmployeeHandler implements HttpHandler {
 
         // Try to parse salary.
         try {
-            employee.setSalary(Double.parseDouble(form.get("salary")));
+            employee.setSalary(Double.parseDouble(form.get("salary").replace(",", "")));
         } catch (Exception e) {
             System.err.println("Unable to parse salary.");
             return null;
@@ -142,4 +115,5 @@ public class RegisterEmployeeHandler implements HttpHandler {
 
         return employee;
     }
+
 }

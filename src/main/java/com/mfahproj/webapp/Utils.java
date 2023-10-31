@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.mysql.cj.util.StringUtils;
+import com.sun.net.httpserver.HttpExchange;
 
 public class Utils {
     // Loads configuration file.
@@ -74,5 +75,36 @@ public class Utils {
         }
 
         return parsedData;
+    }
+
+    public static String dynamicNavigator(HttpExchange exchange, String filename) throws IOException {
+        // Check if a valid session currently exists.
+        boolean isMember = true;
+        String sessionId = null;
+        String sessionCookie = exchange.getRequestHeaders().getFirst("Cookie");
+        if (sessionCookie != null && sessionCookie.startsWith("SESSIONID=")) {
+            sessionId = sessionCookie.split("=")[1];
+            if (App.getMemberSession(sessionId) == null) {
+                if (App.getEmployeeSession(sessionId) == null) {
+                    // No active sessions found.
+                    sessionId = null;
+                } else {
+                    // Is not a member but has an active session.
+                    isMember = false;
+                }
+            }
+        }
+
+        // Modify the 'Profile/Login' navigation menu to change if client is logged in
+        String path = "";
+        if (sessionId == null) {
+            path = String.format("<a href=\"/%s\">%s</a>", "login", "Login");
+        } else {
+            String text = isMember ? "member" : "employee";
+            path = String.format("<a href=\"/%s\">%s</a>", text, "Profile");
+        }
+
+        String resource = Utils.readResourceFile(filename);
+        return resource.replace("{{clientLoggedIn}}", path);
     }
 }
