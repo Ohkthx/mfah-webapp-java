@@ -16,6 +16,7 @@ public class MemberHandler implements HttpHandler {
             // Valid non-timeout sessions found. Send to member home page.
             String response = Utils.readResourceFile("member.html");
             response = response.replace("{{emailAddress}}", member.getEmailAddress());
+            response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
 
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
@@ -27,5 +28,16 @@ public class MemberHandler implements HttpHandler {
         // No prior session, send to login page.
         exchange.getResponseHeaders().add("Location", "/login");
         exchange.sendResponseHeaders(302, -1);
+    }
+
+    private static String getDetails(Member member) {
+        return "<ul>"
+                + String.format("\t<li>First name: %s</li>", member.getFirstName())
+                + String.format("\t<li>Last name: %s</li>", member.getLastName())
+                + String.format("\t<li>Birth date: %s</li>", member.getBirthDate())
+                + String.format("\t<li>Email address: %s</li>", member.getEmailAddress())
+                + String.format("\t<li>Membership: %s</li>", member.getMembershipType())
+                + String.format("\t<li>Last login: %s</li>", member.getLastLogin())
+                + "</ul>";
     }
 }

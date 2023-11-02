@@ -65,6 +65,17 @@
             bottom: 0;
             width: 100%;
         }
+
+        .panes {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pane-left,
+        .pane-right {
+            flex: 1;
+            margin: 0 1rem;
+        }
     </style>
 </head>
 
@@ -79,25 +90,33 @@
         <a href="/logout">Logout</a>
     </nav>
     <main>
-        <section>
-            <h2>Announcements</h2>
-            <p>Placeholder annoucement information.</p>
-        </section>
+        <div class="panes">
+            <div class="pane-left">
+                <section>
+                    <h2>Announcements</h2>
+                    <p>Placeholder annoucement information.</p>
+                </section>
 
-        <section>
-            <h2>Your Details</h2>
-            <ul>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-                <li>Placeholder list item</li>
-            </ul>
-        </section>
+                <section>
+                    <h2>Your Access</h2>
+                    <ul>
+                        <li>Placeholder list item</li>
+                    </ul>
+                </section>
+            </div>
 
-        <section>
-            <h2>Update Profile</h2>
-            <p>Be sure to keep your profile up to date. <a href="/not-implemented">Update now!</a></p>
-        </section>
+            <div class="pane-right">
+                <section>
+                    <h2>Your Details</h2>
+                    {{memberDetails}}
+                </section>
+                <section>
+                    <h2>Update Profile</h2>
+                    <p>Be sure to keep your profile up to date. <a href="/member/edit">Update now!</a></p>
+                </section>
+                <!-- You can add more sections or content here for the right pane -->
+            </div>
+        </div>
     </main>
     <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>

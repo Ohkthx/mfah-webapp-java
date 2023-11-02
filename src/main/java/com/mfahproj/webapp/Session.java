@@ -209,7 +209,7 @@ public class Session {
     }
 
     // Assigns or updates a members session.
-    private static void updateMemberSession(String sessionId, Member member) {
+    public static void updateMemberSession(String sessionId, Member member) {
         if (sessionId == null) {
             return;
         }
@@ -226,7 +226,7 @@ public class Session {
     }
 
     // Assigns or updates an employees session.
-    private static void updateEmployeeSession(String sessionId, Employee employee) {
+    public static void updateEmployeeSession(String sessionId, Employee employee) {
         if (sessionId == null) {
             return;
         }

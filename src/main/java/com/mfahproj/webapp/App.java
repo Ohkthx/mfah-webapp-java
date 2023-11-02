@@ -30,6 +30,8 @@ public class App {
 
         // Homepage
         server.createContext("/", new MiddlewareHandler(new HomeHandler(), callback));
+        server.createContext("/failure", new MiddlewareHandler(new FailureHandler(), callback));
+        server.createContext("/success", new MiddlewareHandler(new SuccessHandler(), callback));
 
         // Login / Logout Page
         server.createContext("/login", new MiddlewareHandler(new LoginHandler(), callback));
@@ -39,12 +41,14 @@ public class App {
         server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
         server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
 
-        // Used for registeration.
+        // Used for registration.
         server.createContext("/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));
         server.createContext("/register-employee", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
-
-        // Used for artifact registeration.
         server.createContext("/register-artifact", new MiddlewareHandler(new ArtifactHandler(), callback));
+
+        // Used for editing content.
+        server.createContext("/member/edit", new MiddlewareHandler(new EditMemberHandler(), callback));
+        server.createContext("/employee/edit", new MiddlewareHandler(new EditEmployeeHandler(), callback));
 
         server.setExecutor(null);
 

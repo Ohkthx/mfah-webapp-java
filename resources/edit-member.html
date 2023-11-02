@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Update Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,12 +48,43 @@
             margin: auto;
         }
 
-        section {
+        .form-container {
             background-color: #fff;
             padding: 1rem;
-            margin-bottom: 1rem;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         footer {
@@ -70,7 +101,7 @@
 
 <body>
     <header>
-        <h1>Not Implemented</h1>
+        <h1>Update your profile!</h1>
     </header>
     <nav>
         <a href="/">Home</a>
@@ -80,14 +111,29 @@
         <a href="/logout">Logout</a>
     </nav>
     <main>
-        <section>
-            <h2>The feature you selected is currently not implemented!</h2>
-            <p>This is a placeholder instead of an ugly screen.</p>
-        </section>
+        <div class="form-container">
+            {{credentials}}
+            <h2>Edit your profile and change your details.</h2>
+            <form action="/member/edit" method="post">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName">
+
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+
+                <label for="emailAddress">Email address:</label>
+                <input type="email" id="emailAddress" name="emailAddress">
+
+                <button type="submit">Complete Changes</button>
+            </form>
+        </div>
     </main>
-    <footer>
+    <!-- <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>

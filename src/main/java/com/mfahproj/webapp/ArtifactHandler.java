@@ -59,9 +59,8 @@ public class ArtifactHandler implements HttpHandler {
         String response;
         switch (Database.createArtifact(artifact)) {
             case SUCCESS:
-
                 // Artifact created
-                exchange.getResponseHeaders().add("Location", "/employee");
+                exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
                 System.out.printf("%s created.\n", artifact.getArtifactId());

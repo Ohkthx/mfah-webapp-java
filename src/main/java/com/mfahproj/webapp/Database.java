@@ -131,7 +131,7 @@ public class Database {
             // Connect to the database
             conn = Database.connect();
 
-            // Prepare a SQL query to check the credentials
+            // Prepare a SQL query to create member.
             String sql = "INSERT INTO Members "
                     + "(FirstName, LastName, MembershipType, BirthDate, EmailAddress, Password, LastLogin) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -157,6 +157,103 @@ public class Database {
         } finally {
             // Cleanup all of the connections and resources.
             try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing member in the database.
+    public static Result editMember(Member member) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to update.
+            String sql = "UPDATE Members "
+                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ? "
+                    + "WHERE MemberId = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, member.getFirstName());
+            pstmt.setString(2, member.getLastName());
+            pstmt.setString(3, member.getPassword());
+            pstmt.setString(4, member.getEmailAddress());
+            pstmt.setInt(5, member.getMemberId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a user from the database using Id.
+    public static Employee getEmployee(int employeeId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Employee WHERE EmployeeId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, employeeId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Employee employee = new Employee();
+            employee.setEmployeeId(results.getInt("EmployeeId"));
+            employee.setMuseumId(results.getInt("MuseumId"));
+            employee.setFirstName(results.getString("FirstName"));
+            employee.setLastName(results.getString("LastName"));
+            employee.setJobTitle(results.getString("JobTitle"));
+            employee.setPhoneNumber(results.getString("PhoneNumber"));
+            employee.setEmailAddress(results.getString("EmailAddress"));
+            employee.setPassword(results.getString("Password"));
+            employee.setSalary(results.getDouble("Salary"));
+            employee.setSupervisorId(results.getInt("SupervisorId"));
+            employee.setAccessLevel(results.getString("AccessLevel"));
+            employee.setLastLogin(results.getDate("LastLogin"));
+
+            return employee;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
                 if (pstmt != null)
                     pstmt.close();
                 if (conn != null)
@@ -249,6 +346,48 @@ public class Database {
             pstmt.setInt(9, employee.getSupervisorId());
             pstmt.setString(10, employee.getAccessLevel());
             pstmt.setDate(11, employee.getLastLogin());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing employee in the database.
+    public static Result editEmployee(Employee employee) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "UPDATE Employee "
+                    + "SET FirstName = ?, LastName = ?, Password = ?, PhoneNumber = ? "
+                    + "WHERE EmployeeId = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, employee.getFirstName());
+            pstmt.setString(2, employee.getLastName());
+            pstmt.setString(3, employee.getPassword());
+            pstmt.setString(4, employee.getPhoneNumber());
+            pstmt.setInt(5, employee.getEmployeeId());
 
             // Execute the query
             pstmt.executeUpdate();
