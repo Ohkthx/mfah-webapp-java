@@ -1,8 +1,9 @@
-package com.mfahproj.webapp;
+package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.mfahproj.webapp.Utils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

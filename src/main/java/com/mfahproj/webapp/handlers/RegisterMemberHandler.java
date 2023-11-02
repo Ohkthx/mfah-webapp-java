@@ -1,4 +1,4 @@
-package com.mfahproj.webapp;
+package com.mfahproj.webapp.handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.mfahproj.webapp.Database;
+import com.mfahproj.webapp.Session;
+import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Member;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

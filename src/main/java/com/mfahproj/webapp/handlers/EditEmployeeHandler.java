@@ -1,4 +1,4 @@
-package com.mfahproj.webapp;
+package com.mfahproj.webapp.handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Map;
 
+import com.mfahproj.webapp.Database;
+import com.mfahproj.webapp.Session;
+import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;

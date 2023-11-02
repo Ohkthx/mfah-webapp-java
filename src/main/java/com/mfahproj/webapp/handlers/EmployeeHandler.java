@@ -1,5 +1,8 @@
-package com.mfahproj.webapp;
+package com.mfahproj.webapp.handlers;
 
+import com.mfahproj.webapp.Database;
+import com.mfahproj.webapp.Session;
+import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
