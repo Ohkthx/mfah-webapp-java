@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
+    <title>Employee - Reports</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,7 +101,7 @@
 
 <body>
     <header>
-        <h1>Update your profile!</h1>
+        <h1>Reports</h1>
     </header>
     <nav>
         <a href="/">Home</a>
@@ -113,13 +113,8 @@
     <main>
         <div class="form-container">
             {{credentials}}
-            <h2>Edit your profile and change your details.</h2>
+            <h2>Create a new report using the following form.</h2>
             <form action="/employee/report" method="post">
-                <label for="action">Action:</label>
-                <select name="action" id="action">
-                    <option value="GENERATE">Generate Data</option>
-                    <option value="DISPLAY">Display Data</option>
-                </select>
                 <label for="type">Type:</label>
                 <select name="type" id="type">
                     <option value="SALES">Sale</option>
