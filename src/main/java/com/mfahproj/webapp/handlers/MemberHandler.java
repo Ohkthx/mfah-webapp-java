@@ -16,7 +16,7 @@ public class MemberHandler implements HttpHandler {
         Member member = Session.getMemberSession(sessionId);
         if (member != null) {
             // Valid non-timeout sessions found. Send to member home page.
-            String response = Utils.readResourceFile("member.html");
+            String response = Utils.readResourceFile("member/member.html");
             response = response.replace("{{emailAddress}}", member.getEmailAddress());
             response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
 

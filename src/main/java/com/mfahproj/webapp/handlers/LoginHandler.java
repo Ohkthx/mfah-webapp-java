@@ -76,7 +76,7 @@ public class LoginHandler implements HttpHandler {
             }
         }
 
-        String location = "/" + loginType.toLowerCase();
+        String location = String.format("/%s", loginType.toLowerCase());
         if (!StringUtils.isNullOrEmpty(sessionId)) {
             String cookie = String.format("SESSIONID=%s; Max-Age=%d", sessionId, 900);
             exchange.getResponseHeaders().add("Set-Cookie", cookie);

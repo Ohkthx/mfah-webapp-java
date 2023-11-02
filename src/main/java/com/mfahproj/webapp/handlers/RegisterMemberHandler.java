@@ -29,7 +29,7 @@ public class RegisterMemberHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show register form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "register.html");
+        String response = Utils.dynamicNavigator(exchange, "member/register.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
@@ -53,7 +53,7 @@ public class RegisterMemberHandler implements HttpHandler {
         // TODO: Make sure the birthday is valid.
 
         // Load register form.
-        String response = Utils.dynamicNavigator(exchange, "register-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "member/register.html");
         switch (Database.createMember(member)) {
             case SUCCESS:
                 // Create a session for the new member.

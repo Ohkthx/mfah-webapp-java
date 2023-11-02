@@ -43,9 +43,9 @@ public class App {
         server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
 
         // Used for registration.
-        server.createContext("/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));
-        server.createContext("/register-employee", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
-        server.createContext("/register-artifact", new MiddlewareHandler(new ArtifactHandler(), callback));
+        server.createContext("/member/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));
+        server.createContext("/employee/register", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
+        server.createContext("/artifact/register", new MiddlewareHandler(new ArtifactHandler(), callback));
 
         // Used for editing content.
         server.createContext("/member/edit", new MiddlewareHandler(new EditMemberHandler(), callback));

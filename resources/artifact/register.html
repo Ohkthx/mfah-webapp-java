@@ -106,14 +106,14 @@
     <nav>
         <a href="/">Home</a>
         {{clientLoggedIn}}
-        <a href="/register">Member Registration</a>
-        <a href="/register-employee">Employee Registration</a>
+        <a href="/member/register">Member Registration</a>
+        <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
     </nav>
     <main>
         <div class="form-container">
             <h2>Please enter the Artifact information.</h2>
-            <form action="/register-artifact" method="post">
+            <form action="/artifact/register" method="post">
                 <label for="Title">Artifact Title:</label>
                 <input type="text" id="Title" name="Title" required>
 

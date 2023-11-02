@@ -106,16 +106,16 @@
     <nav>
         <a href="/">Home</a>
         {{clientLoggedIn}}
-        <a href="/register">Member Registration</a>
-        <a href="/register-employee">Employee Registration</a>
+        <a href="/member/register">Member Registration</a>
+        <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
     </nav>
     <main>
         <div class="form-container">
             {{credentials}}
             <h2>Begin your journey by filling out the registration form below.</h2>
-            <p>Click <a href="/register-employee">here</a> if you're a new employee.</p>
-            <form action="/register" method="post">
+            <p>Click <a href="/employee/register">here</a> if you're a new employee.</p>
+            <form action="/member/register" method="post">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" name="firstName" required>
 

@@ -26,7 +26,7 @@ public class RegisterEmployeeHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show register form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "register-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "employee/register.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
@@ -50,7 +50,7 @@ public class RegisterEmployeeHandler implements HttpHandler {
         // TODO: Make sure the supervisor Id and museum Id are valid.
 
         // Load register form.
-        String response = Utils.dynamicNavigator(exchange, "register-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "employee/register.html");
         switch (Database.createEmployee(employee)) {
             case SUCCESS:
                 // Create a session for the new employee.

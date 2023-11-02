@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
+    <title>Employee Registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,33 +101,56 @@
 
 <body>
     <header>
-        <h1>Update your profile!</h1>
+        <h1>Join the MFAH Family!</h1>
     </header>
     <nav>
         <a href="/">Home</a>
         {{clientLoggedIn}}
-        <a href="/register">Member Registration</a>
-        <a href="/register-employee">Employee Registration</a>
+        <a href="/member/register">Member Registration</a>
+        <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
     </nav>
     <main>
         <div class="form-container">
             {{credentials}}
-            <h2>Edit your profile and change your details.</h2>
-            <form action="/employee/edit" method="post">
+            <h2>Begin your journey by filling out the registration form below.</h2>
+            <p>Click <a href="/member/register">here</a> if you're looking to become a member.</p>
+            <form action="/employee/register" method="post">
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName">
+                <input type="text" id="firstName" name="firstName" required>
 
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName">
+                <input type="text" id="lastName" name="lastName" required>
+
+                <label for="emailAddress">Email Address:</label>
+                <input type="email" id="emailAddress" name="emailAddress" required>
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password" required>
+
+                <label for="jobTitle">Job Title:</label>
+                <input type="jobTitle" id="jobTitle" name="jobTitle" required>
 
                 <label for="phoneNumber">Phone number:</label>
-                <input type="phoneNumber" id="phoneNumber" name="phoneNumber">
+                <input type="phoneNumber" id="phoneNumber" name="phoneNumber" required>
 
-                <button type="submit">Complete Changes</button>
+                <label for="salary">Salary:</label>
+                <input type="salary" id="salary" name="salary" required>
+
+                <label for="museumId">Museum Id:</label>
+                <input type="museumId" id="museumId" name="museumId" required>
+
+                <label for="supervisorId">Supervisor Id:</label>
+                <input type="supervisorId" id="supervisorId" name="supervisorId" required>
+
+                <label for="accessLevel">Access Level:</label>
+                <select name="accessLevel" id="accessLevel">
+                    <option value="NORMAL">Normal</option>
+                    <option value="SUPERVISOR">Supervisor</option>
+                    <option value="MANAGER">Manager</option>
+                </select>
+
+                <button type="submit">Register</button>
             </form>
         </div>
     </main>

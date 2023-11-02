@@ -27,7 +27,7 @@ public class EditMemberHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "edit-member.html");
+        String response = Utils.dynamicNavigator(exchange, "member/edit.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
@@ -59,7 +59,7 @@ public class EditMemberHandler implements HttpHandler {
         member = EditMemberHandler.editMember(member, form);
 
         // Load edit form.
-        String response = Utils.dynamicNavigator(exchange, "edit-member.html");
+        String response = Utils.dynamicNavigator(exchange, "member/edit.html");
         switch (Database.editMember(member)) {
             case SUCCESS:
                 // Update the members session.

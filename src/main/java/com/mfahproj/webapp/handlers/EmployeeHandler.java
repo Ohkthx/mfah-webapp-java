@@ -17,7 +17,7 @@ public class EmployeeHandler implements HttpHandler {
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee != null) {
             // Valid non-timeout sessions found. Send to employee home page.
-            String response = Utils.readResourceFile("employee.html");
+            String response = Utils.readResourceFile("employee/employee.html");
             response = response.replace("{{emailAddress}}", employee.getEmailAddress());
             response = response.replace("{{employeeDetails}}", EmployeeHandler.getDetails(employee));
 

@@ -27,7 +27,7 @@ public class EditEmployeeHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "edit-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "employee/edit.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
@@ -59,7 +59,7 @@ public class EditEmployeeHandler implements HttpHandler {
         employee = EditEmployeeHandler.editEmployee(employee, form);
 
         // Load edit form.
-        String response = Utils.dynamicNavigator(exchange, "edit-employee.html");
+        String response = Utils.dynamicNavigator(exchange, "employee/edit.html");
         switch (Database.editEmployee(employee)) {
             case SUCCESS:
                 // Update the employees session.

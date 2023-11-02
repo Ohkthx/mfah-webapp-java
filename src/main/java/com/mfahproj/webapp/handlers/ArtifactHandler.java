@@ -41,7 +41,7 @@ public class ArtifactHandler implements HttpHandler {
         }
 
         // Show register form for an employee.
-        String response = Utils.dynamicNavigator(exchange, "register-artifact.html");
+        String response = Utils.dynamicNavigator(exchange, "artifact/register.html");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -73,7 +73,7 @@ public class ArtifactHandler implements HttpHandler {
                 System.out.printf("%s is a duplicate artifact.\n", artifact.getTitle());
                 response = "<body>"
                         + "    <h4>Artifact already exists, please try again.</h4>"
-                        + "    <a href='/register-artifact'>Register Artifact</a>"
+                        + "    <a href='/artifact/register'>Register Artifact</a>"
                         + "</body>";
 
                 break;
