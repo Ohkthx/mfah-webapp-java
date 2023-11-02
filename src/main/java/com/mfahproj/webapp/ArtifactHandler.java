@@ -54,14 +54,14 @@ public class ArtifactHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/artifact");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", artifact.getEmailAddress());
+                System.out.printf("%s created.\n", artifact.getTitle());
                 return;
             case DUPLICATE:
                 // Duplicate artifact detected, point them to login page.
                 System.out.printf("%s is a duplicate artifact.\n", artifact.getTitle());
                 response = "<body>"
-                        + "    <h4>Artifact already exists, please try to login.</h4>"
-                        + "    <a href='/login'>Login</a>"
+                        + "    <h4>Artifact already exists, please try again.</h4>"
+                        + "    <a href='/register-artifact'>Login</a>"
                         + "</body>";
 
                 break;
