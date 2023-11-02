@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Artifact;
 import com.mysql.cj.util.StringUtils;
 
 public class Database {
@@ -292,12 +293,13 @@ public class Database {
                 return null;
             }
 
-            Artifact artifact = new artifact();
+            Artifact artifact = new Artifact();
             artifact.setArtifactId(results.getInt("ArtifactId"));
             artifact.setTitle(results.getString("Title"));
             artifact.setArtistId(results.getInt("ArtistId"));
             artifact.setDate(results.getDate("Date"));
             artifact.setPlace(results.getString("Place"));
+            artifact.setMedium(results.getString("Medium"));
             artifact.setDimensions(results.getString("Dimensions"));
             artifact.setCollectionId(results.getInt("CollectionId"));
             artifact.setDescription(results.getString("Description"));
@@ -332,19 +334,20 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "INSERT INTO Employee "
-                    + "(Title, ArtistId, Date, Place, Dimensions, CollectionId, Description, OwnerId) "
+            String sql = "INSERT INTO Artifact "
+                    + "(Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, employee.getTitle());
-            pstmt.setInt(2, employee.getArtistId());
-            pstmt.setString(3, employee.getDate());
-            pstmt.setString(4, employee.getPlace());
-            pstmt.setString(5, employee.getDimensions());
-            pstmt.setInt(6, employee.getCollectionId());
-            pstmt.setString(7, employee.getDescription());
-            pstmt.setInt(8, employee.getOwnerId());
+            pstmt.setString(1, artifact.getTitle());
+            pstmt.setInt(2, artifact.getArtistId());
+            pstmt.setDate(3, artifact.getDate());
+            pstmt.setString(4, artifact.getPlace());
+            pstmt.setString(5, artifact.getMedium());
+            pstmt.setString(6, artifact.getDimensions());
+            pstmt.setInt(7, artifact.getCollectionId());
+            pstmt.setString(8, artifact.getDescription());
+            pstmt.setInt(9, artifact.getOwnerId());
 
             // Execute the query
             pstmt.executeUpdate();
