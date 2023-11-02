@@ -32,6 +32,7 @@ public class MemberHandler implements HttpHandler {
         exchange.sendResponseHeaders(302, -1);
     }
 
+    // Generates the 'About Me' section.
     private static String getDetails(Member member) {
         return "<ul>"
                 + String.format("\t<li>First name: %s</li>", member.getFirstName())

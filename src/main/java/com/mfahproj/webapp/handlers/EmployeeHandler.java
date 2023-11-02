@@ -33,12 +33,8 @@ public class EmployeeHandler implements HttpHandler {
         exchange.sendResponseHeaders(302, -1);
     }
 
+    // Generates the 'About Me' section.
     private static String getDetails(Employee employee) {
-        // <ul>
-        // <li><a href="/register-artifact">Register Artifact</a></li>
-        // <li>Placeholder list item</li>
-        // </ul>
-
         Employee supervisor = Database.getEmployee(employee.getSupervisorId());
         String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());
 

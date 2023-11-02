@@ -51,6 +51,9 @@ public class App {
         server.createContext("/member/edit", new MiddlewareHandler(new EditMemberHandler(), callback));
         server.createContext("/employee/edit", new MiddlewareHandler(new EditEmployeeHandler(), callback));
 
+        // Reports
+        server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
+
         server.setExecutor(null);
 
         // Start the server for listening.

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee's Home</title>
+    <title>Update Profile</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,12 +48,43 @@
             margin: auto;
         }
 
-        section {
+        .form-container {
             background-color: #fff;
             padding: 1rem;
-            margin-bottom: 1rem;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         footer {
@@ -65,64 +96,43 @@
             bottom: 0;
             width: 100%;
         }
-
-        .panes {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .pane-left,
-        .pane-right {
-            flex: 1;
-            margin: 0 1rem;
-        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Welcome {{emailAddress}} to the MFAH Employee Portal</h1>
+        <h1>Update your profile!</h1>
     </header>
     <nav>
         <a href="/">Home</a>
-        <a href="/employee">Profile</a>
-        <a href="/not-implemented">Notifications</a>
+        {{clientLoggedIn}}
+        <a href="/member/register">Member Registration</a>
+        <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
     </nav>
     <main>
-        <div class="panes">
-            <div class="pane-left">
-                <section>
-                    <h2>Announcements</h2>
-                    <p>Placeholder annoucement information.</p>
-                </section>
-
-                <section>
-                    <h2>Your Access</h2>
-                    <ul>
-                        <li><a href="/employee/report">Reports</a></li>
-                        <li><a href="/artifact/register">Register Artifact</a></li>
-                        <li><a href="/employee/edit">Edit Profile</a></li>
-                    </ul>
-                </section>
-            </div>
-
-            <div class="pane-right">
-                <section>
-                    <h2>Your Details</h2>
-                    {{employeeDetails}}
-                </section>
-                <section>
-                    <h2>Update Profile</h2>
-                    <p>Be sure to keep your profile up to date. <a href="/employee/edit">Update now!</a></p>
-                </section>
-                <!-- You can add more sections or content here for the right pane -->
-            </div>
+        <div class="form-container">
+            {{credentials}}
+            <h2>Edit your profile and change your details.</h2>
+            <form action="/employee/report" method="post">
+                <label for="action">Action:</label>
+                <select name="action" id="action">
+                    <option value="GENERATE">Generate Data</option>
+                    <option value="DISPLAY">Display Data</option>
+                </select>
+                <label for="type">Type:</label>
+                <select name="type" id="type">
+                    <option value="SALES">Sale</option>
+                </select>
+                <label for="amountSlider">Amount (1 - 100):</label>
+                <input type="range" id="amountSlider" name="amount" min="1" max="100" value="50">
+                <button type="submit">Complete</button>
+            </form>
         </div>
     </main>
-    <footer>
+    <!-- <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>
