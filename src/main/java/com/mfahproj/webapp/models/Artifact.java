@@ -1,5 +1,7 @@
 package com.mfahproj.webapp.models;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Artifact {
 
     private int ArtifactId = -1;
@@ -25,7 +27,7 @@ public class Artifact {
     }
 
     public Artifact(int ArtifactId, String Title, int ArtistId, java.sql.Date Date, String Place, String Medium,
-    String Dimensions, int CollectionId, String Description, int OwnerId) {
+            String Dimensions, int CollectionId, String Description, int OwnerId) {
         this.setArtifactId(ArtifactId);
         this.setTitle(Title);
         this.setArtistId(ArtistId);
@@ -136,6 +138,52 @@ public class Artifact {
     // Owner ID setter.
     public void setOwnerId(int OwnerId) {
         this.OwnerId = OwnerId;
+    }
+
+    // Creates a random instance of a Artifact.
+    public static Artifact generateRandom(int artistId, int collectionId, int ownerId) {
+        Artifact artifact = new Artifact();
+
+        String[] words = { "Potato", "Carrot", "Soup", "Eggroll", "Coffee Boba", "Pho", "Bread", "Blue", "Red", "Black",
+                "Green", "Panda", "Dragon", "Flower", "River", "Treat", "Tree", "Dog", "Mushroom", "Star" };
+        String[] mediums = { "Pencil", "Pen", "Chalk", "Clay", "Charcoal" };
+        String[] dimensions = { "1x1x1", "1x2x1", "1x3x1" };
+
+        // Create a random title.
+        int titleWords = ThreadLocalRandom.current().nextInt(1, 6);
+        String title = "";
+        for (int i = 0; i < titleWords; i++) {
+            String word = words[ThreadLocalRandom.current().nextInt(words.length)];
+            title = String.format("%s %s", title, word);
+        }
+
+        // Create a random description.
+        int descWords = ThreadLocalRandom.current().nextInt(8, 16);
+        String desc = "";
+        for (int i = 0; i < descWords; i++) {
+            String word = words[ThreadLocalRandom.current().nextInt(words.length)];
+            desc = String.format("%s %s", desc, word);
+        }
+
+        // Create a random creation date.
+        long years100 = 1000L * 60 * 60 * 24 * 365 * 100;
+        long current = System.currentTimeMillis();
+        long minYear = current - years100;
+        long yearMs = ThreadLocalRandom.current().nextLong(minYear, current);
+        java.sql.Date date = new java.sql.Date(yearMs);
+
+        // Set the information for the artifact.
+        artifact.setTitle(title);
+        artifact.setDescription(desc);
+        artifact.setDate(date);
+        artifact.setPlace(words[ThreadLocalRandom.current().nextInt(words.length)]);
+        artifact.setMedium(mediums[ThreadLocalRandom.current().nextInt(mediums.length)]);
+        artifact.setDimensions(dimensions[ThreadLocalRandom.current().nextInt(dimensions.length)]);
+        artifact.setArtistId(artistId);
+        artifact.setCollectionId(collectionId);
+        artifact.setOwnerId(ownerId);
+
+        return artifact;
     }
 
     // Overrides the toString() method for custom printing.

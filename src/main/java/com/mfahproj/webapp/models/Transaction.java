@@ -72,7 +72,6 @@ public class Transaction {
         transaction.setMuseumId(museumId);
 
         return transaction;
-
     }
 
     public int getTransactionId() {

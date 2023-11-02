@@ -3,6 +3,7 @@ package com.mfahproj.webapp.handlers;
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
+import com.mfahproj.webapp.models.Artifact;
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
 import com.mfahproj.webapp.models.Transaction;
@@ -109,8 +110,9 @@ public class GenerateHandler implements HttpHandler {
         if (action.equalsIgnoreCase("tickets")) {
             GenerateHandler.createTickets(amount, isEmployee, id);
         } else if (action.equalsIgnoreCase("transactions")) {
-            System.out.printf("Creating transactions: %d\n", amount);
             GenerateHandler.createTransactions(amount, isEmployee, id);
+        } else if (action.equalsIgnoreCase("artifacts")) {
+            GenerateHandler.createArtifacts(amount);
         } else {
             System.err.println("No matches for generation.");
             return false;
@@ -165,6 +167,32 @@ public class GenerateHandler implements HttpHandler {
 
         // Insert into database.
         switch (Database.createTransactionsBatch(transactions)) {
+            case SUCCESS:
+                System.out.println("Success!");
+                break;
+            case DUPLICATE:
+                System.err.println("Duplicate transaction.");
+                break;
+            default:
+                System.err.println("Unknown error");
+        }
+    }
+
+    // Create `amount` of random artifacts.
+    private static void createArtifacts(int amount) {
+        List<Artifact> artifacts = new Vector<Artifact>();
+
+        // Create n amount of artifacts.
+        for (int i = 0; i < amount; i++) {
+            int artistId = ThreadLocalRandom.current().nextInt(1, 4);
+            int ownerId = ThreadLocalRandom.current().nextInt(1, 3);
+            int collectionId = ThreadLocalRandom.current().nextInt(1, 3);
+
+            artifacts.add(Artifact.generateRandom(artistId, collectionId, ownerId));
+        }
+
+        // Insert into database.
+        switch (Database.createArtifactsBatch(artifacts)) {
             case SUCCESS:
                 System.out.println("Success!");
                 break;

@@ -710,4 +710,62 @@ public class Database {
             }
         }
     }
+
+    // Batch insert method for multiple artifacts
+    public static Result createArtifactsBatch(List<Artifact> artifacts) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Template for all artifacts being inserted.
+            String sql = "INSERT INTO Artifact "
+                    + "(Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Disable auto-commit for batch execution.
+            conn.setAutoCommit(false);
+
+            for (Artifact artifact : artifacts) {
+                pstmt.setString(1, artifact.getTitle());
+                pstmt.setInt(2, artifact.getArtistId());
+                pstmt.setDate(3, artifact.getDate());
+                pstmt.setString(4, artifact.getPlace());
+                pstmt.setString(5, artifact.getMedium());
+                pstmt.setString(6, artifact.getDimensions());
+                pstmt.setInt(7, artifact.getCollectionId());
+                pstmt.setString(8, artifact.getDescription());
+                pstmt.setInt(9, artifact.getOwnerId());
+
+                // Add to batch statement.
+                pstmt.addBatch();
+            }
+
+            // Execute batch insert.
+            pstmt.executeBatch();
+            conn.commit();
+
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
