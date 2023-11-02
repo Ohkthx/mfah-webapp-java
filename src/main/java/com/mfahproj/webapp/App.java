@@ -9,8 +9,6 @@ import java.util.UUID;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
-import com.mfahproj.webapp.models.Artifact;
-
 import com.sun.net.httpserver.HttpServer;
 
 public class App {
