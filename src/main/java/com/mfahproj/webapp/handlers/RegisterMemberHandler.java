@@ -96,6 +96,10 @@ public class RegisterMemberHandler implements HttpHandler {
 
         // Convert and set dates.
         member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
+        Date expirationDate = RegisterMemberHandler.parseDate(form.get("expirationDate"));
+        if (expirationDate != null) {
+            member.setExpirationDate(new java.sql.Date(expirationDate.getTime()));
+        }
         Date birthDate = RegisterMemberHandler.parseDate(form.get("birthDate"));
         if (birthDate != null) {
             member.setBirthDate(new java.sql.Date(birthDate.getTime()));

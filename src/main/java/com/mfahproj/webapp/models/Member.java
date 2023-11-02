@@ -14,6 +14,7 @@ public class Member {
     private String firstName;
     private String lastName;
     private String membershipType = Memberships.NONE.name();
+    private java.sql.Date expirationDate;
     private java.sql.Date birthDate;
     private String emailAddress;
     private String password;
@@ -25,19 +26,20 @@ public class Member {
 
     // Used to create a new member.
     // memberId is created by AUTOINCREMENT.
-    public Member(String firstName, String lastName, Memberships type,
+    public Member(String firstName, String lastName, Memberships type, java.sql.Date expirationDate,
             java.sql.Date birthDate, String emailAddress, String password) {
-        this(-1, firstName, lastName, type.name(), birthDate, emailAddress, password,
+        this(-1, firstName, lastName, type.name(), expirationDate, birthDate, emailAddress, password,
                 new java.sql.Date(System.currentTimeMillis()));
     }
 
     public Member(int memberId, String firstName, String lastName, String membershipType,
-            java.sql.Date birthDate, String emailAddress, String password,
+            java.sql.Date expirationDate, java.sql.Date birthDate, String emailAddress, String password,
             java.sql.Date lastLogin) {
         this.setMemberId(memberId);
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setMembershipType(membershipType);
+        this.setExpirationDate(expirationDate);
         this.setBirthDate(birthDate);
         this.setEmailAddress(emailAddress);
         this.setPassword(password);
@@ -82,6 +84,16 @@ public class Member {
     // Membership type setter.
     public void setMembershipType(String membershipType) {
         this.membershipType = membershipType;
+    }
+
+    // Expiration date getter.
+    public java.sql.Date getExpirationDate() {
+        return this.expirationDate;
+    }
+
+    // Expiration date setter.
+    public void setExpirationDate(java.sql.Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     // Birth date getter.
@@ -132,6 +144,7 @@ public class Member {
                 + ", firstName='" + this.firstName + '\''
                 + ", lastName='" + this.lastName + '\''
                 + ", membershipType='" + this.membershipType + '\''
+                + ", expirationDate=" + this.expirationDate
                 + ", birthDate=" + this.birthDate
                 + ", emailAddress='" + this.emailAddress + '\''
                 + ", password='" + this.password + '\''

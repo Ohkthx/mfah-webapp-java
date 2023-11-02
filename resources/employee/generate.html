@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Registration</title>
+    <title>Employee - Generate</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,7 +101,7 @@
 
 <body>
     <header>
-        <h1>Join the MFAH Family!</h1>
+        <h1>Generate new database data!</h1>
     </header>
     <nav>
         <a href="/">Home</a>
@@ -113,37 +113,16 @@
     <main>
         <div class="form-container">
             {{credentials}}
-            <h2>Begin your journey by filling out the registration form below.</h2>
-            <p>Click <a href="/employee/register">here</a> if you're a new employee.</p>
-            <form action="/member/register" method="post">
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" required>
-
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" required>
-
-                <label for="membershipType">Membership Type:</label>
-                <select name="membershipType" id="membershipType">
-                    <option value="NONE">None</option>
-                    <option value="REGULAR">Regular</option>
-                    <option value="SEASONAL">Seasonal</option>
-                    <option value="SENIOR">Senior</option>
-                    <option value="EMPLOYEE">Employee</option>
+            <h2>Generates random database data.</h2>
+            <form action="/generate" method="post">
+                <label for="action">Create Action:</label>
+                <select name="action" id="action">
+                    <option value="TICKETS">Tickets</option>
+                    <option value="TRANSACTIONS">Transactions</option>
                 </select>
-
-                <label for="expirationDate">Membership Expiration Date:</label>
-                <input type="date" id="expirationDate" name="expirationDate">
-
-                <label for="birthDate">Birth Date:</label>
-                <input type="date" id="birthDate" name="birthDate">
-
-                <label for="emailAddress">Email Address:</label>
-                <input type="email" id="emailAddress" name="emailAddress" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Register</button>
+                <label for="amountSlider">Amount (1 - 200):</label>
+                <input type="range" id="amountSlider" name="amount" min="1" max="200" value="50">
+                <button type="submit">Generate</button>
             </form>
         </div>
     </main>

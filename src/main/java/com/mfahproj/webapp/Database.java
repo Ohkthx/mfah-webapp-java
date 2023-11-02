@@ -1,10 +1,12 @@
 package com.mfahproj.webapp;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Transaction;
 import com.mfahproj.webapp.models.Artifact;
 import com.mysql.cj.util.StringUtils;
 
@@ -98,6 +100,7 @@ public class Database {
             member.setFirstName(results.getString("FirstName"));
             member.setLastName(results.getString("LastName"));
             member.setMembershipType(results.getString("MembershipType"));
+            member.setExpirationDate(results.getDate("ExpirationDate"));
             member.setBirthDate(results.getDate("BirthDate"));
             member.setEmailAddress(results.getString("EmailAddress"));
             member.setPassword(results.getString("Password"));
@@ -133,17 +136,18 @@ public class Database {
 
             // Prepare a SQL query to create member.
             String sql = "INSERT INTO Members "
-                    + "(FirstName, LastName, MembershipType, BirthDate, EmailAddress, Password, LastLogin) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "(FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, member.getFirstName());
             pstmt.setString(2, member.getLastName());
             pstmt.setString(3, member.getMembershipType());
-            pstmt.setDate(4, member.getBirthDate());
-            pstmt.setString(5, member.getEmailAddress());
-            pstmt.setString(6, member.getPassword());
-            pstmt.setDate(7, member.getLastLogin());
+            pstmt.setDate(4, member.getExpirationDate());
+            pstmt.setDate(5, member.getBirthDate());
+            pstmt.setString(6, member.getEmailAddress());
+            pstmt.setString(7, member.getPassword());
+            pstmt.setDate(8, member.getLastLogin());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -508,4 +512,101 @@ public class Database {
             }
         }
     }
+
+    // Create a new transaction in the database. Fails on duplicates.
+    public static Result createTransaction(Transaction transaction) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to create transaction.
+            String sql = "INSERT INTO Transactions "
+                    + "(ItemType, Price, MemberId, PurchaseDate, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, transaction.getItemType());
+            pstmt.setDouble(2, transaction.getPrice());
+            pstmt.setInt(3, transaction.getMemberId());
+            pstmt.setDate(4, transaction.getPurchaseDate());
+            pstmt.setInt(5, transaction.getMuseumId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Batch insert method for multiple transactions
+    public static Result createTransactionsBatch(List<Transaction> transactions) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Template for all transactions being inserted.
+            String sql = "INSERT INTO Transactions "
+                    + "(ItemType, Price, MemberId, PurchaseDate, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+
+            // Disable auto-commit for batch execution.
+            conn.setAutoCommit(false);
+
+            for (Transaction transaction : transactions) {
+                pstmt.setString(1, transaction.getItemType());
+                pstmt.setDouble(2, transaction.getPrice());
+                pstmt.setInt(3, transaction.getMemberId());
+                pstmt.setDate(4, transaction.getPurchaseDate());
+                pstmt.setInt(5, transaction.getMuseumId());
+
+                // Add to batch statement.
+                pstmt.addBatch();
+            }
+
+            // Execute batch insert.
+            pstmt.executeBatch();
+            conn.commit();
+
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

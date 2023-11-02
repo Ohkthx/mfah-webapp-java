@@ -41,6 +41,7 @@ public class App {
         // Homepages
         server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
         server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
+        server.createContext("/generate", new MiddlewareHandler(new GenerateHandler(), callback));
 
         // Used for registration.
         server.createContext("/member/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));

@@ -17,11 +17,11 @@ VALUES ("Rienzi", "1406 Kirby Drive, Houston, TX 77019");
 
 -- Members
 
-INSERT INTO Members (FirstName, LastName, MembershipType, BirthDate, EmailAddress, Password, LastLogin) 
-VALUES ("Regular", "Test-Member", "REGULAR", CURDATE() - INTERVAL 20 YEAR, "regular@test.com", "regular", CURRENT_TIMESTAMP);
+INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin) 
+VALUES ("Regular", "Test-Member", "REGULAR", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 20 YEAR, "regular@test.com", "regular", CURRENT_TIMESTAMP);
 
-INSERT INTO Members (FirstName, LastName, MembershipType, BirthDate, EmailAddress, Password, LastLogin) 
-VALUES ("Member", "Test-Member", "SEASONAL", CURDATE() - INTERVAL 25 YEAR, "member@test.com", "member", CURRENT_TIMESTAMP);
+INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin) 
+VALUES ("Member", "Test-Member", "SEASONAL", CURDATE() + INTERVAL 25 DAY, CURDATE() + INTERVAL 25 YEAR, "member@test.com", "member", CURRENT_TIMESTAMP);
 
 -- Employees
 

@@ -41,7 +41,6 @@ CREATE TABLE Exhibition (
 	EndDate DATE,
 	Description VARCHAR(256) NOT NULL,
 	MuseumId INT UNSIGNED,
-	TotalTickets INT UNSIGNED DEFAULT 0,
 	
 	PRIMARY KEY (ExhibitionId),
 	FOREIGN KEY (MuseumId) REFERENCES Museum(MuseumId)
@@ -83,6 +82,7 @@ CREATE TABLE Members (
 	FirstName VARCHAR(32) NOT NULL,
 	LastName VARCHAR(32) NOT NULL,
 	MembershipType VARCHAR(128) NOT NULL,
+	ExpirationDate DATE NOT NULL,
 	BirthDate DATE,
 	EmailAddress VARCHAR(128) NOT NULL,
 	Password VARCHAR(128) NOT NULL,
@@ -95,7 +95,6 @@ CREATE TABLE Members (
 CREATE TABLE Transactions (
 	ItemId INT UNSIGNED AUTO_INCREMENT,
 	ItemType VARCHAR(32) NOT NULL,
-	ItemName VARCHAR(64) NOT NULL,
 	Price DOUBLE(8,2),
 	MemberId INT UNSIGNED,
 	PurchaseDate DATE,
@@ -185,20 +184,20 @@ END$$
 DELIMITER ;
 
 
-DELIMITER $$
-CREATE TRIGGER update_daily_sales
-AFTER INSERT ON Transactions
-FOR EACH ROW
-BEGIN
-    UPDATE DailySales
-    SET gift_shop_revenue = gift_shop_revenue + Transactions.Price;
-END$$
-DELIMITER ;
+-- DELIMITER $$
+-- CREATE TRIGGER update_daily_sales
+-- AFTER INSERT ON Transactions
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE DailySales
+--     SET gift_shop_revenue = gift_shop_revenue + Transactions.Price;
+-- END$$
+-- DELIMITER ;
 
 
 DELIMITER $$
 CREATE TRIGGER membership_expiration_notification
-BEFORE INSERT ON Transactions
+BEFORE INSERT ON Member
 FOR EACH ROW
 BEGIN
     DECLARE member_id INT;
@@ -210,13 +209,13 @@ BEGIN
     SET today_date = NOW();
 
     IF DATEDIFF(expiration_date, today_date) = 7 THEN
-        INSERT INTO Notification (UserId, NotificationText, NotificationTime)
+        INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
         VALUES (member_id, '1 Week Before Expiration', NOW());
     ELSEIF DATEDIFF(expiration_date, today_date) = 1 THEN
-        INSERT INTO Notification (UserId, NotificationText, NotificationTime)
+        INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
         VALUES (member_id, '1 Day Before Expiration', NOW());
     ELSEIF expiration_date = today_date THEN
-        INSERT INTO Notification (UserId, NotificationText, NotificationTime)
+        INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
         VALUES (member_id, 'On the Day of Expiration', NOW());
     END IF;
 END$$
@@ -237,7 +236,7 @@ BEGIN
     SET today_date = NOW();
 
     IF visit_date = today_date THEN
-        INSERT INTO FeedbackSurvey (UserId, FeedbackText, SubmissionTime)
+        INSERT INTO FeedbackSurvey (MemberId, FeedbackText, SubmissionTime)
         VALUES (visitor_id, 'Feedback Survey Sent', NOW());
     END IF;
 END$$
