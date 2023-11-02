@@ -9,7 +9,7 @@ use museum;
 -- TABLES
 
 CREATE TABLE Artist (
-	ArtistId INT UNSIGNED,
+	ArtistId INT UNSIGNED AUTO_INCREMENT,
 	FirstName VARCHAR(32) NOT NULL,
 	LastName VARCHAR(32) NOT NULL,
 
@@ -17,7 +17,7 @@ CREATE TABLE Artist (
 );
 
 CREATE TABLE Museum (
-	MuseumId INT UNSIGNED,
+	MuseumId INT UNSIGNED AUTO_INCREMENT,
 	Name VARCHAR(32) NOT NULL,
 	Address VARCHAR(64) NOT NULL,
 	TotalRevenue INT UNSIGNED DEFAULT 0,
@@ -27,7 +27,7 @@ CREATE TABLE Museum (
 );
 
 CREATE TABLE ArtifactOwner (
-	OwnerId INT UNSIGNED,
+	OwnerId INT UNSIGNED AUTO_INCREMENT,
 	Name VARCHAR(64) NOT NULL,
 	PhoneNumber VARCHAR(16) NOT NULL,
 
@@ -35,7 +35,7 @@ CREATE TABLE ArtifactOwner (
 );
 
 CREATE TABLE Exhibition (
-	ExhibitionId INT UNSIGNED,
+	ExhibitionId INT UNSIGNED AUTO_INCREMENT,
 	Title VARCHAR(64) NOT NULL,
 	StartDate DATE,
 	EndDate DATE,
@@ -48,7 +48,7 @@ CREATE TABLE Exhibition (
 );
 
 CREATE TABLE Collection (
-	CollectionId INT UNSIGNED,
+	CollectionId INT UNSIGNED AUTO_INCREMENT,
 	Title VARCHAR(64) NOT NULL,
 	Date DATE,
 	Description VARCHAR(256) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE Collection (
 );
 
 CREATE TABLE Artifact (
-	ArtifactId INT UNSIGNED,
+	ArtifactId INT UNSIGNED AUTO_INCREMENT,
 	Title VARCHAR(64) NOT NULL,
 	ArtistId INT UNSIGNED,
 	Date DATE,
@@ -93,7 +93,7 @@ CREATE TABLE Members (
 );
 
 CREATE TABLE Transactions (
-	ItemId INT UNSIGNED,
+	ItemId INT UNSIGNED AUTO_INCREMENT,
 	ItemType VARCHAR(32) NOT NULL,
 	ItemName VARCHAR(64) NOT NULL,
 	Price DOUBLE(8,2),

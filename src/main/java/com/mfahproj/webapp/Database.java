@@ -336,7 +336,7 @@ public class Database {
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Artifact "
                     + "(Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, artifact.getTitle());

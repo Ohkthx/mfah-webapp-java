@@ -54,8 +54,9 @@ public class RegisterMemberHandler implements HttpHandler {
         switch (Database.createMember(member)) {
             case SUCCESS:
                 // Create a session for the new member.
-                String sessionId = App.newMemberSession(member);
-                exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
+                String sessionId = Session.newMemberSession(member);
+                String cookie = String.format("SESSIONID=%s; Max-Age=%d", sessionId, 900);
+                exchange.getResponseHeaders().add("Set-Cookie", cookie);
                 exchange.getResponseHeaders().add("Location", "/member");
                 exchange.sendResponseHeaders(302, -1);
 

@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Map;
 
 import com.mfahproj.webapp.models.Artifact;
+import com.mfahproj.webapp.models.Employee;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -25,8 +27,19 @@ public class ArtifactHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show register form for a new artifact.
-        String response = Utils.readResourceFile("register-artifact.html");
+        // Check if a session exists.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // No prior session, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
+        // Show register form for an employee.
+        String response = Utils.dynamicNavigator(exchange, "register-artifact.html");
+
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -58,7 +71,7 @@ public class ArtifactHandler implements HttpHandler {
                 System.out.printf("%s is a duplicate artifact.\n", artifact.getTitle());
                 response = "<body>"
                         + "    <h4>Artifact already exists, please try again.</h4>"
-                        + "    <a href='/register-artifact'>Login</a>"
+                        + "    <a href='/register-artifact'>Register Artifact</a>"
                         + "</body>";
 
                 break;
@@ -80,11 +93,8 @@ public class ArtifactHandler implements HttpHandler {
         Artifact artifact = new Artifact();
 
         artifact.setTitle(form.get("Title"));
-        //System.out.println(artifact.getTitle());
         artifact.setArtistId(Integer.parseInt(form.get("ArtistId")));
-        //System.out.println(artifact.getArtistId());
         artifact.setPlace(form.get("Place"));
-        //System.out.println(artifact.getPlace());
         artifact.setMedium(form.get("Medium"));
         artifact.setDimensions(form.get("Dimensions"));
         artifact.setCollectionId(Integer.parseInt(form.get("CollectionId")));
@@ -100,14 +110,13 @@ public class ArtifactHandler implements HttpHandler {
     }
 
     private static Date parseDate(String dateStr) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                return sdf.parse(dateStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-    
-            return null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
+        return null;
+    }
 }
