@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.jcp.xml.dsig.internal.dom.Utils;
-
 import com.mfahproj.webapp.models.Artifact;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -43,21 +41,20 @@ public class ArtifactHandler implements HttpHandler {
 
         // Parse the form data to create a new user.
         Map<String, String> form = Utils.parseForm(formData);
-        Artifact artifact = RegisterHandler.createArtifact(form);
+        Artifact artifact = ArtifactHandler.createArtifact(form);
 
         String response;
         switch (Database.createArtifact(artifact)) {
             case SUCCESS:
-                // Create a session for the new artifact.
-                String sessionId = App.newArtifactSession(artifact);
-                exchange.getResponseHeaders().add("Set-Cookie", "SESSIONID=" + sessionId);
-                exchange.getResponseHeaders().add("Location", "/artifact");
+
+                // Artifact created
+                exchange.getResponseHeaders().add("Location", "/employee");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", artifact.getTitle());
+                System.out.printf("%s created.\n", artifact.getArtifactId());
                 return;
             case DUPLICATE:
-                // Duplicate artifact detected, point them to login page.
+                // Duplicate artifact detected, refresh the artifact register page.
                 System.out.printf("%s is a duplicate artifact.\n", artifact.getTitle());
                 response = "<body>"
                         + "    <h4>Artifact already exists, please try again.</h4>"
@@ -83,16 +80,34 @@ public class ArtifactHandler implements HttpHandler {
         Artifact artifact = new Artifact();
 
         artifact.setTitle(form.get("Title"));
-        artifact.setArtistId(form.get("ArtistId"));
-        artifact.setDate(form.get("Date"));
+        //System.out.println(artifact.getTitle());
+        artifact.setArtistId(Integer.parseInt(form.get("ArtistId")));
+        //System.out.println(artifact.getArtistId());
         artifact.setPlace(form.get("Place"));
+        //System.out.println(artifact.getPlace());
         artifact.setMedium(form.get("Medium"));
         artifact.setDimensions(form.get("Dimensions"));
-        artifact.setCollectionId(form.get("CollectionId"));
+        artifact.setCollectionId(Integer.parseInt(form.get("CollectionId")));
         artifact.setDescription(form.get("Description"));
-        artifact.setOwnerId(form.get("OwnerId"));
+        artifact.setOwnerId(Integer.parseInt(form.get("OwnerId")));
+
+        Date date = ArtifactHandler.parseDate(form.get("Date"));
+        if (date != null) {
+            artifact.setDate(new java.sql.Date(date.getTime()));
+        }
 
         return artifact;
     }
+
+    private static Date parseDate(String dateStr) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                return sdf.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+    
+            return null;
+        }
 
 }
