@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member's Home</title>
+    <title>Notifications</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,47 +81,25 @@
 
 <body>
     <header>
-        <h1>Welcome {{emailAddress}} to the MFAH Member Portal</h1>
+        <h1>Your current notifications!</h1>
     </header>
     <nav>
         <a href="/">Home</a>
-        <a href="/member">Profile</a>
-        <a href="/notifications">Notifications [{{notifyNum}}]</a>
+        {{clientLoggedIn}}
+        <a href="/member/register">Member Registration</a>
+        <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
     </nav>
     <main>
         <div class="panes">
             <div class="pane-left">
-                <section>
-                    <h2>Announcements</h2>
-                    <p>Placeholder annoucement information.</p>
-                </section>
-
-                <section>
-                    <h2>Your Access</h2>
-                    <ul>
-                        <li><a href="/member/edit">Edit Profile</a></li>
-                        <li><a href="/generate">Generate Database Data</a></li>
-                    </ul>
-                </section>
-            </div>
-
-            <div class="pane-right">
-                <section>
-                    <h2>Your Details</h2>
-                    {{memberDetails}}
-                </section>
-                <section>
-                    <h2>Update Profile</h2>
-                    <p>Be sure to keep your profile up to date. <a href="/member/edit">Update now!</a></p>
-                </section>
-                <!-- You can add more sections or content here for the right pane -->
+                {{sections}}
             </div>
         </div>
     </main>
-    <footer>
+    <!-- <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>

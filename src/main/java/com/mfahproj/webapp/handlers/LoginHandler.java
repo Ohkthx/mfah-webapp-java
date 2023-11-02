@@ -57,7 +57,7 @@ public class LoginHandler implements HttpHandler {
 
                 // Update the last login.
                 member.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-                // TODO: Need to reflect this to database.
+                Database.editMember(member);
 
                 // Create a session for the user
                 sessionId = Session.newMemberSession(member);
@@ -69,7 +69,7 @@ public class LoginHandler implements HttpHandler {
 
                 // Update the last login.
                 employee.setLastLogin(new java.sql.Date(System.currentTimeMillis()));
-                // TODO: Need to reflect this to database.
+                Database.editEmployee(employee);
 
                 // Create a session for the user
                 sessionId = Session.newEmployeeSession(employee);

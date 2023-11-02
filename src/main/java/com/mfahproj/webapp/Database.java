@@ -3,9 +3,11 @@ package com.mfahproj.webapp;
 import java.sql.*;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Notification;
 import com.mfahproj.webapp.models.Transaction;
 import com.mfahproj.webapp.models.Artifact;
 import com.mysql.cj.util.StringUtils;
@@ -182,7 +184,7 @@ public class Database {
 
             // Prepare a SQL query to update.
             String sql = "UPDATE Members "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ? "
+                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ?, LastLogin = ?"
                     + "WHERE MemberId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -190,7 +192,8 @@ public class Database {
             pstmt.setString(2, member.getLastName());
             pstmt.setString(3, member.getPassword());
             pstmt.setString(4, member.getEmailAddress());
-            pstmt.setInt(5, member.getMemberId());
+            pstmt.setDate(5, member.getLastLogin());
+            pstmt.setInt(6, member.getMemberId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -383,7 +386,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Employee "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, PhoneNumber = ? "
+                    + "SET FirstName = ?, LastName = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
                     + "WHERE EmployeeId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -391,7 +394,8 @@ public class Database {
             pstmt.setString(2, employee.getLastName());
             pstmt.setString(3, employee.getPassword());
             pstmt.setString(4, employee.getPhoneNumber());
-            pstmt.setInt(5, employee.getEmployeeId());
+            pstmt.setDate(5, employee.getLastLogin());
+            pstmt.setInt(6, employee.getEmployeeId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -609,4 +613,101 @@ public class Database {
         }
     }
 
+    // Obtains all notifications for a member
+    public static List<Notification> getNotifications(int MemberId) {
+        List<Notification> notifications = new Vector<Notification>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT NotificationId, NotificationText, NotificationTime, IsCheck FROM Notification WHERE MemberId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, MemberId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                int id = results.getInt("NotificationId");
+                String text = results.getString("NotificationText");
+                Timestamp time = results.getTimestamp("NotificationTime");
+                boolean isChecked = results.getBoolean("IsCheck");
+
+                notifications.add(new Notification(id, text, isChecked, time));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return notifications;
+    }
+
+    // Batch update method for multiple notifications
+    public static Result editNotificationsBatch(List<Notification> notifications, int memberId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Template for all notifications being inserted.
+            String sql = "UPDATE Notification "
+                    + "SET IsCheck = ? "
+                    + "WHERE MemberId = ? AND NotificationId = ?";
+            pstmt = conn.prepareStatement(sql);
+
+            // Disable auto-commit for batch execution.
+            conn.setAutoCommit(false);
+
+            for (Notification notification : notifications) {
+                pstmt.setBoolean(1, notification.getChecked());
+                pstmt.setInt(2, memberId);
+                pstmt.setInt(3, notification.getId());
+
+                // Add to batch statement.
+                pstmt.addBatch();
+            }
+
+            // Execute batch insert.
+            pstmt.executeBatch();
+            conn.commit();
+
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

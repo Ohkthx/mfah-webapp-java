@@ -1,5 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
+import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Member;
@@ -19,6 +20,9 @@ public class MemberHandler implements HttpHandler {
             String response = Utils.readResourceFile("member/member.html");
             response = response.replace("{{emailAddress}}", member.getEmailAddress());
             response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
+
+            int totalNotify = Database.getNotifications(member.getMemberId()).size();
+            response = response.replace("{{notifyNum}}", String.valueOf(totalNotify));
 
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
@@ -40,6 +44,7 @@ public class MemberHandler implements HttpHandler {
                 + String.format("\t<li>Birth date: %s</li>", member.getBirthDate())
                 + String.format("\t<li>Email address: %s</li>", member.getEmailAddress())
                 + String.format("\t<li>Membership: %s</li>", member.getMembershipType())
+                + String.format("\t<li>Membership Expiration: %s</li>", member.getExpirationDate())
                 + String.format("\t<li>Last login: %s</li>", member.getLastLogin())
                 + "</ul>";
     }
