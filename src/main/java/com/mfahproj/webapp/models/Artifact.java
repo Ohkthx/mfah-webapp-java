@@ -7,6 +7,7 @@ public class Artifact {
     private int ArtistId;
     private java.sql.Date Date;
     private String Place;
+    private String Medium;
     private String Dimensions;
     private int CollectionId;
     private String Description;
@@ -18,18 +19,19 @@ public class Artifact {
 
     // Used to create a new Artifact.
     // ArtifactId is created by AUTOINCREMENT.
-    public Artifact(int ArtifactId, String Title, int ArtistId, java.sql.Date Date, String Place,
+    public Artifact(String Title, int ArtistId, java.sql.Date Date, String Place, String Medium,
             String Dimensions, int CollectionId, String Description, int OwnerId) {
-        this(-1, Title, ArtistId, Date, Place, Dimensions, CollectionId, CollectionId, Description, OwnerId);
+        this(-1, Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId);
     }
 
-    public Member(int ArtifactId, String Title, int ArtistId, java.sql.Date Date, String Place,
+    public Artifact(int ArtifactId, String Title, int ArtistId, java.sql.Date Date, String Place, String Medium,
     String Dimensions, int CollectionId, String Description, int OwnerId) {
         this.setArtifactId(ArtifactId);
         this.setTitle(Title);
         this.setArtistId(ArtistId);
         this.setDate(Date);
         this.setPlace(Place);
+        this.setMedium(Medium);
         this.setDimensions(Dimensions);
         this.setCollectionId(CollectionId);
         this.setDescription(Description);
@@ -62,7 +64,7 @@ public class Artifact {
     }
 
     // Artist ID setter.
-    public void setArtistId(String ArtistId) {
+    public void setArtistId(int ArtistId) {
         this.ArtistId = ArtistId;
     }
 
@@ -86,8 +88,18 @@ public class Artifact {
         this.Place = Place;
     }
 
+    // Medium getter.
+    public String getMedium() {
+        return this.Medium;
+    }
+
+    // Medium setter.
+    public void setMedium(String Medium) {
+        this.Medium = Medium;
+    }
+
     // Dimensions getter.
-    public String Dimensions() {
+    public String getDimensions() {
         return this.Dimensions;
     }
 
@@ -96,28 +108,28 @@ public class Artifact {
         this.Dimensions = Dimensions;
     }
 
-    // Collection ID getter.
-    public int CollectionId() {
-        return this.CollectionId;
-    }
-
-    // Collection ID setter.
-    public void CollectionId(String CollectionId) {
-        this.CollectionId = CollectionId;
-    }
-
     // Description getter.
-    public Description getDescription() {
+    public String getDescription() {
         return this.Description;
     }
 
     // Description setter.
-    public void setDescription(string Description) {
+    public void setDescription(String Description) {
         this.Description = Description;
     }
 
+    // Collection Id getter.
+    public int getCollectionId() {
+        return this.CollectionId;
+    }
+
+    // Collection Id setter.
+    public void setCollectionId(int CollectionId) {
+        this.CollectionId = CollectionId;
+    }
+
     // Owner ID getter.
-    public OwnerId getOwnerId() {
+    public int getOwnerId() {
         return this.OwnerId;
     }
 
@@ -134,7 +146,7 @@ public class Artifact {
                 + ", Title='" + this.Title + '\''
                 + ", Date='" + this.Date + '\''
                 + ", Place='" + this.Place + '\''
-                + ", Medium=" + this.Medium 
+                + ", Medium=" + this.Medium + '\''
                 + ", Dimensions='" + this.Dimensions + '\''
                 + ", CollectionId='" + this.CollectionId + '\''
                 + ", Description=" + this.Description + '\''
