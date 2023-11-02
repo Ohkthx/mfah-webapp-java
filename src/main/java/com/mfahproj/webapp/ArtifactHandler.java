@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.mfahproj.webapp.models.Artifact;
 import com.mfahproj.webapp.models.Employee;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -118,5 +119,4 @@ public class ArtifactHandler implements HttpHandler {
 
         return null;
     }
-
 }

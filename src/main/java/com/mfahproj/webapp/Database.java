@@ -353,7 +353,6 @@ public class Database {
             pstmt.executeUpdate();
             return Result.SUCCESS;
         } catch (SQLIntegrityConstraintViolationException e) {
-            e.printStackTrace();
             return Result.DUPLICATE;
         } catch (Exception e) {
             e.printStackTrace();
