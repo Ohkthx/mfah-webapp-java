@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Artifact;
 import com.mysql.cj.util.StringUtils;
 
 public class Database {
@@ -248,6 +249,105 @@ public class Database {
             pstmt.setInt(9, employee.getSupervisorId());
             pstmt.setString(10, employee.getAccessLevel());
             pstmt.setDate(11, employee.getLastLogin());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain an artifact from the database using the Artifact ID.
+    public static Artifact getArtifact(int artifactID) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Artifact WHERE ArtifactId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, artifactID);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Artifact artifact = new Artifact();
+            artifact.setArtifactId(results.getInt("ArtifactId"));
+            artifact.setTitle(results.getString("Title"));
+            artifact.setArtistId(results.getInt("ArtistId"));
+            artifact.setDate(results.getDate("Date"));
+            artifact.setPlace(results.getString("Place"));
+            artifact.setMedium(results.getString("Medium"));
+            artifact.setDimensions(results.getString("Dimensions"));
+            artifact.setCollectionId(results.getInt("CollectionId"));
+            artifact.setDescription(results.getString("Description"));
+            artifact.setOwnerId(results.getInt("OwnerId"));
+
+            return artifact;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new artifact in the database. Fails on duplicates.
+    public static Result createArtifact(Artifact artifact) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Artifact "
+                    + "(Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, artifact.getTitle());
+            pstmt.setInt(2, artifact.getArtistId());
+            pstmt.setDate(3, artifact.getDate());
+            pstmt.setString(4, artifact.getPlace());
+            pstmt.setString(5, artifact.getMedium());
+            pstmt.setString(6, artifact.getDimensions());
+            pstmt.setInt(7, artifact.getCollectionId());
+            pstmt.setString(8, artifact.getDescription());
+            pstmt.setInt(9, artifact.getOwnerId());
 
             // Execute the query
             pstmt.executeUpdate();
