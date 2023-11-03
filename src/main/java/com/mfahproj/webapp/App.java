@@ -3,6 +3,7 @@ package com.mfahproj.webapp;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 
 import com.mfahproj.webapp.handlers.*;
 import com.sun.net.httpserver.HttpServer;
@@ -56,7 +57,7 @@ public class App {
         // Reports
         server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
 
-        server.setExecutor(null);
+        server.setExecutor(Executors.newCachedThreadPool());
 
         // Start the server for listening.
         server.start();
