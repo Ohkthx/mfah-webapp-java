@@ -2,7 +2,6 @@ package com.mfahproj.webapp;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Properties;
 import java.util.Vector;
 
 import com.mfahproj.webapp.models.Employee;
@@ -35,10 +34,10 @@ public class Database {
     }
 
     // Parses the configuration for the values for the database connection.
-    public static void setConfiguration(Properties config) {
-        Database.URL = config.getProperty("db.url");
-        Database.USER = config.getProperty("db.user");
-        Database.PASSWORD = config.getProperty("db.password");
+    public static void setConfiguration(Config config) {
+        Database.URL = config.dbUrl;
+        Database.USER = config.dbUser;
+        Database.PASSWORD = config.dbPassword;
 
         // Make sure the database variables are semi-valid.
         boolean failed = true;
