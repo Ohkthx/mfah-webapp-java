@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member - Generate</title>
+    <title>Home</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,43 +48,12 @@
             margin: auto;
         }
 
-        .form-container {
+        section {
             background-color: #fff;
             padding: 1rem;
+            margin-bottom: 1rem;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="date"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            background-color: #007BFF;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
         }
 
         footer {
@@ -96,12 +65,41 @@
             bottom: 0;
             width: 100%;
         }
+        /* Style for the dropdown button and content */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Generate new database data!</h1>
+        <h1>MFAH Online Portal</h1>
     </header>
     <nav>
         <a href="/">Home</a>
@@ -109,26 +107,49 @@
         <a href="/member/register">Member Registration</a>
         <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
+        <!-- Create the dropdown menu -->
+
+        <div class="dropdown">
+            <button class="dropbtn">Data Queries</button>
+            <div class="dropdown-content">
+                <a href="/artistwork">Artistwork</a>
+                <a href="/revenue">Revenue</a>
+                <a href="/exhibition-collection">Exhibition Collections</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Reports</button>
+            <div class="dropdown-content">
+                <a href="/museum-revenue-report">Museum Revenue Report</a>
+                <a href="/artifact-inventory-report">Artifact Inventory Report</a>
+                <a href="/exhibition-attendance-report">Exhibition Attendance Report</a>
+            </div>
+        </div>
+
+
     </nav>
     <main>
-        <div class="form-container">
-            <h2>Generates random database data.</h2>
-            <form action="/generate" method="post">
-                <label for="action">Create Action:</label>
-                <select name="action" id="action">
-                    <option value="TICKETS">Tickets</option>
-                    <option value="TRANSACTIONS">Transactions</option>
-                    <option value="ARTIFACTS">Artifacts</option>
-                </select>
-                <label for="amountSlider">Amount (1 - 100):</label>
-                <input type="range" id="amountSlider" name="amount" min="1" max="100" value="50">
-                <button type="submit">Generate</button>
-            </form>
-        </div>
+        <section>
+            <h1>Artifact Inventory Report: </h1>
+                <table>
+                    <tr>
+                        <th>Exhibition Title</th>
+                        <th>Attendance</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                    </tr>
+                    {{report}}
+
+                </table>
+        </section>
+        <section>
+
+        </section>
     </main>
-    <!-- <footer>
+    <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-    </footer> -->
+    </footer>
 </body>
 
 </html>

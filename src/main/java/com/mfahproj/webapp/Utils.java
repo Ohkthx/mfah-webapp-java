@@ -81,7 +81,8 @@ public class Utils {
         // Check if a valid session currently exists.
         boolean isMember = true;
         String sessionId = Session.extractSessionId(exchange);
-        if (Session.getMemberSession(sessionId) == null) {
+
+        if (Session.getMemberSession(sessionId) != null) {
             if (Session.getEmployeeSession(sessionId) == null) {
                 // No active sessions found.
                 sessionId = null;

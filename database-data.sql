@@ -77,5 +77,3 @@ VALUES ("American Painting & Sculpture", CURDATE(), "The collection of American 
 
 INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
 VALUES ("Arts of Asia", CURDATE(), "The Museum's collections of Asian art span nearly five millennia and encompass the cultures of China, the Himalayas, India, Japan, Korea, and Southeast Asia.", 1, 1);
-
--- END

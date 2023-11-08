@@ -65,6 +65,36 @@
             bottom: 0;
             width: 100%;
         }
+
+        /* Style for the dropdown button and content */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 
@@ -78,13 +108,39 @@
         <a href="/member/register">Member Registration</a>
         <a href="/employee/register">Employee Registration</a>
         <a href="/logout">Logout</a>
+        <!-- Create the dropdown menu -->
+        <div class="dropdown">
+            <button class="dropbtn">Data Queries</button>
+            <div class="dropdown-content">
+                <a href="/artistwork">Artistwork</a>
+                <a href="/revenue">Revenue</a>
+                <a href="/exhibition-collection">Exhibition Collections</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Reports</button>
+            <div class="dropdown-content">
+                <a href="/museum-revenue-report">Museum Revenue Report</a>
+                <a href="/artifact-inventory-report">Artifact Inventory Report</a>
+                <a href="/exhibition-attendance-report">Exhibition Attendance Report</a>
+            </div>
+        </div>
+
     </nav>
     <main>
         <section>
-            <h2>Welcome to MFAH Database Systems Group Project!</h2>
-            <p>Here we demonstrate the objectives we have learned and attempted to master. More information is available
-                on the GitHub repository below.
+            <h1>Welcome to MFAH Database Systems Group Project!</h1>
+            <h3>GitHub Repository: <a href="https://github.com/Ohkthx/mfah-webapp-java">mfah-webapp-java</a></h3>
+            <p>Here we demonstrate the objectives we have learned and attempted to master.
+                <br>
+
+                Feel free to login, or register as a new member or employee.
             </p>
+
+        </section>
+        <section>
+
         </section>
     </main>
     <footer>

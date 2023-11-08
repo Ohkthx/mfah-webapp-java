@@ -112,13 +112,13 @@
     </nav>
     <main>
         <div class="form-container">
-            {{credentials}}
             <h2>Generates random database data.</h2>
             <form action="/generate" method="post">
                 <label for="action">Create Action:</label>
                 <select name="action" id="action">
                     <option value="TICKETS">Tickets</option>
                     <option value="TRANSACTIONS">Transactions</option>
+                    <option value="ARTIFACTS">Artifacts</option>
                 </select>
                 <label for="amountSlider">Amount (1 - 200):</label>
                 <input type="range" id="amountSlider" name="amount" min="1" max="200" value="50">

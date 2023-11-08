@@ -1,15 +1,11 @@
 package com.mfahproj.webapp;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Vector;
 
-import com.mfahproj.webapp.models.Employee;
-import com.mfahproj.webapp.models.Member;
-import com.mfahproj.webapp.models.Notification;
-import com.mfahproj.webapp.models.Transaction;
-import com.mfahproj.webapp.models.Artifact;
+import com.mfahproj.webapp.models.*;
 import com.mysql.cj.util.StringUtils;
 
 public class Database {
@@ -22,7 +18,7 @@ public class Database {
 
     // Connection requirements.
     private static String URL = "jdbc:mysql://localhost:3306/museum";
-    private static String USER = "placeholder";
+    private static String USER = "root";
     private static String PASSWORD = "placeholder";
 
     // Load the MySQL JDBC driver, this is required.
@@ -35,10 +31,10 @@ public class Database {
     }
 
     // Parses the configuration for the values for the database connection.
-    public static void setConfiguration(Properties config) {
-        Database.URL = config.getProperty("db.url");
-        Database.USER = config.getProperty("db.user");
-        Database.PASSWORD = config.getProperty("db.password");
+    public static void setConfiguration(Config config) {
+        Database.URL = config.dbUrl;
+        Database.USER = config.dbUser;
+        Database.PASSWORD = config.dbPassword;
 
         // Make sure the database variables are semi-valid.
         boolean failed = true;
@@ -710,4 +706,227 @@ public class Database {
             }
         }
     }
+
+    // Batch insert method for multiple artifacts
+    public static Result createArtifactsBatch(List<Artifact> artifacts) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Template for all artifacts being inserted.
+            String sql = "INSERT INTO Artifact "
+                    + "(Title, ArtistId, Date, Place, Medium, Dimensions, CollectionId, Description, OwnerId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Disable auto-commit for batch execution.
+            conn.setAutoCommit(false);
+
+            for (Artifact artifact : artifacts) {
+                pstmt.setString(1, artifact.getTitle());
+                pstmt.setInt(2, artifact.getArtistId());
+                pstmt.setDate(3, artifact.getDate());
+                pstmt.setString(4, artifact.getPlace());
+                pstmt.setString(5, artifact.getMedium());
+                pstmt.setString(6, artifact.getDimensions());
+                pstmt.setInt(7, artifact.getCollectionId());
+                pstmt.setString(8, artifact.getDescription());
+                pstmt.setInt(9, artifact.getOwnerId());
+
+                // Add to batch statement.
+                pstmt.addBatch();
+            }
+
+            // Execute batch insert.
+            pstmt.executeBatch();
+            conn.commit();
+
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    // Getting ArtistArtWork
+    public static List<ArtistArtWork> getArtistArtWork(){
+        List<ArtistArtWork> work = new ArrayList<>();
+//        PreparedStatement pstmt=null;
+        try (Connection conn = Database.connect();
+         PreparedStatement pstmt = conn.prepareStatement(
+             "SELECT Artist.FirstName, Artist.LastName, Artifact.Title " +
+             "FROM Artist " +
+             "LEFT JOIN Artifact ON Artist.ArtistId = Artifact.ArtistId")) {
+
+        ResultSet results = pstmt.executeQuery();
+
+        while (results.next()) {
+            ArtistArtWork artistArtwork = new ArtistArtWork();
+            artistArtwork.setFirstName(results.getString("FirstName"));
+            artistArtwork.setLastName(results.getString("LastName"));
+            artistArtwork.setArtworkTitle(results.getString("Title"));
+
+            work.add(artistArtwork);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+        return work;
+    }
+
+    // Get Museum Revenue
+   public static List<MuseumRevenue> getMuseumRevenue() {
+    List<MuseumRevenue> list = new ArrayList<>();
+
+    try (Connection conn = Database.connect();
+         PreparedStatement pstmt = conn.prepareStatement(
+             "SELECT Museum.Name, SUM(Transactions.Price) AS TotalRevenue " +
+             "FROM Museum " +
+             "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId " +
+             "GROUP BY Museum.MuseumId, Museum.Name;")) {
+
+            ResultSet results = pstmt.executeQuery();
+
+            while (results.next()) {
+                // Assuming TotalRevenue should be treated as a numerical value, e.g., BigDecimal
+                list.add(new MuseumRevenue(results.getString("Name"), results.getDouble("TotalRevenue")));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider more nuanced error handling here
+        }
+
+    return list;
+    }
+
+    // Get Exihibition and colelction
+   public static List<ExihibitionsAndCollections> getExhibitionAndCollection() {
+    List<ExihibitionsAndCollections> list = new ArrayList<>();
+    try (
+            Connection conn = Database.connect();
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT Exhibition.Title AS ExhibitionTitle, Collection.Title AS CollectionTitle " +
+                "FROM Exhibition " +
+                "LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId;"
+            )
+    ) {
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String exhibitionTitle = rs.getString("ExhibitionTitle");
+            String collectionTitle = rs.getString("CollectionTitle");
+            list.add(new ExihibitionsAndCollections(exhibitionTitle, collectionTitle));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Consider more specific error handling
+    }
+    return list;
 }
+
+    // Museun Revenue Report
+    public static List<MuseumRevenueReport> getMuseumRevenueReport() {
+    List<MuseumRevenueReport> list = new ArrayList<>();
+    try (
+        Connection conn = Database.connect();
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT Museum.Name, SUM(Transactions.Price) AS TotalRevenue\n" +
+            "FROM Museum " +
+            "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId\n" +
+            "GROUP BY Museum.MuseumId, Museum.Name;"
+        );
+        ResultSet rs = stmt.executeQuery()
+    ) {
+        while (rs.next()) {
+            String museumName = rs.getString("Name");
+            Double totalRevenue = rs.getDouble("TotalRevenue");
+            list.add(new MuseumRevenueReport(museumName, totalRevenue));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // You should consider more specific error handling here
+        // You can log the exception or throw a custom exception
+    }
+        return list;
+    }
+
+    // ArtifactInventory Report
+    public static List<ArtifactInventoryReport> getArtifactInventoryReport() {
+    List<ArtifactInventoryReport> list = new ArrayList<>();
+    try (
+        Connection conn = Database.connect();
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT Collection.Title AS CollectionTitle, Artifact.Title AS ArtifactTitle, Artist.FirstName, Artist.LastName " +
+                    "FROM Collection " +
+                    "LEFT JOIN Artifact ON Collection.CollectionId = Artifact.CollectionId " +
+                    "LEFT JOIN Artist ON Artifact.ArtistId = Artist.ArtistId; "
+        );
+        ResultSet rs = stmt.executeQuery()
+    ) {
+        while (rs.next()) {
+            String collectionTitle = rs.getString("CollectionTitle");
+            String artifactTitle = rs.getString("ArtifactTitle");
+            String firstName = rs.getString("FirstName");
+            String lastName = rs.getString("LastName");
+            list.add(new ArtifactInventoryReport(artifactTitle, collectionTitle, firstName, lastName));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // You should consider more specific error handling here
+        // You can log the exception or throw a custom exception
+    }
+        return list;
+    }
+
+    // Exhibition Attendance Report
+    public static List<ExhibitionAttendanceReport> getExhibitionAttendanceReport() {
+    List<ExhibitionAttendanceReport> list = new ArrayList<>();
+    try (
+        Connection conn = Database.connect();
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT Exhibition.Title AS ExhibitionTitle, COUNT(Transactions.ItemId) AS Attendance " +
+                    "FROM Exhibition " +
+                    "LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId " +
+                    "LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId " +
+                    "GROUP BY Exhibition.ExhibitionId, Exhibition.Title;"
+
+
+        );
+        ResultSet rs = stmt.executeQuery()
+    ) {
+        while (rs.next()) {
+            String exhibitionTitle = rs.getString("ExhibitionTitle");
+            Integer attendance = rs.getInt("Attendance");
+            list.add(new ExhibitionAttendanceReport(exhibitionTitle, attendance));
+
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // You should consider more specific error handling here
+        // You can log the exception or throw a custom exception
+    }
+
+        return list;
+    }
+
+
+}
+
+

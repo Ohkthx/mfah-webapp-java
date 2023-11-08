@@ -27,6 +27,8 @@ public class Transaction {
     // Used to create a new transaction.
     // transactionId is created by AUTOINCREMENT.
     public Transaction(Transaction.Type type, double price, java.sql.Date purchaseDate, int memberId, int museumId) {
+
+
         this(-1, type, price, purchaseDate, memberId, museumId);
     }
 
@@ -72,7 +74,6 @@ public class Transaction {
         transaction.setMuseumId(museumId);
 
         return transaction;
-
     }
 
     public int getTransactionId() {
