@@ -1,9 +1,0 @@
-db.url=jdbc:mysql://localhost:3306/museum
-db.user=placeholder
-db.password=placeholder
-webapp.port=8080
-
-webapp.https=false
-webapp.httpsPort=4433
-webapp.cert=placeholder
-webapp.password=placeholder
