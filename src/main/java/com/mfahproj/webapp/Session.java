@@ -295,9 +295,19 @@ public class Session {
         // Extract cookie.
         String cookie = exchange.getRequestHeaders().getFirst("Cookie");
         if (cookie != null && cookie.startsWith("SESSIONID=")) {
-            // Get session info.
-            String[] info = cookie.split("=");
-            return info.length < 2 ? null : info[1];
+            // Split the cookies elements.
+            String[] allInfo = cookie.split(";");
+            if (allInfo.length == 0) {
+                return null;
+            }
+
+            // Split from "SESSIONID" and the VALUE.
+            String[] sessionInfo = allInfo[0].split("=");
+            if (sessionInfo.length < 2 || sessionInfo == null) {
+                return null;
+            }
+
+            return sessionInfo[1];
         }
 
         return null;
