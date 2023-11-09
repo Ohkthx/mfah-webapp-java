@@ -31,7 +31,9 @@ public class Session {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable task = new Runnable() {
             public void run() {
+                System.out.println("Purging expired sessions.");
                 Session.purgeExpiredSessions();
+                System.out.println("Purging expired sessions, complete.");
             }
         };
 
@@ -327,4 +329,6 @@ public class Session {
             Session.semEmployee.release();
         }
     }
+
+
 }

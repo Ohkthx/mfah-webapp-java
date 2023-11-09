@@ -1,7 +1,9 @@
 package com.mfahproj.webapp;
+import java.io.*;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import com.mfahproj.webapp.models.Employee;
@@ -34,10 +36,10 @@ public class Database {
     }
 
     // Parses the configuration for the values for the database connection.
-    public static void setConfiguration(Config config) {
-        Database.URL = config.dbUrl;
-        Database.USER = config.dbUser;
-        Database.PASSWORD = config.dbPassword;
+    public static void setConfiguration(Properties config) {
+        Database.URL = config.getProperty("db.url");
+        Database.USER = config.getProperty("db.user");
+        Database.PASSWORD = config.getProperty("db.password");
 
         // Make sure the database variables are semi-valid.
         boolean failed = true;
@@ -270,6 +272,43 @@ public class Database {
         }
     }
 
+    public static int getMaxEmployeeID() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+            String sql = "SELECT EmployeeId FROM employee ORDER BY EmployeeId DESC";
+            pstmt = conn.prepareStatement(sql);
+
+            //execute SQL query
+            results = pstmt.executeQuery();
+
+            if (!results.next()) {
+                return -1;
+            }
+
+            return results.getInt("EmployeeId");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     // Obtain a user from the database using credentials.
     public static Employee getEmployee(String email, String password) {
         Connection conn = null;
@@ -385,16 +424,20 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Employee "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
+                    + "SET FirstName = ?, LastName = ?, JobTitle = ?, EmailAddress = ?, AccessLevel = ?, SupervisorId = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
                     + "WHERE EmployeeId = ?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, employee.getFirstName());
             pstmt.setString(2, employee.getLastName());
-            pstmt.setString(3, employee.getPassword());
-            pstmt.setString(4, employee.getPhoneNumber());
-            pstmt.setDate(5, employee.getLastLogin());
-            pstmt.setInt(6, employee.getEmployeeId());
+            pstmt.setString(3, employee.getJobTitle());
+            pstmt.setString(4, employee.getEmailAddress());
+            pstmt.setString(5, employee.getAccessLevel());
+            pstmt.setString(6, Integer.toString(employee.getSupervisorId()));
+            pstmt.setString(7, employee.getPassword());
+            pstmt.setString(8, employee.getPhoneNumber());
+            pstmt.setDate(9, employee.getLastLogin());
+            pstmt.setInt(10, employee.getEmployeeId());
 
             // Execute the query
             pstmt.executeUpdate();

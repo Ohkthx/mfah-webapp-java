@@ -1,55 +1,34 @@
 package com.mfahproj.webapp;
 
-import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.concurrent.Executors;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
-import javax.net.ssl.TrustManagerFactory;
+import java.util.Properties;
 
 import com.mfahproj.webapp.handlers.*;
 import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpsConfigurator;
-import com.sun.net.httpserver.HttpsParameters;
-import com.sun.net.httpserver.HttpsServer;
 
 public class App {
-
     public static void main(String[] args) throws Exception {
         // Load the configuration file.
-        Config config = Config.loadConfig("app.config");
+        Properties config = Utils.loadConfig("app.config");
+        int port = 8080;
+        try {
+            port = Integer.parseInt(config.getProperty("webapp.port"));
+        } catch (Exception e) {
+            System.out.println("Unable to parse the webapp port number, check configuration file.");
+            System.exit(1);
+        }
 
         // Set the database variables.
         Database.setConfiguration(config);
 
-        // Create thread and middleware responsible for managing expired sessions.
+        // Create a thread responsible for just purging expired sessions.
         Session.startScheduler();
+
+        // Create the HTTP server and URIs to handle.
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         MiddlewareHandler.HttpRequestCallback callback = App.createCallback();
 
-        // Create HTTPS server and set routes.
-        if (config.webappUseHttps) {
-            HttpServer httpsServer = App.createServer(config, true);
-            App.setRoutes(httpsServer, callback);
-            httpsServer.setExecutor(Executors.newCachedThreadPool());
-            httpsServer.start();
-            System.out.printf("Started HTTPS server on port %d.\n", config.webappHttpsPort);
-        }
-
-        // Create HTTP server and set routes.
-        HttpServer httpServer = App.createServer(config, false);
-        App.setRoutes(httpServer, callback);
-        httpServer.setExecutor(Executors.newCachedThreadPool());
-        httpServer.start();
-        System.out.printf("Started HTTP server on port %d.\n", config.webappHttpPort);
-    }
-
-    // Assign routes to the server.
-    private static void setRoutes(HttpServer server, MiddlewareHandler.HttpRequestCallback callback) {
         // Homepage
         server.createContext("/", new MiddlewareHandler(new HomeHandler(), callback));
         server.createContext("/failure", new MiddlewareHandler(new FailureHandler(), callback));
@@ -76,42 +55,16 @@ public class App {
 
         // Reports
         server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
-    }
 
-    // Creates a server based on if it is HTTPS or HTTP.
-    private static HttpServer createServer(Config config, boolean useHttps) throws Exception {
-        if (!useHttps) {
-            return HttpServer.create(new InetSocketAddress(config.webappHttpPort), 0);
-        }
+        //Employee View
+        server.createContext("/employee/employeeView", new MiddlewareHandler(new EmployeeViewHandler(), callback));
+        server.createContext("/employee/employeeViewEditor", new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
 
-        // Load the converted Let's Encrypt certificate.
-        char[] password = config.webappPassword.toCharArray();
-        KeyStore ks = KeyStore.getInstance("PKCS12");
-        FileInputStream fis = new FileInputStream(config.webappCert);
-        ks.load(fis, password);
+        server.setExecutor(null);
 
-        // Set up the factories.
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-        kmf.init(ks, password);
-        tmf.init(ks);
+        // Start the server for listening.
+        server.start();
 
-        // Set SSL context.
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
-
-        // Create the server.
-        HttpsServer server = HttpsServer.create(new InetSocketAddress(config.webappHttpsPort), 0);
-        server.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
-            public void configure(HttpsParameters params) {
-                // Initialize SSL context for connections.
-                SSLContext c = getSSLContext();
-                SSLParameters sslparams = c.getDefaultSSLParameters();
-                params.setSSLParameters(sslparams);
-            }
-        });
-
-        return server;
     }
 
     // Creates a callback that is used to serve as middleware between requests to
