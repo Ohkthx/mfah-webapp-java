@@ -38,7 +38,7 @@ public class RegisterMuseumHandler implements HttpHandler {
         }
 
         // Show register form for an employee.
-        String response = Utils.dynamicNavigator(exchange, "collection/register.html");
+        String response = Utils.dynamicNavigator(exchange, "museum/register.html");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {

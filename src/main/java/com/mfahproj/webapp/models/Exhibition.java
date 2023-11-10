@@ -15,12 +15,13 @@ public class Exhibition {
 
     // Used to create a new exhibition.
     // exhibitionId is created by AUTOINCREMENT.
-    public Exhibition(String title, java.sql.Date startDate, java.sql.Date endDate, 
-        String description, int museumId) {
+    public Exhibition(String title, java.sql.Date startDate, java.sql.Date endDate,
+            String description, int museumId) {
         this(-1, title, startDate, endDate, description, museumId);
     }
 
-    public Exhibition(int exhibitionId, String title, java.sql.Date starDate, java.sql.Date endDate, String description, int museumId) {
+    public Exhibition(int exhibitionId, String title, java.sql.Date starDate, java.sql.Date endDate, String description,
+            int museumId) {
         this.setExhibitionId(exhibitionId);
         this.setTitle(title);
         this.setStartDate(startDate);
@@ -98,7 +99,7 @@ public class Exhibition {
                 + ", startDate='" + this.startDate + '\''
                 + ", endDate='" + this.endDate + '\''
                 + ", desc=" + this.description + '\''
-                + ", museumid=" + this.museumId 
+                + ", museumid=" + this.museumId
                 + '}';
     }
 }

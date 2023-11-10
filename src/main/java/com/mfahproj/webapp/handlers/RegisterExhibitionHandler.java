@@ -41,7 +41,7 @@ public class RegisterExhibitionHandler implements HttpHandler {
         }
 
         // Show register form for an employee.
-        String response = Utils.dynamicNavigator(exchange, "collection/register.html");
+        String response = Utils.dynamicNavigator(exchange, "exhibition/register.html");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -94,7 +94,6 @@ public class RegisterExhibitionHandler implements HttpHandler {
     private static Exhibition createExhibition(Map<String, String> form) {
         Exhibition exhibition = new Exhibition();
 
-        
         exhibition.setExhibitionId(Integer.parseInt(form.get("ExhibitionId")));
         exhibition.setTitle(form.get("Title"));
         exhibition.setDescription(form.get("Description"));

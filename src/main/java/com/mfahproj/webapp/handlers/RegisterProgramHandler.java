@@ -41,7 +41,7 @@ public class RegisterProgramHandler implements HttpHandler {
         }
 
         // Show register form for an employee.
-        String response = Utils.dynamicNavigator(exchange, "artifact/register.html");
+        String response = Utils.dynamicNavigator(exchange, "program/register.html");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {

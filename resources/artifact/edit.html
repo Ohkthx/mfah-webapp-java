@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Collection</title>
+    <title>Update Artifact</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,25 +109,37 @@
     <main>
         <div class="form-container">
             {{credentials}}
-            <h2>Edit Collection.</h2>
-            <form action="/collection/edit" method="post">
-                <label for="CollectionId">Collection ID:</label>
-                <input type="number" id="CollectionId" name="CollectionId" required>
+            <h2>Edit artifact.</h2>
+            <form action="/artifact/edit" method="post">
+                <label for="ArtifactId">Artifact ID:</label>
+                <input type="number" id="ArtifactId" name="ArtifactId" required>
 
-                <label for="Title">Collection Title:</label>
+                <label for="Title">Artifact Title:</label>
                 <input type="text" id="Title" name="Title">
+
+                <label for="ArtistId">Artist ID:</label>
+                <input type="number" id="ArtistId" name="ArtistId">
 
                 <label for="Date">Creation Date:</label>
                 <input type="Date" id="Date" name="Date">
 
+                <label for="Place">Place of Origin:</label>
+                <input type="Place" id="Place" name="Place">
+
+                <label for="Medium">Artifact Medium:</label>
+                <input type="Medium" id="Medium" name="Medium">
+
+                <label for="Dimensions">Dimensions:</label>
+                <input type="Dimensions" id="Dimensions" name="Dimensions">
+
+                <label for="CollectionId">Collection ID:</label>
+                <input type="number" id="CollectionId" name="CollectionId">
+
                 <label for="Description">Description:</label>
                 <input type="text" id="Description" name="Description">
 
-                <label for="LocationId">Location ID:</label>
-                <input type="number" id="LocationId" name="LocationId">
-
-                <label for="ExhibitionId">Exhibition ID:</label>
-                <input type="number" id="ExhibitionId" name="ExhibitionId">
+                <label for="OwnerId">Owner ID:</label>
+                <input type="number" id="OwnerId" name="OwnerId">
 
                 <button type="submit">Complete Changes</button>
             </form>

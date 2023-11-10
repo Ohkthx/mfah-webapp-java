@@ -28,9 +28,8 @@ public class EditArtifactOwnerHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "artifactOwner/edit.html");
 
-        // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
 
         exchange.sendResponseHeaders(200, response.length());
@@ -61,7 +60,7 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         owner = EditArtifactOwnerHandler.editArtifactOwner(owner, form);
 
         // Load edit form.
-        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "artifactOwner/edit.html");
         switch (Database.editArtifactOwner(owner)) {
             case SUCCESS:
                 // Update the employees session.
@@ -87,7 +86,7 @@ public class EditArtifactOwnerHandler implements HttpHandler {
     }
 
     // Edits an antifact from the form data provided.
-    private static ArtifactOwner editArtifactOwner(ArtifactOwner owner, Map<String, String> form) {    
+    private static ArtifactOwner editArtifactOwner(ArtifactOwner owner, Map<String, String> form) {
         if (!StringUtils.isNullOrEmpty(form.get("ownerId"))) {
             owner.setOwnerId(Integer.parseInt(form.get("ownerId")));
         }
@@ -95,11 +94,11 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         if (!StringUtils.isNullOrEmpty(form.get("name"))) {
             owner.setName(form.get("name"));
         }
-        
+
         if (!StringUtils.isNullOrEmpty(form.get("phoneNum"))) {
             owner.setPhoneNumber(form.get("phoneNum"));
         }
-        
+
         return owner;
     }
 

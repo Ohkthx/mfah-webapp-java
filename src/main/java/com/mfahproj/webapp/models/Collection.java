@@ -15,13 +15,13 @@ public class Collection {
 
     // Used to create a new collection.
     // collectionId is created by AUTOINCREMENT.
-    public Collection(String title, java.sql.Date date, String description, 
-        int locationId, int exhibitionId) {
+    public Collection(String title, java.sql.Date date, String description,
+            int locationId, int exhibitionId) {
         this(-1, title, date, description, locationId, exhibitionId);
     }
 
-    public Collection(int collectionId, String title, java.sql.Date date, String description, 
-        int locationId, int exhibitionId) {
+    public Collection(int collectionId, String title, java.sql.Date date, String description,
+            int locationId, int exhibitionId) {
         this.setCollectionId(collectionId);
         this.setTitle(title);
         this.setDate(date);

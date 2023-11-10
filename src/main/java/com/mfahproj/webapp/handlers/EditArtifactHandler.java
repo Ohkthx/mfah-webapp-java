@@ -94,7 +94,7 @@ public class EditArtifactHandler implements HttpHandler {
         if (!StringUtils.isNullOrEmpty(form.get("Title"))) {
             artifact.setTitle(form.get("Title"));
         }
-        
+
         if (!StringUtils.isNullOrEmpty(form.get("ArtistId"))) {
             artifact.setArtistId(Integer.parseInt(form.get("ArtistId")));
         }

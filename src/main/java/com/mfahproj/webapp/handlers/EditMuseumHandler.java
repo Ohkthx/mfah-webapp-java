@@ -28,7 +28,7 @@ public class EditMuseumHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "collection/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "museum/edit.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");

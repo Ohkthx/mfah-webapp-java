@@ -570,7 +570,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Artifact "
+            String sql = "UPDATE Artifact "
                     + "SET Title = ?, ArtistId = ?, Date = ?, Place = ?, Medium = ?, Dimensions = ?, "
                     + "CollectionId = ?, Description = ?, OwnerId = ? "
                     + "WHERE ArtifactId = ?";
@@ -607,7 +607,7 @@ public class Database {
         }
     }
 
-   // Obtain a Program from the database using Id.
+    // Obtain a Program from the database using Id.
     public static Program getProgram(int programId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -760,7 +760,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Program "
+            String sql = "UPDATE Program "
                     + "(SET Name = ?, Speaker = ?, RoomName = ?, StartDate = ?, EndDate = ?) "
                     + "WHERE ProgramId = ?";
             pstmt = conn.prepareStatement(sql);
@@ -844,7 +844,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "EDIT Collection "
+            String sql = "EDIT Collection "
                     + "(Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ?) "
                     + "WHERE CollectionId = ?";
 
@@ -974,7 +974,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Artist "
+            String sql = "UPDATE Artist "
                     + "(SET FirstName = ?, LastName = ?) "
                     + "WHERE ArtistId = ?";
             pstmt = conn.prepareStatement(sql);
@@ -1099,7 +1099,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Artist "
+            String sql = "UPDATE Artist "
                     + "(SET Name = ?, PhoneNumber = ?) "
                     + "WHERE ArtifactOwnerId = ?";
             pstmt = conn.prepareStatement(sql);
@@ -1228,7 +1228,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Artist "
+            String sql = "UPDATE Artist "
                     + "(SET Name = ?, Address = ?, TotalRevenue = ?, OperationalCost = ?) "
                     + "WHERE MuseumId = ?";
             pstmt = conn.prepareStatement(sql);
@@ -1361,7 +1361,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql =  "UPDATE Exhibition "
+            String sql = "UPDATE Exhibition "
                     + "(SET Title = ?, StartDate = ?, EndDate = ?, Description = ?, MuseumId = ?) "
                     + "WHERE ExhibitionId = ?";
             pstmt = conn.prepareStatement(sql);

@@ -28,7 +28,7 @@ public class EditArtistHandler implements HttpHandler {
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
         // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "artist/edit.html");
 
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
@@ -61,7 +61,7 @@ public class EditArtistHandler implements HttpHandler {
         artist = EditArtistHandler.editArtist(artist, form);
 
         // Load edit form.
-        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "artist/edit.html");
         switch (Database.editArtist(artist)) {
             case SUCCESS:
                 // Update the employees session.
@@ -87,7 +87,7 @@ public class EditArtistHandler implements HttpHandler {
     }
 
     // Edits an antifact from the form data provided.
-    private static Artist editArtist(Artist artist, Map<String, String> form) {    
+    private static Artist editArtist(Artist artist, Map<String, String> form) {
         if (!StringUtils.isNullOrEmpty(form.get("ArtistId"))) {
             artist.setArtistId(Integer.parseInt(form.get("ArtistId")));
         }
@@ -95,11 +95,10 @@ public class EditArtistHandler implements HttpHandler {
         if (!StringUtils.isNullOrEmpty(form.get("firstName"))) {
             artist.setFirstName(form.get("firstName"));
         }
-        
+
         if (!StringUtils.isNullOrEmpty(form.get("lastName"))) {
             artist.setLastName(form.get("lastName"));
         }
-        
 
         return artist;
     }

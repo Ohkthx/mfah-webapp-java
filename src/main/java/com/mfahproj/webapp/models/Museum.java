@@ -56,7 +56,6 @@ public class Museum {
         this.address = address;
     }
 
-
     // TotalRevenue getter.
     public int getTotalRevenue() {
         return this.totalRevenue;
@@ -85,7 +84,7 @@ public class Museum {
                 + ", name='" + this.name + '\''
                 + ", address='" + this.address + '\''
                 + ", totalRevenue=" + this.totalRevenue + '\''
-                + ", operationalCost=" + this.operationalCost 
+                + ", operationalCost=" + this.operationalCost
                 + '}';
     }
 }

@@ -64,7 +64,7 @@ public class EditProgramHandler implements HttpHandler {
         obj = EditProgramHandler.editObj(obj, form);
 
         // Load edit form.
-        String response = Utils.dynamicNavigator(exchange, "collection/edit.html");
+        String response = Utils.dynamicNavigator(exchange, "program/edit.html");
         switch (Database.editProgram(obj)) {
             case SUCCESS:
                 // Update the employees session.

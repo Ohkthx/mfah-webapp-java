@@ -72,8 +72,9 @@ public class App {
         server.createContext("/collection/register", new MiddlewareHandler(new RegisterCollectionHandler(), callback));
         server.createContext("/program/register", new MiddlewareHandler(new RegisterProgramHandler(), callback));
         server.createContext("/museum/register", new MiddlewareHandler(new RegisterMuseumHandler(), callback));
-        server.createContext("/artist/edit", new MiddlewareHandler(new EditArtistHandler(), callback));
-        server.createContext("/artifactOwner/register", new MiddlewareHandler(new RegisterArtifactOwnerHandler(), callback));
+        server.createContext("/artist/register", new MiddlewareHandler(new RegisterArtistHandler(), callback));
+        server.createContext("/artifactOwner/register",
+                new MiddlewareHandler(new RegisterArtifactOwnerHandler(), callback));
         server.createContext("/exhibition/register", new MiddlewareHandler(new RegisterExhibitionHandler(), callback));
 
         // Used for editing content.

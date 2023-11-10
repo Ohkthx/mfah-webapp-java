@@ -95,31 +95,46 @@
                 </section>
 
                 <section>
-                    <h2>Your Access</h2>
+                    <h2>Employee Management Panel</h2>
                     <ul>
-                        <li><a href="/employee/report">Reports</a></li>
+                        <li><a href="/employee/register">Create Employee</a></li>
+                        <li><a href="/employee/employeeView">View / Edit Employee</a></li>
+                        <li><a href="/employee/edit">Edit Current Profile</a></li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Artifact Management Panel</h2>
+                    <p>Registration</p>
+                    <ul>
                         <li><a href="/artifact/register">Register Artifact</a></li>
-                        <li><a href="/artifact/edit">Edit Artifact</a></li>
-                        <li><a href="/program/register">Register Program</a></li>
-                        <li><a href="/program/edit">Edit Program</a></li>
-                        <li><a href="/collection/register">Register Collection</a></li>
-                        <li><a href="/collection/edit">Edit Collection</a></li>
                         <li><a href="/artifactOwner/register">Register Artifact Owner</a></li>
-                        <li><a href="/artifactOwner/edit">Edit Artifact Owner</a></li>
                         <li><a href="/artist/register">Register Artist</a></li>
-                        <li><a href="/artist/edit">Edit Artist</a></li>
+                        <li><a href="/program/register">Register Program</a></li>
+                        <li><a href="/collection/register">Register Collection</a></li>
                         <li><a href="/exhibition/register">Register Exhibition</a></li>
-                        <li><a href="/exhibition/edit">Edit Exhibition</a></li>
                         <li><a href="/museum/register">Register Museum</a></li>
+                    </ul>
+                    <p>Edit information</p>
+                    <ul>
+                        <li><a href="/artifact/edit">Edit Artifact</a></li>
+                        <li><a href="/artifactOwner/edit">Edit Artifact Owner</a></li>
+                        <li><a href="/artist/edit">Edit Artist</a></li>
+                        <li><a href="/program/edit">Edit Program</a></li>
+                        <li><a href="/collection/edit">Edit Collection</a></li>
+                        <li><a href="/exhibition/edit">Edit Exhibition</a></li>
                         <li><a href="/museum/edit">Edit Museum</a></li>
-                        <li><a href="/employee/edit">Edit Profile</a></li>
-                        <li><a href="/generate">Generate Database Data</a></li>
-                        <li><a href="/employee/employeeView">View Employees</a></li>
                     </ul>
                 </section>
             </div>
 
             <div class="pane-right">
+                <section>
+                    <h2>Reports</h2>
+                    <ul>
+                        <li><a href="/employee/report">Reports</a></li>
+                        <li><a href="/generate">Generate Database Data</a></li>
+                    </ul>
+                </section>
                 <section>
                     <h2>Your Details</h2>
                     {{employeeDetails}}
@@ -132,9 +147,9 @@
             </div>
         </div>
     </main>
-    <footer>
+    <!-- <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>
