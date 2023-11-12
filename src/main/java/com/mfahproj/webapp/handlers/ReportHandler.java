@@ -55,30 +55,67 @@ public class ReportHandler implements HttpHandler {
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
+
+
+
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
         String response="";
         // Parse the form data to print the information.
         Map<String, String> form = Utils.parseForm(formData);
         String type  = form.get("type");
-        // keys: action, type, amount
+
         if (type.equals("AIR")){
-            System.out.println("This is AI report Request");
-            response = Utils.dynamicNavigator(exchange, "employee/report.html");
-            response = response.replace("{{report}}", getArtifactInventoryReport());
+
 
             String artifactDate = form.get("artifactDate");
             String collectionDate = form.get("collectionDate");
             String artifactPlace = form.get("filter_artifact_place");
             String artifactMedium = form.get("filter_artifact_medium");
+            System.out.println(artifactPlace);
 
-            if (artifactMedium !=null || artifactMedium !=null || artifactDate!=null || collectionDate!=null){
-                System.out.println("One or More Filter is enables");
+            // Start building the SQL query with placeholders for filters
+            StringBuilder query = new StringBuilder("SELECT Collection.Title AS CollectionTitle, Collection.Date AS CollectionDate, Collection.Description AS CollectionDescription, ");
+            query.append("Artifact.Title AS ArtifactTitle, Artifact.Date AS ArtifactDate, Artifact.Place AS ArtifactPlace, ");
+            query.append("Artifact.Medium AS ArtifactMedium, Artifact.Dimensions AS ArtifactDimensions, ");
+            query.append("Artist.FirstName AS ArtistFirstName, Artist.LastName AS ArtistLastName ");
+            query.append("FROM Collection ");
+            query.append("LEFT JOIN Artifact ON Collection.CollectionId = Artifact.CollectionId ");
+            query.append("LEFT JOIN Artist ON Artifact.ArtistId = Artist.ArtistId");
+
+            // Create a list to store the filter conditions
+            List<String> filterConditions = new ArrayList<>();
+
+            // Check if filters are provided and add them to the list
+            if (collectionDate != null && !collectionDate.isEmpty()) {
+                filterConditions.add("Collection.Date = '"+collectionDate+"'");
             }
 
+            if (artifactDate != null && !artifactDate.isEmpty()) {
+                filterConditions.add("Artifact.Date = '"+artifactDate+"'");
+            }
 
-        } else if (type.equals("MRR")) {
-            System.out.println("This is MR report Request");
+            if (artifactPlace != null && !artifactPlace.isEmpty()) {
+                filterConditions.add("Artifact.Place = '"+artifactPlace+"'");
+            }
+
+            if (artifactMedium != null && !artifactMedium.isEmpty()) {
+                filterConditions.add("Artifact.Medium = '"+artifactMedium+"'");
+            }
+
+            // If filter conditions are present, add the WHERE clause
+            if (!filterConditions.isEmpty()) {
+                query.append(" WHERE ");
+                query.append(String.join(" AND ", filterConditions));
+            }
+            response = Utils.dynamicNavigator(exchange, "employee/report.html");
+            response = response.replace("{{report}}", getArtifactInventoryReport(query.toString()));
+
+        }
+
+        // Museum Revenue Report
+        else if (type.equals("MRR")) {
+
 
             StringBuilder query = new StringBuilder();
             query.append("SELECT subquery.MuseumId, subquery.Name, subquery.Address,subquery.CurrentTotalRevenue,subquery.TotalRevenue FROM(");
@@ -95,7 +132,7 @@ public class ReportHandler implements HttpHandler {
             String end = form.get("end");
 
             if (museumName !=null || museumAddress !=null || start !=null || end !=null){
-                System.out.println("One or More Filter is enable");
+
                 query.append("WHERE ");
                 List<String> conditions = new ArrayList<>();
                 if (museumName != null && !museumName.isEmpty()) {
@@ -119,24 +156,25 @@ public class ReportHandler implements HttpHandler {
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
             response = response.replace("{{report}}", getRevenueReport(query.toString()));
         }
-        else if (type.equals("EAR")){
-            System.out.println("This is EA report Request");
-            response = Utils.dynamicNavigator(exchange, "employee/report.html");
-            response = response.replace("{{report}}", getExhibitionAttendanceReport());
 
+        // Exhibition Attendance Report
+        else if (type.equals("EAR")){
             String startDate = form.get("startDate");
             String endDate = form.get("endDate");
+            StringBuilder query = new StringBuilder("SELECT Exhibition.ExhibitionId, Exhibition.Title AS ExhibitionTitle, Exhibition.StartDate, Exhibition.EndDate, Exhibition.Description, ");
+            query.append("Transactions.ItemId AS TransactionItemId, Transactions.ItemType, Transactions.Price, Transactions.PurchaseDate ");
+            query.append("FROM Exhibition ");
+            query.append("LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId ");
+            query.append("LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId");
 
-            if(startDate != null  || endDate != null){
-                System.out.println("One or more filer is enable");
+            // Check if startDate and endDate filters are provided
+            if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+                query.append(" WHERE Exhibition.StartDate BETWEEN '").append(startDate).append("' AND '").append(endDate).append("'");
             }
 
+            response = Utils.dynamicNavigator(exchange, "employee/report.html");
+            response = response.replace("{{report}}", getExhibitionAttendanceReport(query.toString()));
 
-        }
-        else {
-            // Load register form.
-        response = Utils.dynamicNavigator(exchange, "employee/report.html");
-        response = response.replace("{{report}}", getArtifactInventoryReport());
         }
 
 
@@ -148,7 +186,7 @@ public class ReportHandler implements HttpHandler {
 
 
     // Report handler
-    public static String getArtifactInventoryReport() {
+    public static String getArtifactInventoryReport(String query) {
         StringBuilder report = new StringBuilder();
         report.append("<h1>Artifact Inventory Report: </h1>");
         report.append("<table>");
@@ -164,7 +202,7 @@ public class ReportHandler implements HttpHandler {
         report.append("<th>Artist First Name</th>");
         report.append("<th>Artist Last Name</th>");
         report.append("</tr>");
-        for (ArtifactInventoryReport artifactInventoryReport : Database.getArtifactInventoryReport()) {
+        for (ArtifactInventoryReport artifactInventoryReport : Database.getArtifactInventoryReport(query)) {
             report.append("<tr>");
             report.append("<td>").append(artifactInventoryReport.getArtifactTitle()).append("</td>");
             report.append("<td>").append(artifactInventoryReport.getCollectionTitle()).append("</td>");
@@ -184,7 +222,7 @@ public class ReportHandler implements HttpHandler {
 
 
     // Exhibition attendance report
-    public static String getExhibitionAttendanceReport() {
+    public static String getExhibitionAttendanceReport(String query) {
         StringBuilder report = new StringBuilder();
         report.append("<h1> Exhibition Attendance Report </h1>");
         report.append("<table>");
@@ -199,7 +237,7 @@ public class ReportHandler implements HttpHandler {
         report.append("<th>Transaction Price</th>");
         report.append("<th>Transaction Purchase Date</th>");
         report.append("</tr>");
-        for (ExhibitionAttendanceReport exhibitionAttendanceReport : Database.getExhibitionAttendanceReport()) {
+        for (ExhibitionAttendanceReport exhibitionAttendanceReport : Database.getExhibitionAttendanceReport(query)) {
             report.append("<tr>");
             report.append("<td>").append(exhibitionAttendanceReport.getExhibitionId()).append("</td>");
             report.append("<td>").append(exhibitionAttendanceReport.getExhibitionTitle()).append("</td>");

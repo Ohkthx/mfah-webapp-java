@@ -846,18 +846,11 @@ public class Database {
     }
 
     // Museun Revenue Report
-    public static List<MuseumRevenueReport> getMuseumRevenueReport() {
+    public static List<MuseumRevenueReport> getMuseumRevenueReport(String query) {
         List<MuseumRevenueReport> list = new ArrayList<>();
         try (
                 Connection conn = Database.connect();
-                PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Museum.MuseumId, Museum.Name, Museum.Address, " +
-                                "Museum.TotalRevenue AS CurrentTotalRevenue, " +
-                                "SUM(Transactions.Price) AS TotalRevenue " +
-                                "FROM Museum " +
-                                "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId " +
-                                "GROUP BY Museum.MuseumId, Museum.Name, Museum.Address, Museum.TotalRevenue;"
-                );
+                PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
@@ -877,19 +870,11 @@ public class Database {
 
 
     // ArtifactInventory Report
-    public static List<ArtifactInventoryReport> getArtifactInventoryReport() {
+    public static List<ArtifactInventoryReport> getArtifactInventoryReport(String query) {
         List<ArtifactInventoryReport> list = new ArrayList<>();
         try (
                 Connection conn = Database.connect();
-                PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Collection.Title AS CollectionTitle, Collection.Date AS CollectionDate, Collection.Description AS CollectionDescription, " +
-                                "Artifact.Title AS ArtifactTitle, Artifact.Date AS ArtifactDate, Artifact.Place AS ArtifactPlace, " +
-                                "Artifact.Medium AS ArtifactMedium, Artifact.Dimensions AS ArtifactDimensions, " +
-                                "Artist.FirstName AS ArtistFirstName, Artist.LastName AS ArtistLastName " +
-                                "FROM Collection " +
-                                "LEFT JOIN Artifact ON Collection.CollectionId = Artifact.CollectionId " +
-                                "LEFT JOIN Artist ON Artifact.ArtistId = Artist.ArtistId; "
-                );
+                PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
@@ -918,17 +903,11 @@ public class Database {
 
 
     // Exhibition Attendance Report
-    public static List<ExhibitionAttendanceReport> getExhibitionAttendanceReport() {
+    public static List<ExhibitionAttendanceReport> getExhibitionAttendanceReport(String query) {
         List<ExhibitionAttendanceReport> list = new ArrayList<>();
         try (
                 Connection conn = Database.connect();
-                PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Exhibition.ExhibitionId, Exhibition.Title AS ExhibitionTitle, Exhibition.StartDate, Exhibition.EndDate, Exhibition.Description, " +
-                                "Transactions.ItemId AS TransactionItemId, Transactions.ItemType, Transactions.Price, Transactions.PurchaseDate " +
-                                "FROM Exhibition " +
-                                "LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId " +
-                                "LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId;"
-                );
+                PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {

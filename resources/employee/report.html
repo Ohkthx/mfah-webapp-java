@@ -133,13 +133,13 @@
 
                 <!--    Filters             -->
                 <!-- Start Date Field -->
-                <div id="startDateField" style="display: none;">
+                <div id="startDateField" style="display: block;">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate" name="startDate">
                 </div>
 
                 <!-- End Date Field -->
-                <div id="endDateField" style="display: none;">
+                <div id="endDateField" style="display: block;">
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate" name="endDate">
                 </div>
@@ -162,8 +162,8 @@
 
 
                 <div id="artifactMedium" style="display:none;">
-                    <label for="filter_artifact_place">Filter by Artifact Place:</label>
-                    <input type="text" name="filter_artifact_place" id="filter_artifact_medium">
+                    <label for="filter_artifact_medium">Filter by Artifact Medium:</label>
+                    <input type="text" name="filter_artifact_medium" id="filter_artifact_medium">
 
                 </div>
 
@@ -175,8 +175,11 @@
                     <label for="filter_museum_address">Filter by Address:</label>
                     <input type="text" name="filter_museum_address" id="filter_museum_address">
 
-                    <label for="filter_total_revenue">Filter by Total Revenue:</label>
-                    <input type="text" name="filter_total_revenue" id="filter_total_revenue">
+                    <label >Filter by Total Revenue:</label>
+                    <label for="start">From: </label>
+                    <input type="text" name="start" id="start">
+                    <label for="end">To:</label>
+                    <input type="text" name="end" id="end">
                 </div>
 
 
@@ -214,6 +217,8 @@
             cD.style.display = "none";
             aP.style.display = "none";
             aM.style.display = "none";
+            startDateField.style.display="none";
+            endDateField.style.display="none";
             // Check if the selected option is "Exhibition Attendance Report"
             if (selectedOption === "EAR") {
                 // Show the Start Date and End Date fields
@@ -225,6 +230,8 @@
                 cD.style.display = "block";
                 aP.style.display = "block";
                 aM.style.display = "block";
+                startDateField.style.display="none";
+                endDateField.style.display="none";
 
             }
             else if (selectedOption==="AIR"){
