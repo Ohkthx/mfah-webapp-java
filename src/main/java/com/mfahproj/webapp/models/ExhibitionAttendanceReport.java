@@ -1,41 +1,117 @@
 package com.mfahproj.webapp.models;
 
+import java.util.Date; // You might need to import the appropriate Date class.
+
 public class ExhibitionAttendanceReport {
-    private String attendanceTitle;
-    private int attendance;
+    private int exhibitionId;
+    private String exhibitionTitle;
+    private Date startDate;
+    private Date endDate;
+    private String description;
+    private int transactionItemId;
+    private String itemType;
+    private double price;
+    private Date purchaseDate;
 
-    public ExhibitionAttendanceReport(String attendanceTitle, int attendance) {
-        this.attendanceTitle = attendanceTitle;
-        this.attendance = attendance;
+    public ExhibitionAttendanceReport(int exhibitionId, String exhibitionTitle, Date startDate, Date endDate, String description,
+                                      int transactionItemId, String itemType, double price, Date purchaseDate) {
+        this.exhibitionId = exhibitionId;
+        this.exhibitionTitle = exhibitionTitle;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.transactionItemId = transactionItemId;
+        this.itemType = itemType;
+        this.price = price;
+        this.purchaseDate = purchaseDate;
     }
 
-    public  ExhibitionAttendanceReport(){
-        this.attendanceTitle = "";
-        this.attendance = 0;
+    // Getters and setters for all fields
+
+    public int getExhibitionId() {
+        return exhibitionId;
     }
 
-    public String getAttendanceTitle() {
-        return attendanceTitle;
+    public void setExhibitionId(int exhibitionId) {
+        this.exhibitionId = exhibitionId;
     }
 
-    public void setAttendanceTitle(String attendanceTitle) {
-        this.attendanceTitle = attendanceTitle;
+    public String getExhibitionTitle() {
+        return exhibitionTitle;
     }
 
-    public int getAttendance() {
-        return attendance;
+    public void setExhibitionTitle(String exhibitionTitle) {
+        this.exhibitionTitle = exhibitionTitle;
     }
 
-    public void setAttendance(int attendance) {
-        this.attendance = attendance;
+    public Date getStartDate() {
+        return startDate;
     }
 
-//String representation of the model=
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getTransactionItemId() {
+        return transactionItemId;
+    }
+
+    public void setTransactionItemId(int transactionItemId) {
+        this.transactionItemId = transactionItemId;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Date getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
     @Override
     public String toString() {
         return "ExhibitionAttendanceReport{" +
-                "attendanceTitle='" + attendanceTitle + '\'' +
-                ", attendance=" + attendance +
+                "exhibitionId=" + exhibitionId +
+                ", exhibitionTitle='" + exhibitionTitle + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", description='" + description + '\'' +
+                ", transactionItemId=" + transactionItemId +
+                ", itemType='" + itemType + '\'' +
+                ", price=" + price +
+                ", purchaseDate=" + purchaseDate +
                 '}';
     }
 }

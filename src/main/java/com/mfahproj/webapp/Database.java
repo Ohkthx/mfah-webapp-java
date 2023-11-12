@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.Date;
 
 import com.mfahproj.webapp.models.*;
 import com.mysql.cj.util.StringUtils;
@@ -850,24 +851,30 @@ public class Database {
         try (
                 Connection conn = Database.connect();
                 PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Museum.Name, SUM(Transactions.Price) AS TotalRevenue\n" +
+                        "SELECT Museum.MuseumId, Museum.Name, Museum.Address, " +
+                                "Museum.TotalRevenue AS CurrentTotalRevenue, " +
+                                "SUM(Transactions.Price) AS TotalRevenue " +
                                 "FROM Museum " +
-                                "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId\n" +
-                                "GROUP BY Museum.MuseumId, Museum.Name;"
+                                "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId " +
+                                "GROUP BY Museum.MuseumId, Museum.Name, Museum.Address, Museum.TotalRevenue;"
                 );
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
+                int museumId = rs.getInt("MuseumId");
                 String museumName = rs.getString("Name");
+                String address = rs.getString("Address");
+                Double currentTotalRevenue = rs.getDouble("CurrentTotalRevenue");
                 Double totalRevenue = rs.getDouble("TotalRevenue");
-                list.add(new MuseumRevenueReport(museumName, totalRevenue));
+
+                list.add(new MuseumRevenueReport(museumId, museumName, address, currentTotalRevenue, totalRevenue));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // You should consider more specific error handling here
-            // You can log the exception or throw a custom exception
+            e.printStackTrace();
         }
         return list;
     }
+
 
     // ArtifactInventory Report
     public static List<ArtifactInventoryReport> getArtifactInventoryReport() {
@@ -875,7 +882,10 @@ public class Database {
         try (
                 Connection conn = Database.connect();
                 PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Collection.Title AS CollectionTitle, Artifact.Title AS ArtifactTitle, Artist.FirstName, Artist.LastName " +
+                        "SELECT Collection.Title AS CollectionTitle, Collection.Date AS CollectionDate, Collection.Description AS CollectionDescription, " +
+                                "Artifact.Title AS ArtifactTitle, Artifact.Date AS ArtifactDate, Artifact.Place AS ArtifactPlace, " +
+                                "Artifact.Medium AS ArtifactMedium, Artifact.Dimensions AS ArtifactDimensions, " +
+                                "Artist.FirstName AS ArtistFirstName, Artist.LastName AS ArtistLastName " +
                                 "FROM Collection " +
                                 "LEFT JOIN Artifact ON Collection.CollectionId = Artifact.CollectionId " +
                                 "LEFT JOIN Artist ON Artifact.ArtistId = Artist.ArtistId; "
@@ -885,9 +895,19 @@ public class Database {
             while (rs.next()) {
                 String collectionTitle = rs.getString("CollectionTitle");
                 String artifactTitle = rs.getString("ArtifactTitle");
-                String firstName = rs.getString("FirstName");
-                String lastName = rs.getString("LastName");
-                list.add(new ArtifactInventoryReport(artifactTitle, collectionTitle, firstName, lastName));
+                String collectionDate = rs.getString("CollectionDate");
+                String collectionDescription = rs.getString("CollectionDescription");
+                String artifactDate = rs.getString("ArtifactDate");
+                String artifactPlace = rs.getString("ArtifactPlace");
+                String artifactMedium = rs.getString("ArtifactMedium");
+                String artifactDimensions = rs.getString("ArtifactDimensions");
+                String artistFirstName = rs.getString("ArtistFirstName");
+                String artistLastName = rs.getString("ArtistLastName");
+                list.add(new ArtifactInventoryReport(
+                        artifactTitle, collectionTitle, collectionDate, collectionDescription,
+                        artifactDate, artifactPlace, artifactMedium, artifactDimensions,
+                        artistFirstName, artistLastName
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace(); // You should consider more specific error handling here
@@ -895,6 +915,7 @@ public class Database {
         }
         return list;
     }
+
 
     // Exhibition Attendance Report
     public static List<ExhibitionAttendanceReport> getExhibitionAttendanceReport() {
@@ -902,29 +923,39 @@ public class Database {
         try (
                 Connection conn = Database.connect();
                 PreparedStatement stmt = conn.prepareStatement(
-                        "SELECT Exhibition.Title AS ExhibitionTitle, COUNT(Transactions.ItemId) AS Attendance " +
+                        "SELECT Exhibition.ExhibitionId, Exhibition.Title AS ExhibitionTitle, Exhibition.StartDate, Exhibition.EndDate, Exhibition.Description, " +
+                                "Transactions.ItemId AS TransactionItemId, Transactions.ItemType, Transactions.Price, Transactions.PurchaseDate " +
                                 "FROM Exhibition " +
                                 "LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId " +
-                                "LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId " +
-                                "GROUP BY Exhibition.ExhibitionId, Exhibition.Title;"
-
-
+                                "LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId;"
                 );
                 ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
+                int exhibitionId = rs.getInt("ExhibitionId");
                 String exhibitionTitle = rs.getString("ExhibitionTitle");
-                Integer attendance = rs.getInt("Attendance");
-                list.add(new ExhibitionAttendanceReport(exhibitionTitle, attendance));
+                Date startDate = rs.getDate("StartDate");
+                Date endDate = rs.getDate("EndDate");
+                String description = rs.getString("Description");
+                int transactionItemId = rs.getInt("TransactionItemId");
+                String itemType = rs.getString("ItemType");
+                double price = rs.getDouble("Price");
+                Date purchaseDate = rs.getDate("PurchaseDate");
 
+                list.add(new ExhibitionAttendanceReport(
+                        exhibitionId, exhibitionTitle, startDate, endDate, description,
+                        transactionItemId, itemType, price, purchaseDate
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace(); // You should consider more specific error handling here
             // You can log the exception or throw a custom exception
         }
 
+
         return list;
     }
+
 
 
 }

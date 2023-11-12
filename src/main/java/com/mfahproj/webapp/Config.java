@@ -6,15 +6,15 @@ import java.util.Properties;
 public class Config {
     // Default database information.
     String dbUrl = "jdbc:mysql://localhost:3306/museum";
-    String dbUser = "placeholder";
-    String dbPassword = "placeholder";
+    String dbUser = "root";
+    String dbPassword = "Gideon@1122";
 
     // Default WebApp information.
     int webappHttpPort = 8080;
     int webappHttpsPort = 4433;
     boolean webappUseHttps = false;
-    String webappCert = "placeholder";
-    String webappPassword = "placeholder";
+    String webappCert = "root";
+    String webappPassword = "Gideon@1122";
 
     private Config() {
     }

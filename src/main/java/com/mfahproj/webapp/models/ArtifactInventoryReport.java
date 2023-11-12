@@ -3,21 +3,41 @@ package com.mfahproj.webapp.models;
 public class ArtifactInventoryReport {
     private String artifactTitle;
     private String collectionTitle;
-    private String firstName;
-    private String lastName;
+    private String collectionDate;
+    private String collectionDescription;
+    private String artifactDate;
+    private String artifactPlace;
+    private String artifactMedium;
+    private String artifactDimensions;
+    private String artistFirstName;
+    private String artistLastName;
 
-    public ArtifactInventoryReport(String artifactTitle, String collectionTitle, String firstName, String lastName) {
+    public ArtifactInventoryReport(String artifactTitle, String collectionTitle, String collectionDate, String collectionDescription,
+                                   String artifactDate, String artifactPlace, String artifactMedium, String artifactDimensions,
+                                   String artistFirstName, String artistLastName) {
         this.artifactTitle = artifactTitle;
         this.collectionTitle = collectionTitle;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.collectionDate = collectionDate;
+        this.collectionDescription = collectionDescription;
+        this.artifactDate = artifactDate;
+        this.artifactPlace = artifactPlace;
+        this.artifactMedium = artifactMedium;
+        this.artifactDimensions = artifactDimensions;
+        this.artistFirstName = artistFirstName;
+        this.artistLastName = artistLastName;
     }
 
     public ArtifactInventoryReport() {
         this.artifactTitle = "";
         this.collectionTitle = "";
-        this.firstName = "";
-        this.lastName = "";
+        this.collectionDate = "";
+        this.collectionDescription = "";
+        this.artifactDate = "";
+        this.artifactPlace = "";
+        this.artifactMedium = "";
+        this.artifactDimensions = "";
+        this.artistFirstName = "";
+        this.artistLastName = "";
     }
 
     public String getArtifactTitle() {
@@ -36,20 +56,68 @@ public class ArtifactInventoryReport {
         this.collectionTitle = collectionTitle;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getCollectionDate() {
+        return collectionDate;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setCollectionDate(String collectionDate) {
+        this.collectionDate = collectionDate;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getCollectionDescription() {
+        return collectionDescription;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCollectionDescription(String collectionDescription) {
+        this.collectionDescription = collectionDescription;
+    }
+
+    public String getArtifactDate() {
+        return artifactDate;
+    }
+
+    public void setArtifactDate(String artifactDate) {
+        this.artifactDate = artifactDate;
+    }
+
+    public String getArtifactPlace() {
+        return artifactPlace;
+    }
+
+    public void setArtifactPlace(String artifactPlace) {
+        this.artifactPlace = artifactPlace;
+    }
+
+    public String getArtifactMedium() {
+        return artifactMedium;
+    }
+
+    public void setArtifactMedium(String artifactMedium) {
+        this.artifactMedium = artifactMedium;
+    }
+
+    public String getArtifactDimensions() {
+        return artifactDimensions;
+    }
+
+    public void setArtifactDimensions(String artifactDimensions) {
+        this.artifactDimensions = artifactDimensions;
+    }
+
+    public String getArtistFirstName() {
+        return artistFirstName;
+    }
+
+    public void setArtistFirstName(String artistFirstName) {
+        this.artistFirstName = artistFirstName;
+    }
+
+    public String getArtistLastName() {
+        return artistLastName;
+    }
+
+    public void setArtistLastName(String artistLastName) {
+        this.artistLastName = artistLastName;
     }
 
     @Override
@@ -57,8 +125,14 @@ public class ArtifactInventoryReport {
         return "ArtifactInventoryReport{" +
                 "artifactTitle='" + artifactTitle + '\'' +
                 ", collectionTitle='" + collectionTitle + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", collectionDate='" + collectionDate + '\'' +
+                ", collectionDescription='" + collectionDescription + '\'' +
+                ", artifactDate='" + artifactDate + '\'' +
+                ", artifactPlace='" + artifactPlace + '\'' +
+                ", artifactMedium='" + artifactMedium + '\'' +
+                ", artifactDimensions='" + artifactDimensions + '\'' +
+                ", artistFirstName='" + artistFirstName + '\'' +
+                ", artistLastName='" + artistLastName + '\'' +
                 '}';
     }
 }

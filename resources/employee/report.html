@@ -82,6 +82,13 @@
             width: 100%;
             margin-top: 10px;
         }
+        section {
+            background-color: #fff;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
         button:hover {
             background-color: #0056b3;
@@ -117,17 +124,123 @@
             <form action="/employee/report" method="post">
                 <label for="type">Type:</label>
                 <select name="type" id="type">
-                    <option value="SALES">Sale</option>
+                    <option value="EAR">Exhibition Attendance Report</option>
+                    <option value="AIR">Artifact Inventory Report</option>
+                    <option value="MRR">Museum Revenue Report</option>
                 </select>
-                <label for="amountSlider">Amount (1 - 100):</label>
-                <input type="range" id="amountSlider" name="amount" min="1" max="100" value="50">
+
+
+
+                <!--    Filters             -->
+                <!-- Start Date Field -->
+                <div id="startDateField" style="display: none;">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+
+                <!-- End Date Field -->
+                <div id="endDateField" style="display: none;">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
+
+                <div id="collectionDateField" style="display: none">
+                    <label for="collectionDate">Filter by Collection Date:</label>
+                    <input type="date" name="collectionDate" id="collectionDate">
+                </div>
+
+                <div id="artifactDateField" style="display: none">
+                    <label for="artifactDate">Filter by Artifact Date:</label>
+                    <input type="date" name="artifactDate" id="artifactDate">
+                </div>
+
+                <div id="artifactPlace" style="display:none;">
+                    <label for="filter_artifact_place">Filter by Artifact Place:</label>
+                    <input type="text" name="filter_artifact_place" id="filter_artifact_place">
+
+                </div>
+
+
+                <div id="artifactMedium" style="display:none;">
+                    <label for="filter_artifact_place">Filter by Artifact Place:</label>
+                    <input type="text" name="filter_artifact_place" id="filter_artifact_medium">
+
+                </div>
+
+                <!-- Filters for Museum Revenue Report -->
+                <div id="museum-revenue-filters" style="display: none;">
+                    <label for="filter_museum_name">Filter by Museum Name:</label>
+                    <input type="text" name="filter_museum_name" id="filter_museum_name">
+
+                    <label for="filter_museum_address">Filter by Address:</label>
+                    <input type="text" name="filter_museum_address" id="filter_museum_address">
+
+                    <label for="filter_total_revenue">Filter by Total Revenue:</label>
+                    <input type="text" name="filter_total_revenue" id="filter_total_revenue">
+                </div>
+
+
+<!--                <label for="amountSlider">Amount (1 - 100):</label>-->
+<!--                <input type="range" id="amountSlider" name="amount" min="1" max="100" value="50">-->
                 <button type="submit">Complete</button>
             </form>
+
+
         </div>
+        <section>
+                {{report}}
+        </section>
+        <section>
+
+        </section>
     </main>
     <!-- <footer>
         <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
     </footer> -->
+
+    <script>
+        document.getElementById("type").addEventListener("change", function() {
+            var selectedOption = this.value;
+            var startDateField = document.getElementById("startDateField");
+            var endDateField = document.getElementById("endDateField");
+            var aD = document.getElementById("artifactDateField")
+            var cD = document.getElementById("collectionDateField")
+            var aP = document.getElementById("artifactPlace")
+            var aM = document.getElementById("artifactMedium")
+            var museumRevenueFilters = document.getElementById("museum-revenue-filters");
+
+            museumRevenueFilters.style.display = selectedOption === "MRR" ? "block" : "none";
+            aD.style.display = "none";
+            cD.style.display = "none";
+            aP.style.display = "none";
+            aM.style.display = "none";
+            // Check if the selected option is "Exhibition Attendance Report"
+            if (selectedOption === "EAR") {
+                // Show the Start Date and End Date fields
+                startDateField.style.display = "block";
+                endDateField.style.display = "block";
+            }
+            else if (selectedOption === "AIR") {
+                aD.style.display = "block";
+                cD.style.display = "block";
+                aP.style.display = "block";
+                aM.style.display = "block";
+
+            }
+            else if (selectedOption==="AIR"){
+
+            }
+            else {
+                // Hide the Start Date and End Date fields for other options
+                startDateField.style.display = "none";
+                endDateField.style.display = "none";
+                aD.style.display = "none";
+                cD.style.display = "none";
+                aP.style.display = "none";
+                aM.style.display = "none";
+            }
+        });
+    </script>
 </body>
 
 </html>

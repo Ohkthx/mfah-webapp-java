@@ -86,16 +86,6 @@ public class App {
         //Exhibition and Collection
         server.createContext("/exhibition-collection", new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
-        // Museum Revenue Report
-        server.createContext("/museum-revenue-report", new MiddlewareHandler(new MuseumRevenueReportHandler(), callback));
-
-        // Artifact Inventory Report
-        server.createContext("/artifact-inventory-report", new MiddlewareHandler(new ArtifactInventoryReportHandler(), callback));
-
-        // Exhibition Attendance Report
-        server.createContext("/exhibition-attendance-report", new MiddlewareHandler(new ExhibitionAttendanceReportHandler(), callback));
-
-
     }
 
 
