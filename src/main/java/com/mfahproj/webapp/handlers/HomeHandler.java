@@ -17,6 +17,7 @@ public class HomeHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "homepage.html");
         String sessionId = Session.extractSessionId(exchange);
         Member member = Session.getMemberSession(sessionId);
+        Employee employee = Session.getEmployeeSession(sessionId);
 
         if(sessionId ==  null){
 
@@ -25,7 +26,7 @@ public class HomeHandler implements HttpHandler {
         }
         else {
 
-            if (member != null){
+            if (member != null || employee!=null){
 
                 String forMember =  "<div class='dropdown'>" +
                         "            <button class='dropbtn'>Data Queries</button>" +
