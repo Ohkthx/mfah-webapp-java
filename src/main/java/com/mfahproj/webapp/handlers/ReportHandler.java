@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -65,20 +67,79 @@ public class ReportHandler implements HttpHandler {
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
             response = response.replace("{{report}}", getArtifactInventoryReport());
 
+            String artifactDate = form.get("artifactDate");
+            String collectionDate = form.get("collectionDate");
+            String artifactPlace = form.get("filter_artifact_place");
+            String artifactMedium = form.get("filter_artifact_medium");
+
+            if (artifactMedium !=null || artifactMedium !=null || artifactDate!=null || collectionDate!=null){
+                System.out.println("One or More Filter is enables");
+            }
+
+
         } else if (type.equals("MRR")) {
             System.out.println("This is MR report Request");
-             response = Utils.dynamicNavigator(exchange, "employee/report.html");
-            response = response.replace("{{report}}", getRevenueReport());
+
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT subquery.MuseumId, subquery.Name, subquery.Address,subquery.CurrentTotalRevenue,subquery.TotalRevenue FROM(");
+            query.append("SELECT Museum.MuseumId, Museum.Name, Museum.Address, ");
+            query.append("Museum.TotalRevenue AS CurrentTotalRevenue, SUM(Transactions.Price) AS TotalRevenue ");
+            query.append("FROM Museum ");
+            query.append("LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId ");
+            query.append("GROUP BY Museum.MuseumId, Museum.Name, Museum.Address, Museum.TotalRevenue) AS subquery ");
+
+
+            String museumName = form.get("filter_museum_name");
+            String museumAddress =  form.get("filter_museum_address");
+            String start =  form.get("start");
+            String end = form.get("end");
+
+            if (museumName !=null || museumAddress !=null || start !=null || end !=null){
+                System.out.println("One or More Filter is enable");
+                query.append("WHERE ");
+                List<String> conditions = new ArrayList<>();
+                if (museumName != null && !museumName.isEmpty()) {
+                    conditions.add("subquery.Name = '" + museumName + "'");
+                }
+
+                if (museumAddress != null && !museumAddress.isEmpty()) {
+                    conditions.add("subquery.Address = '" + museumAddress + "'");
+                }
+
+                if (start != null && !start.isEmpty() && end != null && !end.isEmpty()) {
+                    conditions.add("subquery.TotalRevenue BETWEEN " + start + " AND " + end );
+                }
+
+                if (!conditions.isEmpty()) {
+                    query.append(" " + String.join(" AND ", conditions));
+                }
+            }
+
+            System.out.println("Query is: " + query.toString() );
+            response = Utils.dynamicNavigator(exchange, "employee/report.html");
+            response = response.replace("{{report}}", getRevenueReport(query.toString()));
         }
         else if (type.equals("EAR")){
             System.out.println("This is EA report Request");
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
             response = response.replace("{{report}}", getExhibitionAttendanceReport());
+
+            String startDate = form.get("startDate");
+            String endDate = form.get("endDate");
+
+            if(startDate != null  || endDate != null){
+                System.out.println("One or more filer is enable");
+            }
+
+
+        }
+        else {
+            // Load register form.
+        response = Utils.dynamicNavigator(exchange, "employee/report.html");
+        response = response.replace("{{report}}", getArtifactInventoryReport());
         }
 
-        // Load register form.
-//        String response = Utils.dynamicNavigator(exchange, "employee/report.html");
-//        response = response.replace("{{report}}", getArtifactInventoryReport());
+
         exchange.sendResponseHeaders(200, response.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -156,9 +217,9 @@ public class ReportHandler implements HttpHandler {
     }
 
     // Get museum revenue report
-    public static String getRevenueReport() {
+    public static String getRevenueReport(String query) {
         StringBuilder report = new StringBuilder();
-        List<MuseumRevenueReport> museumReports = Database.getMuseumRevenueReport();
+        List<MuseumRevenueReport> museumReports = Database.getMuseumRevenueReport(query);
         report.append("<h1>Museum Revenue Report: </h1>");
         report.append("<table>");
         report.append("<tr>");
