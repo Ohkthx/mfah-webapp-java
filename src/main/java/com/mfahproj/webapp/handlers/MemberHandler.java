@@ -17,7 +17,7 @@ public class MemberHandler implements HttpHandler {
         Member member = Session.getMemberSession(sessionId);
         if (member != null) {
             // Valid non-timeout sessions found. Send to member home page.
-            String response = Utils.readResourceFile("member/member.html");
+            String response = Utils.dynamicNavigator(exchange, "member/member.html");
             response = response.replace("{{emailAddress}}", member.getEmailAddress());
             response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
 
@@ -34,6 +34,13 @@ public class MemberHandler implements HttpHandler {
         // No prior session, send to login page.
         exchange.getResponseHeaders().add("Location", "/login");
         exchange.sendResponseHeaders(302, -1);
+    }
+
+    // Sets the notificaitons
+    public static String setNotifications(Member member, String response) {
+        int totalNotify = Database.getNotifications(member.getMemberId()).size();
+        response = response.replace("{{notifyNum}}", String.valueOf(totalNotify));
+        return response;
     }
 
     // Generates the 'About Me' section.

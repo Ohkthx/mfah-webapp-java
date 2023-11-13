@@ -15,6 +15,8 @@ public class HomeHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         // Load the HTML file to display.
         String response = Utils.dynamicNavigator(exchange, "homepage.html");
+        response = response.replace("{{notifyNum}}", "0");
+
         String sessionId = Session.extractSessionId(exchange);
         Member member = Session.getMemberSession(sessionId);
         Employee employee = Session.getEmployeeSession(sessionId);
@@ -33,6 +35,10 @@ public class HomeHandler implements HttpHandler {
                         "        </div>";
 
                 response = response.replace("{{dropdownmenu}}", forMember);
+                if (member != null) {
+                    // Updates the notifications panel item.
+                    response = MemberHandler.setNotifications(member, response);
+                }
             } else {
                 response = response.replace("{{dropdownmenu}}", "");
             }

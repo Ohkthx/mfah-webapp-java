@@ -16,8 +16,8 @@ public class EmployeeHandler implements HttpHandler {
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee != null) {
-            // Valid non-timeout sessions found. Send to employee home page.
-            String response = Utils.readResourceFile("employee/employee.html");
+            // Load the HTML file to display.
+            String response = Utils.dynamicNavigator(exchange, "employee/employee.html");
             response = response.replace("{{emailAddress}}", employee.getEmailAddress());
             response = response.replace("{{employeeDetails}}", EmployeeHandler.getDetails(employee));
 

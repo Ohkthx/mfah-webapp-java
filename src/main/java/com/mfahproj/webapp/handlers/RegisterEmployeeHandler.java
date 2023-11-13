@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import com.mfahproj.webapp.Database;
-import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
@@ -53,11 +52,8 @@ public class RegisterEmployeeHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "employee/register.html");
         switch (Database.createEmployee(employee)) {
             case SUCCESS:
-                // Create a session for the new employee.
-                String sessionId = Session.newEmployeeSession(employee);
-                String cookie = String.format("SESSIONID=%s; Max-Age=%d", sessionId, 900);
-                exchange.getResponseHeaders().add("Set-Cookie", cookie);
-                exchange.getResponseHeaders().add("Location", "/employee");
+                // Redirect to success page.
+                exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
                 System.out.printf("%s created.\n", employee.getEmailAddress());

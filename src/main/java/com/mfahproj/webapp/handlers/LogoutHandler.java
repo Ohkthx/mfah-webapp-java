@@ -16,13 +16,14 @@ public class LogoutHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        String response = Utils.readResourceFile("logout.html");
-
         // Kill the session.
         String sessionId = Session.extractSessionId(exchange);
         if (sessionId != null) {
             Session.killSession(sessionId);
         }
+
+        // Load the HTML file to display.
+        String response = Utils.dynamicNavigator(exchange, "logout.html");
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {

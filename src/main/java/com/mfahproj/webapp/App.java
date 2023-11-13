@@ -134,7 +134,7 @@ public class App {
                 Session.killSession(sessionId);
 
                 // Redirect to timeout page.
-                String response = Utils.readResourceFile("timeout.html");
+                String response = Utils.dynamicNavigator(exchange, "timeout.html");
                 exchange.sendResponseHeaders(200, response.length());
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(response.getBytes());

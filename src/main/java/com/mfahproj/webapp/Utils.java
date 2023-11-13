@@ -8,8 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Vector;
 
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
@@ -49,7 +51,7 @@ public class Utils {
     }
 
     // Reads a resource file / HTML template to send to client.
-    public static String readResourceFile(String filename) throws IOException {
+    private static String readResourceFile(String filename) throws IOException {
         Path filePath = Paths.get("resources", filename);
         return new String(Files.readAllBytes(filePath));
     }
@@ -77,7 +79,16 @@ public class Utils {
         return parsedData;
     }
 
+    // Creates a href item for the navigation bar.
+    private static String makeHref(String link, String text) {
+        return String.format("<a href=\"%s\">%s</a>", link, text);
+    }
+
+    // Creates the top navigation panel at the top of the page.
     public static String dynamicNavigator(HttpExchange exchange, String filename) throws IOException {
+        List<String> elements = new Vector<String>();
+        elements.add(makeHref("/", "Home"));
+
         // Check if a valid session currently exists.
         boolean isMember = true;
         String sessionId = Session.extractSessionId(exchange);
@@ -92,15 +103,21 @@ public class Utils {
         }
 
         // Modify the 'Profile/Login' navigation menu to change if client is logged in
-        String path = "";
         if (sessionId == null) {
-            path = String.format("<a href=\"/%s\">%s</a>", "login", "Login");
+            elements.add(makeHref("/login", "Login"));
         } else {
-            String text = isMember ? "member" : "employee";
-            path = String.format("<a href=\"/%s\">%s</a>", text, "Profile");
+            String link = isMember ? "/member" : "/employee";
+            elements.add(makeHref(link, "Profile"));
+            if (isMember) {
+                // Add in the notifications panel.
+                elements.add(makeHref("/notifications", "Notifications [{{notifyNum}}]"));
+            }
+
+            elements.add(makeHref("/logout", "Logout"));
         }
 
+        String navigation = String.join("\n", elements);
         String resource = Utils.readResourceFile(filename);
-        return resource.replace("{{clientLoggedIn}}", path);
+        return resource.replace("{{navigationPanel}}", navigation);
     }
 }

@@ -35,12 +35,15 @@ public class NotificationsHandler implements HttpHandler {
             return;
         }
 
+        // Loads the HTML for notifications.
         String response = Utils.dynamicNavigator(exchange, "notifications.html");
+
         List<String> sections = new Vector<String>();
         if (employee != null) {
             sections = NotificationsHandler.employeeNotifications(employee);
         } else {
             sections = NotificationsHandler.memberNotifications(member);
+            response = MemberHandler.setNotifications(member, response);
         }
 
         String html_sections = String.join("\n", sections);
