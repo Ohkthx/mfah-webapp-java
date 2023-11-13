@@ -13,8 +13,8 @@ public class Config {
     int webappHttpPort = 8080;
     int webappHttpsPort = 4433;
     boolean webappUseHttps = false;
-    String webappCert = "root";
-    String webappPassword = "Gideon@1122";
+    String webappCert = "placeholder";
+    String webappPassword = "placeholder";
 
     private Config() {
     }
