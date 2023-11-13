@@ -15,10 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class ReportHandler implements HttpHandler {
     @Override
@@ -173,7 +171,7 @@ public class ReportHandler implements HttpHandler {
             }
 
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
-            response = response.replace("{{report}}", getExhibitionAttendanceReport(query.toString()));
+            response = response.replace("{{report}}", getExhibitionScheduleReport(query.toString()));
 
         }
 
@@ -222,9 +220,9 @@ public class ReportHandler implements HttpHandler {
 
 
     // Exhibition attendance report
-    public static String getExhibitionAttendanceReport(String query) {
+    public static String getExhibitionScheduleReport(String query) {
         StringBuilder report = new StringBuilder();
-        report.append("<h1> Exhibition Attendance Report </h1>");
+        report.append("<h1> Exhibition Schedule Report </h1>");
         report.append("<table>");
         report.append("<tr>");
         report.append("<th>Exhibition ID</th>");
