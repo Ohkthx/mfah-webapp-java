@@ -7,7 +7,8 @@ public class MuseumRevenueReport {
     private Double currentTotalRevenue;
     private Double totalRevenue;
 
-    public MuseumRevenueReport(int museumId, String museumName, String address, Double currentTotalRevenue, Double totalRevenue) {
+    public MuseumRevenueReport(int museumId, String museumName, String address, Double currentTotalRevenue,
+            Double totalRevenue) {
         this.museumId = museumId;
         this.museumName = museumName;
         this.address = address;

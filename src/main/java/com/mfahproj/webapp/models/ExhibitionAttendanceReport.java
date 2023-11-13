@@ -13,8 +13,9 @@ public class ExhibitionAttendanceReport {
     private double price;
     private Date purchaseDate;
 
-    public ExhibitionAttendanceReport(int exhibitionId, String exhibitionTitle, Date startDate, Date endDate, String description,
-                                      int transactionItemId, String itemType, double price, Date purchaseDate) {
+    public ExhibitionAttendanceReport(int exhibitionId, String exhibitionTitle, Date startDate, Date endDate,
+            String description,
+            int transactionItemId, String itemType, double price, Date purchaseDate) {
         this.exhibitionId = exhibitionId;
         this.exhibitionTitle = exhibitionTitle;
         this.startDate = startDate;

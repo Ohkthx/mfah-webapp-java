@@ -19,16 +19,11 @@ public class HomeHandler implements HttpHandler {
         Member member = Session.getMemberSession(sessionId);
         Employee employee = Session.getEmployeeSession(sessionId);
 
-        if(sessionId ==  null){
-
-                System.out.println("Not Logedin");
-                response = response.replace("{{dropdownmenu}}",  "");
-        }
-        else {
-
-            if (member != null || employee!=null){
-
-                String forMember =  "<div class='dropdown'>" +
+        if (sessionId == null) {
+            response = response.replace("{{dropdownmenu}}", "");
+        } else {
+            if (member != null || employee != null) {
+                String forMember = "<div class='dropdown'>" +
                         "            <button class='dropbtn'>Data Queries</button>" +
                         "            <div class='dropdown-content'>" +
                         "                <a href='/artistwork'>Artistwork</a>" +
@@ -37,10 +32,9 @@ public class HomeHandler implements HttpHandler {
                         "            </div>" +
                         "        </div>";
 
-                response = response.replace("{{dropdownmenu}}",  forMember);
-            }
-            else{
-                response = response.replace("{{dropdownmenu}}",  "");
+                response = response.replace("{{dropdownmenu}}", forMember);
+            } else {
+                response = response.replace("{{dropdownmenu}}", "");
             }
 
         }
@@ -49,7 +43,5 @@ public class HomeHandler implements HttpHandler {
             os.write(response.getBytes());
         }
     }
-
-
 
 }

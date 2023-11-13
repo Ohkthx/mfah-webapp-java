@@ -1,12 +1,12 @@
 package com.mfahproj.webapp.models;
 
 public class MuseumRevenue {
-    private  String museumName;
-    private  Double revenue;
+    private String museumName;
+    private Double revenue;
 
-    public  MuseumRevenue(){
-        this.museumName="";
-        this.revenue=0.0;
+    public MuseumRevenue() {
+        this.museumName = "";
+        this.revenue = 0.0;
     }
 
     public MuseumRevenue(String museumName, Double revenue) {
@@ -14,9 +14,7 @@ public class MuseumRevenue {
         this.revenue = revenue;
     }
 
-
-    //Getter and Setters
-
+    // Getter and Setters
 
     public String getMuseumName() {
         return museumName;
@@ -34,8 +32,7 @@ public class MuseumRevenue {
         this.revenue = revenue;
     }
 
-
-    //String Representation
+    // String Representation
     @Override
     public String toString() {
         return "MuseumRevenue{" +

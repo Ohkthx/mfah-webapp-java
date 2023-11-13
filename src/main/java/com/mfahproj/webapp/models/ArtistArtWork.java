@@ -6,10 +6,10 @@ public class ArtistArtWork {
     private String lastName;
     private String artworkTitle;
 
-    public ArtistArtWork(){
-        this.firstName="";
-        this.lastName="";
-        this.artworkTitle="";
+    public ArtistArtWork() {
+        this.firstName = "";
+        this.lastName = "";
+        this.artworkTitle = "";
     }
 
     public ArtistArtWork(String firstName, String lastName, String artworkTitle) {

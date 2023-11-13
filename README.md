@@ -11,6 +11,7 @@ Current features:
 - Generating Pseudo Data for Database population: Tickets, Transactions, and Artifacts.
 - Notifications enabled for Members.
 - Artifact creation, needs to be added to employee role.
+- Generate reports from employee homepage using directors account.
 
 ## Testing Logins
 
@@ -54,11 +55,12 @@ The following are credentials for logging in for testing purposes.
     - [X] Creating pseudo data for Tickets, Transactions, and Artifacts.
     - [ ] Others, add here as implemented.
 - [ ] Data reports - At least 3.
-    - [ ] Certain roles (access level) have access to this, not all preferably.
+    - [X] Certain roles (access level) have access to this, not all preferably.
+        - [X] Director role used to generate reports.
     - [ ] Reporting tools exist inside the database systems already.
     - [ ] Generated when requested.
-    - [ ] Required SQL queries in the background.
-        - [ ] Time Interval required.
+    - [X] Required SQL queries in the background.
+        - [X] Time Interval required.
         - [ ] Needs to come from more than one table.
     - [ ] Report builder
     - [ ] Report designer

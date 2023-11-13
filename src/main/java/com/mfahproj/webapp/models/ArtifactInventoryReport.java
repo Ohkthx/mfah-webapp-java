@@ -12,9 +12,10 @@ public class ArtifactInventoryReport {
     private String artistFirstName;
     private String artistLastName;
 
-    public ArtifactInventoryReport(String artifactTitle, String collectionTitle, String collectionDate, String collectionDescription,
-                                   String artifactDate, String artifactPlace, String artifactMedium, String artifactDimensions,
-                                   String artistFirstName, String artistLastName) {
+    public ArtifactInventoryReport(String artifactTitle, String collectionTitle, String collectionDate,
+            String collectionDescription,
+            String artifactDate, String artifactPlace, String artifactMedium, String artifactDimensions,
+            String artistFirstName, String artistLastName) {
         this.artifactTitle = artifactTitle;
         this.collectionTitle = collectionTitle;
         this.collectionDate = collectionDate;

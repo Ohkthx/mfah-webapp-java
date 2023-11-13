@@ -19,8 +19,8 @@ public class ExhibitionCollectionHandler implements HttpHandler {
         Member member = Session.getMemberSession(sessionId);
         Employee employee = Session.getEmployeeSession(sessionId);
 
-        if (member != null || employee !=null) {
-            String response = Utils.dynamicNavigator(exchange, "exhibition-collection.html");
+        if (member != null || employee != null) {
+            String response = Utils.dynamicNavigator(exchange, "report/exhibition-collection.html");
             response = response.replace("{{exhibition-collection}}", getExhibitionCollection());
             String forMember = "<div class='dropdown'>" +
                     "            <button class='dropbtn'>Data Queries</button>" +
@@ -38,7 +38,7 @@ public class ExhibitionCollectionHandler implements HttpHandler {
                 os.write(response.getBytes());
             }
             return;
-        }else {
+        } else {
             String response = Utils.dynamicNavigator(exchange, "login.html");
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
@@ -54,7 +54,7 @@ public class ExhibitionCollectionHandler implements HttpHandler {
         for (ExihibitionsAndCollections exhibition : Database.getExhibitionAndCollection()) {
             exhibitionCollection += "<tr>";
             exhibitionCollection += "<td>" + exhibition.getExihibitionTitle() + "</td>";
-            exhibitionCollection += "<td>" + exhibition.getCollectionTitle()+ "</td>";
+            exhibitionCollection += "<td>" + exhibition.getCollectionTitle() + "</td>";
             exhibitionCollection += "</tr>";
         }
         return exhibitionCollection;

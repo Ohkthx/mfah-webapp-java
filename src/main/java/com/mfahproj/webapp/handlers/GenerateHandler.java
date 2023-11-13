@@ -168,7 +168,6 @@ public class GenerateHandler implements HttpHandler {
         // Insert into database.
         switch (Database.createTransactionsBatch(transactions)) {
             case SUCCESS:
-                System.out.println("Success!");
                 break;
             case DUPLICATE:
                 System.err.println("Duplicate transaction.");
@@ -194,7 +193,6 @@ public class GenerateHandler implements HttpHandler {
         // Insert into database.
         switch (Database.createArtifactsBatch(artifacts)) {
             case SUCCESS:
-                System.out.println("Success!");
                 break;
             case DUPLICATE:
                 System.err.println("Duplicate transaction.");

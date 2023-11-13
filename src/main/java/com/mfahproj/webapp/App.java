@@ -76,18 +76,12 @@ public class App {
 
         // Reports
         server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
-
-        // Artwork
         server.createContext("/artistwork", new MiddlewareHandler(new ArtistWorkHandler(), callback));
-
-        //Museum Revenue
         server.createContext("/revenue", new MiddlewareHandler(new RevenueHandler(), callback));
-
-        //Exhibition and Collection
-        server.createContext("/exhibition-collection", new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
+        server.createContext("/exhibition-collection",
+                new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
     }
-
 
     // Creates a server based on if it is HTTPS or HTTP.
     private static HttpServer createServer(Config config, boolean useHttps) throws Exception {

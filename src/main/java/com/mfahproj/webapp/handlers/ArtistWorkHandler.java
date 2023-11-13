@@ -11,7 +11,7 @@ import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Member;
 import com.sun.net.httpserver.HttpHandler;
 
-public class ArtistWorkHandler  implements HttpHandler {
+public class ArtistWorkHandler implements HttpHandler {
     @Override
     public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
 
@@ -19,10 +19,9 @@ public class ArtistWorkHandler  implements HttpHandler {
         Member member = Session.getMemberSession(sessionId);
         Employee employee = Session.getEmployeeSession(sessionId);
 
-        if (member != null || employee!=null) {
+        if (member != null || employee != null) {
 
-
-            String response = Utils.dynamicNavigator(exchange, "artwork.html");
+            String response = Utils.dynamicNavigator(exchange, "report/artwork.html");
             response = response.replace("{{artistwork}}", getArtist());
 
             String forMember = "<div class='dropdown'>" +
@@ -40,21 +39,20 @@ public class ArtistWorkHandler  implements HttpHandler {
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
             }
-        }else {
-            String response =  Utils.dynamicNavigator(exchange, "login.html");
+        } else {
+            String response = Utils.dynamicNavigator(exchange, "login.html");
             exchange.sendResponseHeaders(200, response.length());
-            try  (OutputStream os = exchange.getResponseBody()){
+            try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
             }
         }
 
-            return;
+        return;
     }
 
-
     public String getArtist() {
-        String artistwork ="";
-        for(ArtistArtWork artistArtWork : Database.getArtistArtWork()) {
+        String artistwork = "";
+        for (ArtistArtWork artistArtWork : Database.getArtistArtWork()) {
             artistwork += "<tr>";
             artistwork += "<td>" + artistArtWork.getFirstName() + "</td>";
             artistwork += "<td>" + artistArtWork.getLastName() + "</td>";
@@ -62,8 +60,7 @@ public class ArtistWorkHandler  implements HttpHandler {
             artistwork += "</tr>";
         }
 
-
-        return  artistwork;
+        return artistwork;
     }
 
 }

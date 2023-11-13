@@ -5,8 +5,8 @@ public class ExihibitionsAndCollections {
     private String collectionTitle;
 
     public ExihibitionsAndCollections() {
-        this.exihibitionTitle ="";
-        this.collectionTitle="";
+        this.exihibitionTitle = "";
+        this.collectionTitle = "";
     }
 
     public ExihibitionsAndCollections(String exihibitionTitle, String collectionTitle) {
@@ -14,8 +14,7 @@ public class ExihibitionsAndCollections {
         this.collectionTitle = collectionTitle;
     }
 
-
-    //Getter and Setter
+    // Getter and Setter
 
     public String getExihibitionTitle() {
         return exihibitionTitle;

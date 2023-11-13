@@ -16,6 +16,9 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+# IDEA
+.idea/
+
 # Ignore configuration files and certificates.
 app.config
 *.p12

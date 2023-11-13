@@ -54,27 +54,25 @@ public class ReportHandler implements HttpHandler {
     private void post(HttpExchange exchange) throws IOException {
         InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), "utf-8");
 
-
-
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
-        String response="";
+        String response = "";
         // Parse the form data to print the information.
         Map<String, String> form = Utils.parseForm(formData);
-        String type  = form.get("type");
+        String type = form.get("type");
 
-        if (type.equals("AIR")){
-
+        if (type.equals("AIR")) {
 
             String artifactDate = form.get("artifactDate");
             String collectionDate = form.get("collectionDate");
             String artifactPlace = form.get("filter_artifact_place");
             String artifactMedium = form.get("filter_artifact_medium");
-            System.out.println(artifactPlace);
 
             // Start building the SQL query with placeholders for filters
-            StringBuilder query = new StringBuilder("SELECT Collection.Title AS CollectionTitle, Collection.Date AS CollectionDate, Collection.Description AS CollectionDescription, ");
-            query.append("Artifact.Title AS ArtifactTitle, Artifact.Date AS ArtifactDate, Artifact.Place AS ArtifactPlace, ");
+            StringBuilder query = new StringBuilder(
+                    "SELECT Collection.Title AS CollectionTitle, Collection.Date AS CollectionDate, Collection.Description AS CollectionDescription, ");
+            query.append(
+                    "Artifact.Title AS ArtifactTitle, Artifact.Date AS ArtifactDate, Artifact.Place AS ArtifactPlace, ");
             query.append("Artifact.Medium AS ArtifactMedium, Artifact.Dimensions AS ArtifactDimensions, ");
             query.append("Artist.FirstName AS ArtistFirstName, Artist.LastName AS ArtistLastName ");
             query.append("FROM Collection ");
@@ -86,19 +84,19 @@ public class ReportHandler implements HttpHandler {
 
             // Check if filters are provided and add them to the list
             if (collectionDate != null && !collectionDate.isEmpty()) {
-                filterConditions.add("Collection.Date = '"+collectionDate+"'");
+                filterConditions.add("Collection.Date = '" + collectionDate + "'");
             }
 
             if (artifactDate != null && !artifactDate.isEmpty()) {
-                filterConditions.add("Artifact.Date = '"+artifactDate+"'");
+                filterConditions.add("Artifact.Date = '" + artifactDate + "'");
             }
 
             if (artifactPlace != null && !artifactPlace.isEmpty()) {
-                filterConditions.add("Artifact.Place = '"+artifactPlace+"'");
+                filterConditions.add("Artifact.Place = '" + artifactPlace + "'");
             }
 
             if (artifactMedium != null && !artifactMedium.isEmpty()) {
-                filterConditions.add("Artifact.Medium = '"+artifactMedium+"'");
+                filterConditions.add("Artifact.Medium = '" + artifactMedium + "'");
             }
 
             // If filter conditions are present, add the WHERE clause
@@ -114,22 +112,21 @@ public class ReportHandler implements HttpHandler {
         // Museum Revenue Report
         else if (type.equals("MRR")) {
 
-
             StringBuilder query = new StringBuilder();
-            query.append("SELECT subquery.MuseumId, subquery.Name, subquery.Address,subquery.CurrentTotalRevenue,subquery.TotalRevenue FROM(");
+            query.append(
+                    "SELECT subquery.MuseumId, subquery.Name, subquery.Address,subquery.CurrentTotalRevenue,subquery.TotalRevenue FROM(");
             query.append("SELECT Museum.MuseumId, Museum.Name, Museum.Address, ");
             query.append("Museum.TotalRevenue AS CurrentTotalRevenue, SUM(Transactions.Price) AS TotalRevenue ");
             query.append("FROM Museum ");
             query.append("LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId ");
             query.append("GROUP BY Museum.MuseumId, Museum.Name, Museum.Address, Museum.TotalRevenue) AS subquery ");
 
-
             String museumName = form.get("filter_museum_name");
-            String museumAddress =  form.get("filter_museum_address");
-            String start =  form.get("start");
+            String museumAddress = form.get("filter_museum_address");
+            String start = form.get("start");
             String end = form.get("end");
 
-            if (museumName !=null || museumAddress !=null || start !=null || end !=null){
+            if (museumName != null || museumAddress != null || start != null || end != null) {
 
                 query.append("WHERE ");
                 List<String> conditions = new ArrayList<>();
@@ -142,7 +139,7 @@ public class ReportHandler implements HttpHandler {
                 }
 
                 if (start != null && !start.isEmpty() && end != null && !end.isEmpty()) {
-                    conditions.add("subquery.TotalRevenue BETWEEN " + start + " AND " + end );
+                    conditions.add("subquery.TotalRevenue BETWEEN " + start + " AND " + end);
                 }
 
                 if (!conditions.isEmpty()) {
@@ -150,24 +147,26 @@ public class ReportHandler implements HttpHandler {
                 }
             }
 
-            System.out.println("Query is: " + query.toString() );
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
             response = response.replace("{{report}}", getRevenueReport(query.toString()));
         }
 
         // Exhibition Attendance Report
-        else if (type.equals("EAR")){
+        else if (type.equals("EAR")) {
             String startDate = form.get("startDate");
             String endDate = form.get("endDate");
-            StringBuilder query = new StringBuilder("SELECT Exhibition.ExhibitionId, Exhibition.Title AS ExhibitionTitle, Exhibition.StartDate, Exhibition.EndDate, Exhibition.Description, ");
-            query.append("Transactions.ItemId AS TransactionItemId, Transactions.ItemType, Transactions.Price, Transactions.PurchaseDate ");
+            StringBuilder query = new StringBuilder(
+                    "SELECT Exhibition.ExhibitionId, Exhibition.Title AS ExhibitionTitle, Exhibition.StartDate, Exhibition.EndDate, Exhibition.Description, ");
+            query.append(
+                    "Transactions.ItemId AS TransactionItemId, Transactions.ItemType, Transactions.Price, Transactions.PurchaseDate ");
             query.append("FROM Exhibition ");
             query.append("LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId ");
             query.append("LEFT JOIN Transactions ON Collection.CollectionId = Transactions.ItemId");
 
             // Check if startDate and endDate filters are provided
             if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-                query.append(" WHERE Exhibition.StartDate BETWEEN '").append(startDate).append("' AND '").append(endDate).append("'");
+                query.append(" WHERE Exhibition.StartDate BETWEEN '").append(startDate).append("' AND '")
+                        .append(endDate).append("'");
             }
 
             response = Utils.dynamicNavigator(exchange, "employee/report.html");
@@ -175,13 +174,11 @@ public class ReportHandler implements HttpHandler {
 
         }
 
-
         exchange.sendResponseHeaders(200, response.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
-
 
     // Report handler
     public static String getArtifactInventoryReport(String query) {
@@ -217,7 +214,6 @@ public class ReportHandler implements HttpHandler {
         report.append("</table>");
         return report.toString();
     }
-
 
     // Exhibition attendance report
     public static String getExhibitionScheduleReport(String query) {
@@ -279,8 +275,3 @@ public class ReportHandler implements HttpHandler {
     }
 
 }
-
-
-
-
-
