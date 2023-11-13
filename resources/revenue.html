@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Museum Revenue</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,7 +65,6 @@
             bottom: 0;
             width: 100%;
         }
-
         /* Style for the dropdown button and content */
         .dropdown {
             position: relative;
@@ -100,7 +99,7 @@
 
 <body>
     <header>
-        <h1>MFAH Online Portal</h1>
+        <h1>Museum revenue</h1>
     </header>
     <nav>
         <a href="/">Home</a>
@@ -111,16 +110,20 @@
         <!-- Create the dropdown menu -->
         {{dropdownmenu}}
 
+
     </nav>
     <main>
         <section>
-            <h1>Welcome to MFAH Database Systems Group Project!</h1>
-            <h3>GitHub Repository: <a href="https://github.com/Ohkthx/mfah-webapp-java">mfah-webapp-java</a></h3>
-            <p>Here we demonstrate the objectives we have learned and attempted to master.
-                <br>
+            <h1>Revenue</h1>
+                <table>
+                    <tr>
+                        <th>Museum Name</th>
+                        <th>Revenue </th>
+                    </tr>
+                    {{revenue}}
 
-                Feel free to login, or register as a new member or employee.
-            </p>
+                </table>
+
 
         </section>
         <section>

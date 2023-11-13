@@ -1,14 +1,12 @@
 package com.mfahproj.webapp;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.Date;
 
-import com.mfahproj.webapp.models.Employee;
-import com.mfahproj.webapp.models.Member;
-import com.mfahproj.webapp.models.Notification;
-import com.mfahproj.webapp.models.Transaction;
-import com.mfahproj.webapp.models.Artifact;
+import com.mfahproj.webapp.models.*;
 import com.mysql.cj.util.StringUtils;
 
 public class Database {
@@ -767,4 +765,178 @@ public class Database {
             }
         }
     }
+
+
+
+    // Getting ArtistArtWork
+    public static List<ArtistArtWork> getArtistArtWork(){
+        List<ArtistArtWork> work = new ArrayList<>();
+//        PreparedStatement pstmt=null;
+        try (Connection conn = Database.connect();
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "SELECT Artist.FirstName, Artist.LastName, Artifact.Title " +
+                             "FROM Artist " +
+                             "LEFT JOIN Artifact ON Artist.ArtistId = Artifact.ArtistId")) {
+
+            ResultSet results = pstmt.executeQuery();
+
+            while (results.next()) {
+                ArtistArtWork artistArtwork = new ArtistArtWork();
+                artistArtwork.setFirstName(results.getString("FirstName"));
+                artistArtwork.setLastName(results.getString("LastName"));
+                artistArtwork.setArtworkTitle(results.getString("Title"));
+
+                work.add(artistArtwork);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return work;
+    }
+
+    // Get Museum Revenue
+    public static List<MuseumRevenue> getMuseumRevenue() {
+        List<MuseumRevenue> list = new ArrayList<>();
+
+        try (Connection conn = Database.connect();
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "SELECT Museum.Name, SUM(Transactions.Price) AS TotalRevenue " +
+                             "FROM Museum " +
+                             "LEFT JOIN Transactions ON Museum.MuseumId = Transactions.MuseumId " +
+                             "GROUP BY Museum.MuseumId, Museum.Name;")) {
+
+            ResultSet results = pstmt.executeQuery();
+
+            while (results.next()) {
+                // Assuming TotalRevenue should be treated as a numerical value, e.g., BigDecimal
+                list.add(new MuseumRevenue(results.getString("Name"), results.getDouble("TotalRevenue")));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider more nuanced error handling here
+        }
+
+        return list;
+    }
+
+    // Get Exihibition and colelction
+    public static List<ExihibitionsAndCollections> getExhibitionAndCollection() {
+        List<ExihibitionsAndCollections> list = new ArrayList<>();
+        try (
+                Connection conn = Database.connect();
+                PreparedStatement stmt = conn.prepareStatement(
+                        "SELECT Exhibition.Title AS ExhibitionTitle, Collection.Title AS CollectionTitle " +
+                                "FROM Exhibition " +
+                                "LEFT JOIN Collection ON Exhibition.ExhibitionId = Collection.ExhibitionId;"
+                )
+        ) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String exhibitionTitle = rs.getString("ExhibitionTitle");
+                String collectionTitle = rs.getString("CollectionTitle");
+                list.add(new ExihibitionsAndCollections(exhibitionTitle, collectionTitle));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Consider more specific error handling
+        }
+        return list;
+    }
+
+    // Museun Revenue Report
+    public static List<MuseumRevenueReport> getMuseumRevenueReport(String query) {
+        List<MuseumRevenueReport> list = new ArrayList<>();
+        try (
+                Connection conn = Database.connect();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                int museumId = rs.getInt("MuseumId");
+                String museumName = rs.getString("Name");
+                String address = rs.getString("Address");
+                Double currentTotalRevenue = rs.getDouble("CurrentTotalRevenue");
+                Double totalRevenue = rs.getDouble("TotalRevenue");
+
+                list.add(new MuseumRevenueReport(museumId, museumName, address, currentTotalRevenue, totalRevenue));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+    // ArtifactInventory Report
+    public static List<ArtifactInventoryReport> getArtifactInventoryReport(String query) {
+        List<ArtifactInventoryReport> list = new ArrayList<>();
+        try (
+                Connection conn = Database.connect();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                String collectionTitle = rs.getString("CollectionTitle");
+                String artifactTitle = rs.getString("ArtifactTitle");
+                String collectionDate = rs.getString("CollectionDate");
+                String collectionDescription = rs.getString("CollectionDescription");
+                String artifactDate = rs.getString("ArtifactDate");
+                String artifactPlace = rs.getString("ArtifactPlace");
+                String artifactMedium = rs.getString("ArtifactMedium");
+                String artifactDimensions = rs.getString("ArtifactDimensions");
+                String artistFirstName = rs.getString("ArtistFirstName");
+                String artistLastName = rs.getString("ArtistLastName");
+                list.add(new ArtifactInventoryReport(
+                        artifactTitle, collectionTitle, collectionDate, collectionDescription,
+                        artifactDate, artifactPlace, artifactMedium, artifactDimensions,
+                        artistFirstName, artistLastName
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // You should consider more specific error handling here
+            // You can log the exception or throw a custom exception
+        }
+        return list;
+    }
+
+
+    // Exhibition Attendance Report
+    public static List<ExhibitionAttendanceReport> getExhibitionAttendanceReport(String query) {
+        List<ExhibitionAttendanceReport> list = new ArrayList<>();
+        try (
+                Connection conn = Database.connect();
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                int exhibitionId = rs.getInt("ExhibitionId");
+                String exhibitionTitle = rs.getString("ExhibitionTitle");
+                Date startDate = rs.getDate("StartDate");
+                Date endDate = rs.getDate("EndDate");
+                String description = rs.getString("Description");
+                int transactionItemId = rs.getInt("TransactionItemId");
+                String itemType = rs.getString("ItemType");
+                double price = rs.getDouble("Price");
+                Date purchaseDate = rs.getDate("PurchaseDate");
+
+                list.add(new ExhibitionAttendanceReport(
+                        exhibitionId, exhibitionTitle, startDate, endDate, description,
+                        transactionItemId, itemType, price, purchaseDate
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // You should consider more specific error handling here
+            // You can log the exception or throw a custom exception
+        }
+
+
+        return list;
+    }
+
+
+
 }
+
+
