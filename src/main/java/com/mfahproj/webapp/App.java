@@ -81,6 +81,14 @@ public class App {
         server.createContext("/exhibition-collection",
                 new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
+        //Employee View
+        server.createContext("/employee/employeeView", new MiddlewareHandler(new EmployeeViewHandler(), callback));
+        server.createContext("/employee/employeeViewEditor", new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
+
+        //Access Denied webpage
+        server.createContext("/accessDeny", new MiddlewareHandler(new accessDenyHandler(), callback));
+
+
     }
 
     // Creates a server based on if it is HTTPS or HTTP.
