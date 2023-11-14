@@ -517,7 +517,7 @@ public class Database {
         }
     }
 
-    // Create a new artifact in the database. Fails on duplicates.
+   // Create a new artifact in the database. Fails on duplicates.
     public static Result createArtifact(Artifact artifact) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -804,8 +804,8 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "INSERT INTO Employee "
-                    + "(title, date, description, locationId, exhibitionId) "
+            String sql = "INSERT INTO Collection "
+                    + "(Title, Date, Description, MuseumId, ExhibitionId) "
                     + "VALUES (?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
