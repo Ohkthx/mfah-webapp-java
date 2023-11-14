@@ -91,6 +91,10 @@ public class EditCollectionHandler implements HttpHandler {
 
     // Edits an antifact from the form data provided.
     private static Collection editObj(Collection obj, Map<String, String> form) {
+        if (!StringUtils.isNullOrEmpty(form.get("CollectionId"))) {
+            obj.setCollectionId(Integer.parseInt(form.get("CollectionId")));
+        }
+        
         if (!StringUtils.isNullOrEmpty(form.get("Title"))) {
             obj.setTitle(form.get("Title"));
         }

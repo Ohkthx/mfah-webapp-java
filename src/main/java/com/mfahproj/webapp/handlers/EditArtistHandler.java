@@ -88,8 +88,8 @@ public class EditArtistHandler implements HttpHandler {
 
     // Edits an antifact from the form data provided.
     private static Artist editArtist(Artist artist, Map<String, String> form) {
-        if (!StringUtils.isNullOrEmpty(form.get("ArtistId"))) {
-            artist.setArtistId(Integer.parseInt(form.get("ArtistId")));
+        if (!StringUtils.isNullOrEmpty(form.get("artistId"))) {
+            artist.setArtistId(Integer.parseInt(form.get("artistId")));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("firstName"))) {
