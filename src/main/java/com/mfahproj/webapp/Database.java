@@ -1,9 +1,11 @@
 package com.mfahproj.webapp;
+import java.io.*;
 
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 import java.util.Date;
 
@@ -37,10 +39,10 @@ public class Database {
     }
 
     // Parses the configuration for the values for the database connection.
-    public static void setConfiguration(Config config) {
-        Database.URL = config.dbUrl;
-        Database.USER = config.dbUser;
-        Database.PASSWORD = config.dbPassword;
+    public static void setConfiguration(Properties config) {
+        Database.URL = config.getProperty("db.url");
+        Database.USER = config.getProperty("db.user");
+        Database.PASSWORD = config.getProperty("db.password");
 
         // Make sure the database variables are semi-valid.
         boolean failed = true;
