@@ -62,7 +62,7 @@ public class RegisterExhibitionHandler implements HttpHandler {
         String response;
         switch (Database.createExhibition(exhibition)) {
             case SUCCESS:
-                // Artifact created
+                // Exhibition created
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
@@ -96,16 +96,16 @@ public class RegisterExhibitionHandler implements HttpHandler {
 
         exhibition.setTitle(form.get("Title"));
         exhibition.setDescription(form.get("Description"));
-        exhibition.setExhibitionId(Integer.parseInt(form.get("MuseumId")));
+        exhibition.setMuseumId(Integer.parseInt(form.get("MuseumId")));
 
-        Date date = RegisterExhibitionHandler.parseDate(form.get("StartDate"));
-        if (date != null) {
-            exhibition.setStartDate(new java.sql.Date(date.getTime()));
+        Date sdate = RegisterExhibitionHandler.parseDate(form.get("StartDate"));
+        if (sdate != null) {
+            exhibition.setStartDate(new java.sql.Date(sdate.getTime()));
         }
 
-        date = RegisterExhibitionHandler.parseDate(form.get("EndDate"));
-        if (date != null) {
-            exhibition.setEndDate(new java.sql.Date(date.getTime()));
+        Date edate = RegisterExhibitionHandler.parseDate(form.get("EndDate"));
+        if (edate != null) {
+            exhibition.setEndDate(new java.sql.Date(edate.getTime()));
         }
 
         return exhibition;
