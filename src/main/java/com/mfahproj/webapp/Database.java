@@ -38,11 +38,12 @@ public class Database {
         }
     }
 
+
     // Parses the configuration for the values for the database connection.
-    public static void setConfiguration(Properties config) {
-        Database.URL = config.getProperty("db.url");
-        Database.USER = config.getProperty("db.user");
-        Database.PASSWORD = config.getProperty("db.password");
+    public static void setConfiguration(Config config) {
+        Database.URL = config.dbUrl;
+        Database.USER = config.dbUser;
+        Database.PASSWORD = config.dbPassword;
 
         // Make sure the database variables are semi-valid.
         boolean failed = true;
