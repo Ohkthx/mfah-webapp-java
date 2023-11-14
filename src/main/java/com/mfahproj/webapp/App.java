@@ -69,10 +69,23 @@ public class App {
         server.createContext("/member/register", new MiddlewareHandler(new RegisterMemberHandler(), callback));
         server.createContext("/employee/register", new MiddlewareHandler(new RegisterEmployeeHandler(), callback));
         server.createContext("/artifact/register", new MiddlewareHandler(new ArtifactHandler(), callback));
+        server.createContext("/collection/register", new MiddlewareHandler(new RegisterCollectionHandler(), callback));
+        server.createContext("/program/register", new MiddlewareHandler(new RegisterProgramHandler(), callback));
+        server.createContext("/museum/register", new MiddlewareHandler(new RegisterMuseumHandler(), callback));
+        server.createContext("/artist/edit", new MiddlewareHandler(new EditArtistHandler(), callback));
+        server.createContext("/artifactOwner/register", new MiddlewareHandler(new RegisterArtifactOwnerHandler(), callback));
+        server.createContext("/exhibition/register", new MiddlewareHandler(new RegisterExhibitionHandler(), callback));
 
         // Used for editing content.
         server.createContext("/member/edit", new MiddlewareHandler(new EditMemberHandler(), callback));
         server.createContext("/employee/edit", new MiddlewareHandler(new EditEmployeeHandler(), callback));
+        server.createContext("/artifact/edit", new MiddlewareHandler(new EditArtifactHandler(), callback));
+        server.createContext("/collection/edit", new MiddlewareHandler(new EditCollectionHandler(), callback));
+        server.createContext("/program/edit", new MiddlewareHandler(new EditProgramHandler(), callback));
+        server.createContext("/museum/edit", new MiddlewareHandler(new EditMuseumHandler(), callback));
+        server.createContext("/artist/edit", new MiddlewareHandler(new EditArtistHandler(), callback));
+        server.createContext("/artifactOwner/edit", new MiddlewareHandler(new EditArtifactOwnerHandler(), callback));
+        server.createContext("/exhibition/edit", new MiddlewareHandler(new EditExhibitionHandler(), callback));
 
         // Reports
         server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
