@@ -66,11 +66,11 @@ public class RegisterArtifactOwnerHandler implements HttpHandler {
                 System.out.printf("%s created.\n", obj.getName());
                 return;
             case DUPLICATE:
-                // Duplicate artist detected, refresh the artist register page.
-                System.out.printf("%s is a duplicate artist.\n", obj.getName());
+                // Duplicate artifactOwner detected, refresh the artifactOwner register page.
+                System.out.printf("%s is a duplicate artifact owner.\n", obj.getName());
                 response = "<body>"
-                        + "    <h4>Artist already exists, please try again.</h4>"
-                        + "    <a href='/artist/register'>Register Artist</a>"
+                        + "    <h4>owner already exists, please try again.</h4>"
+                        + "    <a href='/artifactOwner/register'>Register Artifact Owner</a>"
                         + "</body>";
 
                 break;
