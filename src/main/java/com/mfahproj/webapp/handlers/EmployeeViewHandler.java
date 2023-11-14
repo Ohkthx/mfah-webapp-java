@@ -52,6 +52,7 @@ public class EmployeeViewHandler implements  HttpHandler{
         //send user to employeeView.html (should list all employees with an option to edit employee data
         String response = Utils.dynamicNavigator(exchange, "employee/employeeView.html");
         response = response.replace("{{employeeDetails}}", EmployeeViewHandler.getEmployeeDetails(sessionId));
+        response = response.replace("{{emailAddress}}", employee.getFirstName());
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
