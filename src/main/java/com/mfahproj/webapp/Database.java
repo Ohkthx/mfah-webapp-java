@@ -560,6 +560,839 @@ public class Database {
         }
     }
 
+    // Edit an existing artist in the database.
+    public static Result editArtifact(Artifact artifact) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Artifact "
+                    + "SET Title = ?, ArtistId = ?, Date = ?, Place = ?, Medium = ?, Dimensions = ?, "
+                    + "CollectionId = ?, Description = ?, OwnerId = ? "
+                    + "WHERE ArtifactId = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, artifact.getTitle());
+            pstmt.setInt(2, artifact.getArtistId());
+            pstmt.setDate(3, artifact.getDate());
+            pstmt.setString(4, artifact.getPlace());
+            pstmt.setString(5, artifact.getMedium());
+            pstmt.setString(6, artifact.getDimensions());
+            pstmt.setInt(7, artifact.getCollectionId());
+            pstmt.setString(8, artifact.getDescription());
+            pstmt.setInt(9, artifact.getOwnerId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+   // Obtain a Program from the database using Id.
+    public static Program getProgram(int programId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Program WHERE ProgramId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, programId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Program program = new Program();
+            program.setProgramId(results.getInt("ProgramId"));
+            program.setName(results.getString("Name"));
+            program.setSpeaker(results.getString("Speaker"));
+            program.setRoomName(results.getString("RoomName"));
+            program.setStartDate(results.getDate("StarDate"));
+            program.setEndDate(results.getDate("EndDate"));
+            program.setMuseumId(results.getInt("MuseumId"));
+
+            return program;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new Program in the database. Fails on duplicates.
+    public static Result createProgram(Program program) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Program "
+                    + "(ProgramId, Name, Speaker, RoomName, StartDate, EndDate, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, program.getProgramId());
+            pstmt.setString(2, program.getName());
+            pstmt.setString(3, program.getSpeaker());
+            pstmt.setString(4, program.getRoomName());
+            pstmt.setDate(5, program.getStartDate());
+            pstmt.setDate(6, program.getEndDate());
+            pstmt.setInt(7, program.getMuseumId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a Collection from the database using Id.
+    public static Collection getCollection(int collectionId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Collection WHERE CollectionId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, collectionId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Collection collection = new Collection();
+            collection.setCollectionId(results.getInt("collectionId"));
+            collection.setTitle(results.getString("title"));
+            collection.setDate(results.getDate("date"));
+            collection.setDescription(results.getString("description"));
+            collection.setLocationId(results.getInt("locationId"));
+            collection.setExhibitionId(results.getInt("exhibitionId"));
+
+            return collection;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing program in the database.
+    public static Result editProgram(Program program) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Program "
+                    + "(SET Name = ?, Speaker = ?, RoomName = ?, StartDate = ?, EndDate = ?) "
+                    + "WHERE ProgramId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, program.getName());
+            pstmt.setString(2, program.getSpeaker());
+            pstmt.setString(3, program.getRoomName());
+            pstmt.setDate(4, program.getStartDate());
+            pstmt.setDate(5, program.getEndDate());
+            pstmt.setInt(6, program.getProgramId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new Program in the database. Fails on duplicates.
+    public static Result createCollection(Collection collection) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Employee "
+                    + "(collectionId, title, date, description, locationId, exhibitionId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, collection.getCollectionId());
+            pstmt.setString(2, collection.getTitle());
+            pstmt.setDate(3, collection.getDate());
+            pstmt.setString(4, collection.getDescription());
+            pstmt.setInt(5, collection.getLocationId());
+            pstmt.setInt(6, collection.getExhibitionId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Result editCollection(Collection collection) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "EDIT Collection "
+                    + "(Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ?) "
+                    + "WHERE CollectionId = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, collection.getTitle());
+            pstmt.setDate(2, collection.getDate());
+            pstmt.setString(3, collection.getDescription());
+            pstmt.setInt(4, collection.getLocationId());
+            pstmt.setInt(5, collection.getExhibitionId());
+
+            pstmt.setInt(6, collection.getCollectionId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new Artist in the database. Fails on duplicates.
+    public static Result createArtist(Artist obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Artist "
+                    + "(ArtistId, FirstName, LastName) "
+                    + "VALUES (?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, obj.getArtistId());
+            pstmt.setString(2, obj.getFirstName());
+            pstmt.setString(3, obj.getLastName());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a Artist from the database using Id.
+    public static Artist getArtist(int ArtistId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Artist WHERE ArtistId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, ArtistId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Artist obj = new Artist();
+            obj.setArtistId(results.getInt("artistId"));
+            obj.setFirstName(results.getString("firstName"));
+            obj.setLastName(results.getString("lastName"));
+
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing artist in the database.
+    public static Result editArtist(Artist obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Artist "
+                    + "(SET FirstName = ?, LastName = ?) "
+                    + "WHERE ArtistId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, obj.getFirstName());
+            pstmt.setString(2, obj.getLastName());
+            pstmt.setInt(3, obj.getArtistId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new ArtifactOwner in the database. Fails on duplicates.
+    public static Result createArtifactOwner(ArtifactOwner obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO ArtifactOwner "
+                    + "(OwnerId, Name, PhoneNumber) "
+                    + "VALUES (?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, obj.getOwnerId());
+            pstmt.setString(2, obj.getName());
+            pstmt.setString(3, obj.getPhoneNumber());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a ArtifactOwner from the database using Id.
+    public static ArtifactOwner getArtifactOwner(int ArtifactOwnerId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM ArtifactOwner WHERE ArtifactOwnerId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, ArtifactOwnerId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            ArtifactOwner obj = new ArtifactOwner();
+            obj.setOwnerId(results.getInt("OwnerId"));
+            obj.setName(results.getString("Name"));
+            obj.setPhoneNumber(results.getString("PhoneNumber"));
+
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing artifactOwner in the database.
+    public static Result editArtifactOwner(ArtifactOwner obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Artist "
+                    + "(SET Name = ?, PhoneNumber = ?) "
+                    + "WHERE ArtifactOwnerId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, obj.getName());
+            pstmt.setString(2, obj.getPhoneNumber());
+            pstmt.setInt(3, obj.getOwnerId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new Museum in the database. Fails on duplicates.
+    public static Result createMuseum(Museum obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO Museum "
+                    + "(MuseumId, Name, Address, TotalRevenue, OperationalCost) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, obj.getMuseumId());
+            pstmt.setString(2, obj.getName());
+            pstmt.setString(3, obj.getAddress());
+            pstmt.setInt(4, obj.getTotalRevenue());
+            pstmt.setInt(5, obj.getOperationalCost());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain a Museum from the database using Id.
+    public static Museum getMuseum(int MuseumId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Museum WHERE MuseumId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, MuseumId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Museum obj = new Museum();
+            obj.setMuseumId(results.getInt("MuseumId"));
+            obj.setName(results.getString("Name"));
+            obj.setAddress(results.getString("Address"));
+            obj.setTotalRevenue(results.getInt("TotalRevenue"));
+            obj.setOperationalCost(results.getInt("OperationalCost"));
+
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing Museum in the database.
+    public static Result editMuseum(Museum obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Artist "
+                    + "(SET Name = ?, Address = ?, TotalRevenue = ?, OperationalCost = ?) "
+                    + "WHERE MuseumId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, obj.getName());
+            pstmt.setString(2, obj.getAddress());
+            pstmt.setInt(3, obj.getTotalRevenue());
+            pstmt.setInt(4, obj.getOperationalCost());
+            pstmt.setInt(5, obj.getMuseumId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Create a new Museum in the database. Fails on duplicates.
+    public static Result createExhibition(Exhibition obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql = "INSERT INTO ArtifactOwner "
+                    + "(ExhibitionId, Title, StartDate, EndDate, Description, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, obj.getExhibitionId());
+            pstmt.setString(2, obj.getTitle());
+            pstmt.setDate(3, obj.getStartDate());
+            pstmt.setDate(3, obj.getEndDate());
+            pstmt.setString(4, obj.getDescription());
+            pstmt.setInt(5, obj.getMuseumId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Obtain an exhibition from the database using Id.
+    public static Exhibition getExhibition(int exhibitionId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = "SELECT * FROM Exhibition WHERE ExhibitionId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, exhibitionId);
+
+            // Execute the query
+            results = pstmt.executeQuery();
+
+            // If a record exists, then the credentials are correct
+            if (!results.next()) {
+                return null;
+            }
+
+            Exhibition obj = new Exhibition();
+            obj.setMuseumId(results.getInt("ExhibitionId"));
+            obj.setTitle(results.getString("Title"));
+            obj.setStartDate(results.getDate("StartDate"));
+            obj.setEndDate(results.getDate("EndDate"));
+            obj.setDescription(results.getString("Description"));
+            obj.setMuseumId(results.getInt("MuseumId"));
+
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Edit an existing Exhibition in the database.
+    public static Result editExhibition(Exhibition obj) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            // Prepare a SQL query to check the credentials
+            String sql =  "UPDATE Exhibition "
+                    + "(SET Title = ?, StartDate = ?, EndDate = ?, Description = ?, MuseumId = ?) "
+                    + "WHERE ExhibitionId = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, obj.getTitle());
+            pstmt.setDate(2, obj.getStartDate());
+            pstmt.setDate(3, obj.getEndDate());
+            pstmt.setString(4, obj.getDescription());
+            pstmt.setInt(5, obj.getMuseumId());
+            pstmt.setInt(6, obj.getExhibitionId());
+
+            // Execute the query
+            pstmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return Result.DUPLICATE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.FAILURE;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Create a new transaction in the database. Fails on duplicates.
     public static Result createTransaction(Transaction transaction) {
         Connection conn = null;
