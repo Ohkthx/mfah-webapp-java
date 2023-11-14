@@ -91,6 +91,10 @@ public class EditArtifactHandler implements HttpHandler {
 
     // Edits an antifact from the form data provided.
     private static Artifact editArtifact(Artifact artifact, Map<String, String> form) {
+        if (!StringUtils.isNullOrEmpty(form.get("ArtifactId"))) {
+            artifact.setTitle(form.get("ArtifactId"));
+        }
+        
         if (!StringUtils.isNullOrEmpty(form.get("Title"))) {
             artifact.setTitle(form.get("Title"));
         }

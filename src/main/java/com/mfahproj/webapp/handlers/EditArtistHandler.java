@@ -57,7 +57,7 @@ public class EditArtistHandler implements HttpHandler {
 
         // Parse the form data to edit the artist information.
         Map<String, String> form = Utils.parseForm(formData);
-        Artist artist = Database.getArtist(Integer.parseInt(form.get("ArtistId")));
+        Artist artist = Database.getArtist(Integer.parseInt(form.get("artistId")));
         artist = EditArtistHandler.editArtist(artist, form);
 
         // Load edit form.

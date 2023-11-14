@@ -464,7 +464,7 @@ public class Database {
         }
     }
 
-   // Obtain an artifact from the database using the Artifact ID.
+    // Obtain an artifact from the database using the Artifact ID.
     public static Artifact getArtifact(int artifactID) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -588,7 +588,7 @@ public class Database {
             pstmt.setInt(7, artifact.getCollectionId());
             pstmt.setString(8, artifact.getDescription());
             pstmt.setInt(9, artifact.getOwnerId());
-            pstmt.setInt(9, artifact.getArtifactId());
+            pstmt.setInt(10, artifact.getArtifactId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -847,7 +847,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Collection "
-                    + "SET Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ? "
+                    + "SET Title = ?, Date = ?, Description = ?, MuseumId = ?, ExhibitionId = ? "
                     + "WHERE CollectionId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -856,7 +856,6 @@ public class Database {
             pstmt.setString(3, collection.getDescription());
             pstmt.setInt(4, collection.getLocationId());
             pstmt.setInt(5, collection.getExhibitionId());
-
             pstmt.setInt(6, collection.getCollectionId());
 
             // Execute the query
@@ -1101,7 +1100,7 @@ public class Database {
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE ArtifactOwner "
                     + "SET Name = ?, PhoneNumber = ? "
-                    + "WHERE ArtifactOwnerId = ?";
+                    + "WHERE OwnerId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
             pstmt.setString(2, obj.getPhoneNumber());
