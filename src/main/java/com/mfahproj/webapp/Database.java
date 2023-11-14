@@ -727,12 +727,12 @@ public class Database {
             }
 
             Collection collection = new Collection();
-            collection.setCollectionId(results.getInt("collectionId"));
-            collection.setTitle(results.getString("title"));
-            collection.setDate(results.getDate("date"));
-            collection.setDescription(results.getString("description"));
-            collection.setLocationId(results.getInt("locationId"));
-            collection.setExhibitionId(results.getInt("exhibitionId"));
+            collection.setCollectionId(results.getInt("CollectionId"));
+            collection.setTitle(results.getString("Title"));
+            collection.setDate(results.getDate("Date"));
+            collection.setDescription(results.getString("Description"));
+            collection.setLocationId(results.getInt("MuseumId"));
+            collection.setExhibitionId(results.getInt("ExhibitionId"));
 
             return collection;
         } catch (Exception e) {
@@ -941,9 +941,9 @@ public class Database {
             }
 
             Artist obj = new Artist();
-            obj.setArtistId(results.getInt("artistId"));
-            obj.setFirstName(results.getString("firstName"));
-            obj.setLastName(results.getString("lastName"));
+            obj.setArtistId(results.getInt("ArtistId"));
+            obj.setFirstName(results.getString("FirstName"));
+            obj.setLastName(results.getString("LastName"));
 
             return obj;
         } catch (Exception e) {
@@ -1052,7 +1052,7 @@ public class Database {
             // Connect to the database
             conn = Database.connect();
 
-            String sql = "SELECT * FROM ArtifactOwner WHERE ArtifactOwnerId = ?";
+            String sql = "SELECT * FROM ArtifactOwner WHERE OwnerId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, ArtifactOwnerId);
 
