@@ -30,13 +30,13 @@ INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthD
 VALUES ("Squidward", "Tentacles", "SEASONAL", CURDATE() + INTERVAL 1 DAY, CURDATE() - INTERVAL 35 YEAR, "squidward@krustykrab.com", "ihatespongebob", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Eugene", "Krabs", "SENIOR", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 60 YEAR, "eugene@krustykrab.com", "ilovemoney", CURRENT_TIMESTAMP);
+VALUES ("Eugene", "Krabs", "SEASONAL", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 60 YEAR, "eugene@krustykrab.com", "ilovemoney", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Harry", "Potter", "REGULAR", CURDATE() + INTERVAL 7 DAY, CURDATE() - INTERVAL 18 YEAR, "harry@hogwarts.com", "boywholived", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Joe", "Biden", "SENIOR", CURDATE() - INTERVAL 1 MONTH, CURDATE() - INTERVAL 80 YEAR, "joe@whitehouse.com", "POTUS", CURRENT_TIMESTAMP);
+VALUES ("Joe", "Biden", "REGULAR", CURDATE() - INTERVAL 1 MONTH, CURDATE() - INTERVAL 80 YEAR, "joe@whitehouse.com", "POTUS", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Jose", "Altuve", "REGULAR", CURDATE() + INTERVAL 10 DAY, CURDATE() - INTERVAL 33 YEAR, "jose@astros.com", "worldchamp", CURRENT_TIMESTAMP);
@@ -45,7 +45,7 @@ INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthD
 VALUES ("Simba", "daLion", "REGULAR", CURDATE() - INTERVAL 5 MONTH, CURDATE() - INTERVAL 15 YEAR, "simba@lionking.com", "lionking", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Evelyn", "Harrington", "SENIOR", CURDATE() + INTERVAL 3 MONTH, CURDATE() - INTERVAL 65 YEAR, "evelyn@test.com", "evelyn", CURRENT_TIMESTAMP);
+VALUES ("Evelyn", "Harrington", "SEASONAL", CURDATE() + INTERVAL 3 MONTH, CURDATE() - INTERVAL 65 YEAR, "evelyn@test.com", "evelyn", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Graham", "Fitzgerald", "SEASONAL", CURDATE() + INTERVAL 6 MONTH, CURDATE() - INTERVAL 40 YEAR, "graham@test.com", "graham", CURRENT_TIMESTAMP);
@@ -54,13 +54,13 @@ INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthD
 VALUES ("Penelope", "Crawford", "REGULAR", CURDATE() + INTERVAL 1 YEAR, CURDATE() - INTERVAL 30 YEAR, "penelope@test.com", "penelope", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Dexter", "Wong", "NONE", NULL, CURDATE() - INTERVAL 25 YEAR, "dexter@test.com", "dexter", CURRENT_TIMESTAMP);
+VALUES ("Dexter", "Wong", "NONE", CURDATE(), CURDATE() - INTERVAL 25 YEAR, "dexter@test.com", "dexter", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Victoria", "Preston", "REGULAR", CURDATE() + INTERVAL 1 YEAR, CURDATE() - INTERVAL 28 YEAR, "victoria@test.com", "victoria", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Quentin", "Sinclair", "SENIOR", CURDATE() + INTERVAL 2 MONTH, CURDATE() - INTERVAL 70 YEAR, "quentin@test.com", "quentin", CURRENT_TIMESTAMP);
+VALUES ("Quentin", "Sinclair", "SEASONAL", CURDATE() + INTERVAL 2 MONTH, CURDATE() - INTERVAL 70 YEAR, "quentin@test.com", "quentin", CURRENT_TIMESTAMP);
 
 -- Employees
 
