@@ -211,13 +211,13 @@ BEGIN
 
     IF DATEDIFF(expiration_date, today_date) = 1 THEN
         INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
-        VALUES (member_id, '1 Day Before Expiration', NOW());
+        VALUES (member_id, 'One day remaining of membership until expiration.', NOW());
     ELSEIF expiration_date = today_date THEN
         INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
-        VALUES (member_id, 'On the Day of Expiration', NOW());
+        VALUES (member_id, 'Last day of membership until expiration.', NOW());
     ELSEIF DATEDIFF(expiration_date, today_date) <= 7 THEN
         INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
-        VALUES (member_id, '1 Week Before Expiration', NOW());
+        VALUES (member_id, 'One week of membership until expiration.', NOW());
     END IF;
 END$$
 DELIMITER ;

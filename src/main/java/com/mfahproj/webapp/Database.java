@@ -185,7 +185,7 @@ public class Database {
 
             // Prepare a SQL query to update.
             String sql = "UPDATE Members "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ?, LastLogin = ?"
+                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ?, LastLogin = ?, MembershipType = ?, ExpirationDate = ?, BirthDate = ? "
                     + "WHERE MemberId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -194,7 +194,10 @@ public class Database {
             pstmt.setString(3, member.getPassword());
             pstmt.setString(4, member.getEmailAddress());
             pstmt.setDate(5, member.getLastLogin());
-            pstmt.setInt(6, member.getMemberId());
+            pstmt.setString(6, member.getMembershipType());
+            pstmt.setDate(7, member.getExpirationDate());
+            pstmt.setDate(8, member.getBirthDate());
+            pstmt.setInt(9, member.getMemberId());
 
             // Execute the query
             pstmt.executeUpdate();

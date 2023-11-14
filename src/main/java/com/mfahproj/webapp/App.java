@@ -63,6 +63,7 @@ public class App {
         server.createContext("/member", new MiddlewareHandler(new MemberHandler(), callback));
         server.createContext("/employee", new MiddlewareHandler(new EmployeeHandler(), callback));
         server.createContext("/generate", new MiddlewareHandler(new GenerateHandler(), callback));
+        server.createContext("/member/trigger", new MiddlewareHandler(new MemberTriggerHandler(), callback));
         server.createContext("/notifications", new MiddlewareHandler(new NotificationsHandler(), callback));
 
         // Used for registration.
@@ -101,7 +102,7 @@ public class App {
                 new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
 
         // Access Denied webpage
-        server.createContext("/accessDeny", new MiddlewareHandler(new accessDenyHandler(), callback));
+        server.createContext("/accessDeny", new MiddlewareHandler(new AccessDenyHandler(), callback));
 
     }
 

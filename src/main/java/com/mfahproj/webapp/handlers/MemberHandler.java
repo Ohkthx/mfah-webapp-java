@@ -4,10 +4,12 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Member;
+import com.mfahproj.webapp.models.Notification;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 public class MemberHandler implements HttpHandler {
     @Override
@@ -20,9 +22,7 @@ public class MemberHandler implements HttpHandler {
             String response = Utils.dynamicNavigator(exchange, "member/member.html");
             response = response.replace("{{emailAddress}}", member.getEmailAddress());
             response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
-
-            int totalNotify = Database.getNotifications(member.getMemberId()).size();
-            response = response.replace("{{notifyNum}}", String.valueOf(totalNotify));
+            response = MemberHandler.setNotifications(member, response);
 
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
@@ -38,7 +38,12 @@ public class MemberHandler implements HttpHandler {
 
     // Sets the notificaitons
     public static String setNotifications(Member member, String response) {
-        int totalNotify = Database.getNotifications(member.getMemberId()).size();
+        List<Notification> notifications = Database.getNotifications(member.getMemberId());
+        int totalNotify = 0;
+        for (Notification n : notifications) {
+            totalNotify += n.getChecked() ? 0 : 1;
+        }
+
         response = response.replace("{{notifyNum}}", String.valueOf(totalNotify));
         return response;
     }
