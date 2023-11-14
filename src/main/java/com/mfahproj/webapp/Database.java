@@ -638,7 +638,7 @@ public class Database {
             program.setName(results.getString("Name"));
             program.setSpeaker(results.getString("Speaker"));
             program.setRoomName(results.getString("RoomName"));
-            program.setStartDate(results.getDate("StarDate"));
+            program.setStartDate(results.getDate("StartDate"));
             program.setEndDate(results.getDate("EndDate"));
             program.setMuseumId(results.getInt("MuseumId"));
 
@@ -1226,7 +1226,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "UPDATE Artist "
+            String sql = "UPDATE Museum "
                     + "SET Name = ?, Address = ?, TotalRevenue = ?, OperationalCost = ? "
                     + "WHERE MuseumId = ?";
             pstmt = conn.prepareStatement(sql);
