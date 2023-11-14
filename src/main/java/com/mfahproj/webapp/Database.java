@@ -17,6 +17,10 @@ public class Database {
         FAILURE
     }
 
+    public static Result employeeEditorFailure() {
+        return Result.FAILURE;
+    }
+
     // Connection requirements.
     private static String URL = "jdbc:mysql://localhost:3306/museum";
     private static String USER = "placeholder";
@@ -268,6 +272,44 @@ public class Database {
         }
     }
 
+    public static int getMaxEmployeeID() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+            String sql = "SELECT EmployeeId FROM Employee ORDER BY EmployeeId DESC";
+            pstmt = conn.prepareStatement(sql);
+
+            // execute SQL query
+            results = pstmt.executeQuery();
+
+            if (!results.next()) {
+                return -1;
+            }
+
+            return results.getInt("EmployeeId");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Obtain a user from the database using credentials.
     public static Employee getEmployee(String email, String password) {
         Connection conn = null;
@@ -383,16 +425,20 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Employee "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
+                    + "SET FirstName = ?, LastName = ?, JobTitle = ?, EmailAddress = ?, AccessLevel = ?, SupervisorId = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
                     + "WHERE EmployeeId = ?";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, employee.getFirstName());
             pstmt.setString(2, employee.getLastName());
-            pstmt.setString(3, employee.getPassword());
-            pstmt.setString(4, employee.getPhoneNumber());
-            pstmt.setDate(5, employee.getLastLogin());
-            pstmt.setInt(6, employee.getEmployeeId());
+            pstmt.setString(3, employee.getJobTitle());
+            pstmt.setString(4, employee.getEmailAddress());
+            pstmt.setString(5, employee.getAccessLevel());
+            pstmt.setString(6, Integer.toString(employee.getSupervisorId()));
+            pstmt.setString(7, employee.getPassword());
+            pstmt.setString(8, employee.getPhoneNumber());
+            pstmt.setDate(9, employee.getLastLogin());
+            pstmt.setInt(10, employee.getEmployeeId());
 
             // Execute the query
             pstmt.executeUpdate();

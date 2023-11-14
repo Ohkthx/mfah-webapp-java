@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee's Home</title>
+    <title>Employee - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,58 +76,49 @@
             flex: 1;
             margin: 0 1rem;
         }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Welcome {{emailAddress}} to the MFAH Employee Portal</h1>
+        <h1>Viewing all Employees</h1>
     </header>
     <nav>
         {{navigationPanel}}
     </nav>
     <main>
         <div class="panes">
-            <div class="pane-left">
+
+            <div class="pane">
                 <section>
-                    <h2>Announcements</h2>
-                    <p>Placeholder annoucement information.</p>
+                    <h2>Employee Details:</h2>
+
+                    <table style="width:100%">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Job Title</th>
+                            <th>Phone Number</th>
+                            <th>Email Address</th>
+                            <th>Access Level</th>
+                            <th>Supervisor</th>
+                            <th>Last Login</th>
+                            <th>Edit Details</th>
+                        </tr>
+                        {{employeeDetails}}
+
+
+
+
+                    </table>
                 </section>
 
-                <section>
-                    <h2>Your Access</h2>
-                    <ul>
-                        <li><a href="/employee/report">Reports</a></li>
-                        <li><a href="/artifact/register">Register Artifact</a></li>
-                        <li><a href="/artifact/edit">Edit Artifact</a></li>
-                        <li><a href="/program/register">Register Program</a></li>
-                        <li><a href="/program/edit">Edit Program</a></li>
-                        <li><a href="/collection/register">Register Collection</a></li>
-                        <li><a href="/collection/edit">Edit Collection</a></li>
-                        <li><a href="/artifactOwner/register">Register Artifact Owner</a></li>
-                        <li><a href="/artifactOwner/edit">Edit Artifact Owner</a></li>
-                        <li><a href="/artist/register">Register Artist</a></li>
-                        <li><a href="/artist/edit">Edit Artist</a></li>
-                        <li><a href="/exhibition/register">Register Exhibition</a></li>
-                        <li><a href="/exhibition/edit">Edit Exhibition</a></li>
-                        <li><a href="/museum/register">Register Museum</a></li>
-                        <li><a href="/museum/edit">Edit Museum</a></li>
-                        <li><a href="/employee/edit">Edit Profile</a></li>
-                        <li><a href="/generate">Generate Database Data</a></li>
-                        <li><a href="/employee/employeeView">View Employees</a></li>
-                    </ul>
-                </section>
-            </div>
-
-            <div class="pane-right">
-                <section>
-                    <h2>Your Details</h2>
-                    {{employeeDetails}}
-                </section>
-                <section>
-                    <h2>Update Profile</h2>
-                    <p>Be sure to keep your profile up to date. <a href="/employee/edit">Update now!</a></p>
-                </section>
                 <!-- You can add more sections or content here for the right pane -->
             </div>
         </div>
