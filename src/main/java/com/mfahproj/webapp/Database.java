@@ -1,11 +1,8 @@
 package com.mfahproj.webapp;
-import java.io.*;
-
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Vector;
 import java.util.Date;
 
@@ -20,7 +17,7 @@ public class Database {
         FAILURE
     }
 
-    public static Result employeeEditorFailure(){
+    public static Result employeeEditorFailure() {
         return Result.FAILURE;
     }
 
@@ -37,7 +34,6 @@ public class Database {
             e.printStackTrace();
         }
     }
-
 
     // Parses the configuration for the values for the database connection.
     public static void setConfiguration(Config config) {
@@ -284,10 +280,10 @@ public class Database {
         try {
             // Connect to the database
             conn = Database.connect();
-            String sql = "SELECT EmployeeId FROM employee ORDER BY EmployeeId DESC";
+            String sql = "SELECT EmployeeId FROM Employee ORDER BY EmployeeId DESC";
             pstmt = conn.prepareStatement(sql);
 
-            //execute SQL query
+            // execute SQL query
             results = pstmt.executeQuery();
 
             if (!results.next()) {
@@ -313,6 +309,7 @@ public class Database {
             }
         }
     }
+
     // Obtain a user from the database using credentials.
     public static Employee getEmployee(String email, String password) {
         Connection conn = null;

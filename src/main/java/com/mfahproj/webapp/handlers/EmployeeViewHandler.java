@@ -1,25 +1,16 @@
 package com.mfahproj.webapp.handlers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
-import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import javax.xml.crypto.Data;
-
-public class EmployeeViewHandler implements  HttpHandler{
-
-    HashMap<String, Integer> storeId = new HashMap<>();
+public class EmployeeViewHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -31,11 +22,10 @@ public class EmployeeViewHandler implements  HttpHandler{
     }
 
     private void get(HttpExchange exchange) throws IOException {
-        //check if session exists
+        // check if session exists
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
 
-        storeId.put(sessionId,employee.getEmployeeId());
         // No prior session, send to login page
         if (employee == null) {
             exchange.getResponseHeaders().add("Location", "/login");
@@ -43,13 +33,13 @@ public class EmployeeViewHandler implements  HttpHandler{
             return;
         }
 
-        if(!employee.getAccessLevel().equalsIgnoreCase("MANAGER"))
-        {
+        if (!employee.getAccessLevel().equalsIgnoreCase("MANAGER")) {
             exchange.getResponseHeaders().add("Location", "/accessDeny");
             exchange.sendResponseHeaders(302, -1);
             return;
         }
-        //send user to employeeView.html (should list all employees with an option to edit employee data
+        // send user to employeeView.html (should list all employees with an option to
+        // edit employee data
         String response = Utils.dynamicNavigator(exchange, "employee/employeeView.html");
         response = response.replace("{{employeeDetails}}", EmployeeViewHandler.getEmployeeDetails(sessionId));
         response = response.replace("{{emailAddress}}", employee.getFirstName());
@@ -61,26 +51,21 @@ public class EmployeeViewHandler implements  HttpHandler{
 
     private void post(HttpExchange exchange) throws IOException {
 
-
-
     }
 
-    //should add a Database.editEmployee() method here so managers can edit.
+    // should add a Database.editEmployee() method here so managers can edit.
 
-    //get employee details
+    // get employee details
     private static String getEmployeeDetails(String session) {
 
-
         String s = "";
-        for(int i = 1; i <= Database.getMaxEmployeeID(); i++)
-        {
+        for (int i = 1; i <= Database.getMaxEmployeeID(); i++) {
             Employee employeeDetails = Database.getEmployee(i);
-            //get Employee Supervisor
+            // get Employee Supervisor
             Employee supervisor = Database.getEmployee(employeeDetails.getSupervisorId());
             String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());
 
-             s +=
-                    "<tr>"
+            s += "<tr>"
                     + String.format("\t<td>%s</td>", employeeDetails.getFirstName())
                     + String.format("\t<td>%s</td>", employeeDetails.getLastName())
                     + String.format("\t<td>%s</td>", employeeDetails.getJobTitle())
@@ -94,6 +79,5 @@ public class EmployeeViewHandler implements  HttpHandler{
         }
         return s;
     }
-
 
 }

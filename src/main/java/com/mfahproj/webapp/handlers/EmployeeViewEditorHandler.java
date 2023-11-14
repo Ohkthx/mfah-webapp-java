@@ -1,9 +1,7 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.*;
-import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.mfahproj.webapp.Database;
@@ -15,7 +13,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class EmployeeViewEditorHandler implements HttpHandler {
-
 
     HashMap<String, String> storeQuery = new HashMap<>();
     static boolean editError = false;
@@ -33,7 +30,7 @@ public class EmployeeViewEditorHandler implements HttpHandler {
     private void get(HttpExchange exchange) throws IOException {
         // Check if a session exists.
         String sessionId = Session.extractSessionId(exchange);
-        //employee id number should be passed from EmployeeViewHandler.java
+        // employee id number should be passed from EmployeeViewHandler.java
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee == null) {
             // They are not logged in, send to login page.
@@ -42,27 +39,25 @@ public class EmployeeViewEditorHandler implements HttpHandler {
             return;
         }
 
-        //get URL from edit function
+        // get URL from edit function
         String query = exchange.getRequestURI().getQuery();
 
-
-        //extract only employeeID from URL to parse into editEmployee
+        // extract only employeeID from URL to parse into editEmployee
         query = query.replaceAll("[^0-9]", "");
 
-        storeQuery.put(sessionId,query);
+        storeQuery.put(sessionId, query);
 
         String response = Utils.dynamicNavigator(exchange, "employee/employeeViewEditor.html");
 
-        response = response.replace("{{credentials}}", "Editing Employee : " + Database.getEmployee(Integer.parseInt(query)).getFirstName() +
-                " " + Database.getEmployee(Integer.parseInt(query)).getLastName());
+        response = response.replace("{{credentials}}",
+                "Editing Employee : " + Database.getEmployee(Integer.parseInt(query)).getFirstName() +
+                        " " + Database.getEmployee(Integer.parseInt(query)).getLastName());
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
-
-
 
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
@@ -82,12 +77,10 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
 
-
-
-        //retrieve hashmap to get employeeID
+        // retrieve hashmap to get employeeID
         String query = storeQuery.get(sessionId);
 
-        //set employee to employee that you want to edit
+        // set employee to employee that you want to edit
         editEmployee = Database.getEmployee(Integer.parseInt(query));
 
         // Parse the form data to edit the employee information.
@@ -98,26 +91,22 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         // Load edit form.
         String response = Utils.dynamicNavigator(exchange, "employee/employeeViewEditor.html");
 
+        switch (Database.editEmployee(editEmployee)) {
+            case SUCCESS:
+                // Update the employees session.
+                Session.updateEmployeeSession(sessionId, currentEmployee);
 
-            switch (Database.editEmployee(editEmployee)) {
-                case SUCCESS:
-                    // Update the employees session.
-                    Session.updateEmployeeSession(sessionId, currentEmployee);
+                // Create a session for the new employee.
+                exchange.getResponseHeaders().add("Location", "/success");
+                exchange.sendResponseHeaders(302, -1);
 
-                    // Create a session for the new employee.
-                    exchange.getResponseHeaders().add("Location", "/success");
-                    exchange.sendResponseHeaders(302, -1);
-
-                    System.out.printf("%s updated.\n", editEmployee.getEmailAddress());
-                    return;
-                default:
-                    // Could not create employee.
-                    System.out.printf("%s failed to update.\n", editEmployee.getEmailAddress());
-                    response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
-            }
-
-
-
+                System.out.printf("%s updated.\n", editEmployee.getEmailAddress());
+                return;
+            default:
+                // Could not create employee.
+                System.out.printf("%s failed to update.\n", editEmployee.getEmailAddress());
+                response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
+        }
 
         // Send the response based on the error.
         exchange.sendResponseHeaders(200, response.length());
@@ -126,11 +115,8 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         }
     }
 
-
-
     // Edits an employee from the form data provided.
     private static Employee editEmployee(Employee employee, Map<String, String> form) {
-
 
         if (!StringUtils.isNullOrEmpty(form.get("firstName"))) {
             employee.setFirstName(form.get("firstName"));
@@ -155,9 +141,8 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         if (!StringUtils.isNullOrEmpty(form.get("accessLevel"))) {
             var input = form.get("accessLevel").toLowerCase();
             System.out.println(input);
-            if(input.equals("manager") || input.equals("supervisor") || input.equals("normal"))
+            if (input.equals("manager") || input.equals("supervisor") || input.equals("normal"))
                 employee.setAccessLevel(form.get("accessLevel").toUpperCase());
-
 
         }
 

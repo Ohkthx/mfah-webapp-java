@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee's Home</title>
+    <title>Employee - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,55 +76,56 @@
             flex: 1;
             margin: 0 1rem;
         }
-        table, th, td {
-        border:1px solid black;
-}
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
     </style>
 </head>
 
 <body>
-<header>
-    <h1>Welcome {{emailAddress}} to the MFAH Edit Employee Portal</h1>
-</header>
-<nav>
-    <a href="/">Home</a>
-    <a href="/employee">Profile</a>
-    <a href="/logout">Logout</a>
-</nav>
-<main>
-    <div class="panes">
+    <header>
+        <h1>Viewing all Employees</h1>
+    </header>
+    <nav>
+        {{navigationPanel}}
+    </nav>
+    <main>
+        <div class="panes">
 
-        <div class="pane">
-            <section>
-                <h2>Employee Details:</h2>
+            <div class="pane">
+                <section>
+                    <h2>Employee Details:</h2>
 
-                <table style="width:100%">
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Job Title</th>
-                        <th>Phone Number</th>
-                        <th>Email Address</th>
-                        <th>Access Level</th>
-                        <th>Supervisor</th>
-                        <th>Last Login</th>
-                        <th>Edit Details</th>
-                    </tr>
-                    {{employeeDetails}}
+                    <table style="width:100%">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Job Title</th>
+                            <th>Phone Number</th>
+                            <th>Email Address</th>
+                            <th>Access Level</th>
+                            <th>Supervisor</th>
+                            <th>Last Login</th>
+                            <th>Edit Details</th>
+                        </tr>
+                        {{employeeDetails}}
 
 
 
 
-                </table>
-            </section>
+                    </table>
+                </section>
 
-            <!-- You can add more sections or content here for the right pane -->
+                <!-- You can add more sections or content here for the right pane -->
+            </div>
         </div>
-    </div>
-</main>
-<footer>
-    <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
-</footer>
+    </main>
+    <footer>
+        <p>MFAH 3380 Group Project. <a href="https://github.com/Ohkthx/mfah-webapp-java">Source code</a> on GitHub!</p>
+    </footer>
 </body>
 
 </html>
