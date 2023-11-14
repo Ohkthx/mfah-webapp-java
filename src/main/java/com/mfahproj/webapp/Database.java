@@ -846,8 +846,8 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "EDIT Collection "
-                    + "Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ? "
+            String sql = "UPDATE Collection "
+                    + "SET Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ? "
                     + "WHERE CollectionId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -892,7 +892,7 @@ public class Database {
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Artist "
                     + "(FirstName, LastName) "
-                    + "VALUES (?, ?, ?)";
+                    + "VALUES (?, ?)";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getFirstName());
@@ -1268,7 +1268,7 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "INSERT INTO ArtifactOwner "
+            String sql = "INSERT INTO Exhibition "
                     + "(Title, StartDate, EndDate, Description, MuseumId) "
                     + "VALUES (?, ?, ?, ?, ?)";
 
@@ -1390,7 +1390,7 @@ public class Database {
             }
         }
     }
-
+    
     // Create a new transaction in the database. Fails on duplicates.
     public static Result createTransaction(Transaction transaction) {
         Connection conn = null;
