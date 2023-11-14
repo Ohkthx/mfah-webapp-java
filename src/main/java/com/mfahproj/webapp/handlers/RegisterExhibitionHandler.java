@@ -94,7 +94,6 @@ public class RegisterExhibitionHandler implements HttpHandler {
     private static Exhibition createExhibition(Map<String, String> form) {
         Exhibition exhibition = new Exhibition();
 
-        exhibition.setExhibitionId(Integer.parseInt(form.get("ExhibitionId")));
         exhibition.setTitle(form.get("Title"));
         exhibition.setDescription(form.get("Description"));
         exhibition.setExhibitionId(Integer.parseInt(form.get("MuseumId")));
