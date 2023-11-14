@@ -727,12 +727,12 @@ public class Database {
             }
 
             Collection collection = new Collection();
-            collection.setCollectionId(results.getInt("collectionId"));
-            collection.setTitle(results.getString("title"));
-            collection.setDate(results.getDate("date"));
-            collection.setDescription(results.getString("description"));
-            collection.setLocationId(results.getInt("museumId"));
-            collection.setExhibitionId(results.getInt("exhibitionId"));
+            collection.setCollectionId(results.getInt("CollectionId"));
+            collection.setTitle(results.getString("Title"));
+            collection.setDate(results.getDate("Date"));
+            collection.setDescription(results.getString("Description"));
+            collection.setLocationId(results.getInt("MuseumId"));
+            collection.setExhibitionId(results.getInt("ExhibitionId"));
 
             return collection;
         } catch (Exception e) {
