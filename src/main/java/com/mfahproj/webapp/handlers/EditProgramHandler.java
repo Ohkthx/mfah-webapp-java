@@ -91,12 +91,21 @@ public class EditProgramHandler implements HttpHandler {
 
     // Edits an antifact from the form data provided.
     private static Program editObj(Program obj, Map<String, String> form) {
+
+        if (!StringUtils.isNullOrEmpty(form.get("programId"))) {
+            obj.setProgramId(Integer.parseInt(form.get("programId")));
+        }
+
         if (!StringUtils.isNullOrEmpty(form.get("name"))) {
             obj.setName(form.get("name"));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("speaker"))) {
             obj.setSpeaker(form.get("speaker"));
+        }
+
+        if (!StringUtils.isNullOrEmpty(form.get("roomName"))) {
+            obj.setRoomName(form.get("roomName"));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("startDate"))) {

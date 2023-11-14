@@ -99,8 +99,8 @@ public class RegisterProgramHandler implements HttpHandler {
         program.setRoomName(form.get("roomName"));
         program.setMuseumId(Integer.parseInt(form.get("museumId")));
 
-        Date sdate = RegisterProgramHandler.parseDate(form.get("StartDate"));
-        Date edate = RegisterProgramHandler.parseDate(form.get("EndDate"));
+        Date sdate = RegisterProgramHandler.parseDate(form.get("startDate"));
+        Date edate = RegisterProgramHandler.parseDate(form.get("endDate"));
         if (sdate != null) {
             program.setStartDate(new java.sql.Date(sdate.getTime()));
         }
