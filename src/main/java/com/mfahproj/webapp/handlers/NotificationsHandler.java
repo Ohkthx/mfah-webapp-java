@@ -46,8 +46,13 @@ public class NotificationsHandler implements HttpHandler {
             response = MemberHandler.setNotifications(member, response);
         }
 
-        String html_sections = String.join("\n", sections);
-        response = response.replace("{{sections}}", html_sections);
+        // Account for no notifications.
+        if (sections.size() == 0) {
+            response = response.replace("{{sections}}", "<section><p>None.</p></section>");
+        } else {
+            String html_sections = String.join("\n", sections);
+            response = response.replace("{{sections}}", html_sections);
+        }
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -84,6 +89,11 @@ public class NotificationsHandler implements HttpHandler {
             notify.setChecked(true);
         }
 
+        if (notifications.size() == 0) {
+            return new Vector<String>();
+        }
+
+        // Update that they have been seen.
         Database.editNotificationsBatch(notifications, employee.getEmployeeId());
 
         return notifications.stream().map(Notification::asSection).collect(Collectors.toList());

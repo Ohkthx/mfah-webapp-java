@@ -52,6 +52,7 @@ public class App {
     private static void setRoutes(HttpServer server, MiddlewareHandler.HttpRequestCallback callback) {
         // Homepage
         server.createContext("/", new MiddlewareHandler(new HomeHandler(), callback));
+        server.createContext("/about", new MiddlewareHandler(new AboutHandler(), callback));
         server.createContext("/failure", new MiddlewareHandler(new FailureHandler(), callback));
         server.createContext("/success", new MiddlewareHandler(new SuccessHandler(), callback));
 

@@ -88,6 +88,7 @@ public class Utils {
     public static String dynamicNavigator(HttpExchange exchange, String filename) throws IOException {
         List<String> elements = new Vector<String>();
         elements.add(makeHref("/", "Home"));
+        elements.add(makeHref("/about", "About"));
 
         // Check if a valid session currently exists.
         boolean isMember = true;

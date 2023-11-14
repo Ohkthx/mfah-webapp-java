@@ -39,6 +39,11 @@ public class GenerateHandler implements HttpHandler {
         if (employee != null || member != null) {
             String type = employee != null ? "employee" : "member";
             String response = Utils.dynamicNavigator(exchange, String.format("/%s/generate.html", type));
+            if (member != null) {
+                // Updates the notifications panel item.
+                response = MemberHandler.setNotifications(member, response);
+            }
+
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
