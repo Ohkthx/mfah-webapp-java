@@ -60,7 +60,7 @@ public class EditProgramHandler implements HttpHandler {
 
         // Parse the form data to edit the program information.
         Map<String, String> form = Utils.parseForm(formData);
-        Program obj = Database.getProgram(Integer.parseInt(form.get("ProgramId")));
+        Program obj = Database.getProgram(Integer.parseInt(form.get("programId")));
         obj = EditProgramHandler.editObj(obj, form);
 
         // Load edit form.

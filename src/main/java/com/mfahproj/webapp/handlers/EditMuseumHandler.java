@@ -88,6 +88,12 @@ public class EditMuseumHandler implements HttpHandler {
 
     // Edits an antifact from the form data provided.
     private static Museum editObj(Museum obj, Map<String, String> form) {
+
+        if (!StringUtils.isNullOrEmpty(form.get("MuseumId"))) {
+            obj.setMuseumId(Integer.parseInt(form.get("MuseumId")));
+        }
+
+
         if (!StringUtils.isNullOrEmpty(form.get("Name"))) {
             obj.setName(form.get("Name"));
         }
