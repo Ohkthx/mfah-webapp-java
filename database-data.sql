@@ -30,23 +30,14 @@ INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthD
 VALUES ("Squidward", "Tentacles", "SEASONAL", CURDATE() + INTERVAL 1 DAY, CURDATE() - INTERVAL 35 YEAR, "squidward@krustykrab.com", "ihatespongebob", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Eugene", "Krabs", "SEASONAL", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 60 YEAR, "eugene@krustykrab.com", "ilovemoney", CURRENT_TIMESTAMP);
-
-INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Harry", "Potter", "REGULAR", CURDATE() + INTERVAL 7 DAY, CURDATE() - INTERVAL 18 YEAR, "harry@hogwarts.com", "boywholived", CURRENT_TIMESTAMP);
-
-INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Joe", "Biden", "REGULAR", CURDATE() - INTERVAL 1 MONTH, CURDATE() - INTERVAL 80 YEAR, "joe@whitehouse.com", "POTUS", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Jose", "Altuve", "REGULAR", CURDATE() + INTERVAL 10 DAY, CURDATE() - INTERVAL 33 YEAR, "jose@astros.com", "worldchamp", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Simba", "daLion", "REGULAR", CURDATE() - INTERVAL 5 MONTH, CURDATE() - INTERVAL 15 YEAR, "simba@lionking.com", "lionking", CURRENT_TIMESTAMP);
-
-INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Evelyn", "Harrington", "SEASONAL", CURDATE() + INTERVAL 3 MONTH, CURDATE() - INTERVAL 65 YEAR, "evelyn@test.com", "evelyn", CURRENT_TIMESTAMP);
-
+  
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Graham", "Fitzgerald", "SEASONAL", CURDATE() + INTERVAL 6 MONTH, CURDATE() - INTERVAL 40 YEAR, "graham@test.com", "graham", CURRENT_TIMESTAMP);
 
@@ -58,9 +49,6 @@ VALUES ("Dexter", "Wong", "NONE", CURDATE(), CURDATE() - INTERVAL 25 YEAR, "dext
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Victoria", "Preston", "REGULAR", CURDATE() + INTERVAL 1 YEAR, CURDATE() - INTERVAL 28 YEAR, "victoria@test.com", "victoria", CURRENT_TIMESTAMP);
-
-INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
-VALUES ("Quentin", "Sinclair", "SEASONAL", CURDATE() + INTERVAL 2 MONTH, CURDATE() - INTERVAL 70 YEAR, "quentin@test.com", "quentin", CURRENT_TIMESTAMP);
 
 -- Employees
 
@@ -223,9 +211,6 @@ VALUES ("Arts of Asia", CURDATE(), "The Museum's collections of Asian art span n
 
 INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
 VALUES ("European Art", CURDATE(), "The collection of European art comprises important paintings and sculpture from the 13th to early 20th century.", 3, 3);
-
-INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
-VALUES ("Latin American Art", CURDATE(), "The mission of the Latin American art department and its research institute, the International Center for the Arts of the Americas (ICAA), is to collect, exhibit, research, and educate the public about the diverse artistic production of Latin Americans and Latinos.", 4, 4);
 
 INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
 VALUES ("Photography", CURDATE(), "The Museum's photography collection comprises more than 35,000 items spanning the full history of the medium, from invention to present day.", 5, 5);
