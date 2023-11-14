@@ -369,102 +369,7 @@ public class Database {
         }
     }
 
-    // Create a new employee in the database. Fails on duplicates.
-    public static Result createEmployee(Employee employee) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-            // Connect to the database
-            conn = Database.connect();
-
-            // Prepare a SQL query to check the credentials
-            String sql = "INSERT INTO Employee "
-                    + "(FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, employee.getFirstName());
-            pstmt.setString(2, employee.getLastName());
-            pstmt.setString(3, employee.getJobTitle());
-            pstmt.setString(4, employee.getPhoneNumber());
-            pstmt.setString(5, employee.getEmailAddress());
-            pstmt.setString(6, employee.getPassword());
-            pstmt.setDouble(7, employee.getSalary());
-            pstmt.setInt(8, employee.getMuseumId());
-            pstmt.setInt(9, employee.getSupervisorId());
-            pstmt.setString(10, employee.getAccessLevel());
-            pstmt.setDate(11, employee.getLastLogin());
-
-            // Execute the query
-            pstmt.executeUpdate();
-            return Result.SUCCESS;
-        } catch (SQLIntegrityConstraintViolationException e) {
-            return Result.DUPLICATE;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.FAILURE;
-        } finally {
-            // Cleanup all of the connections and resources.
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Edit an existing employee in the database.
-    public static Result editEmployee(Employee employee) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-            // Connect to the database
-            conn = Database.connect();
-
-            // Prepare a SQL query to check the credentials
-            String sql = "UPDATE Employee "
-                    + "SET FirstName = ?, LastName = ?, JobTitle = ?, EmailAddress = ?, AccessLevel = ?, SupervisorId = ?, Password = ?, PhoneNumber = ?, LastLogin = ? "
-                    + "WHERE EmployeeId = ?";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, employee.getFirstName());
-            pstmt.setString(2, employee.getLastName());
-            pstmt.setString(3, employee.getJobTitle());
-            pstmt.setString(4, employee.getEmailAddress());
-            pstmt.setString(5, employee.getAccessLevel());
-            pstmt.setString(6, Integer.toString(employee.getSupervisorId()));
-            pstmt.setString(7, employee.getPassword());
-            pstmt.setString(8, employee.getPhoneNumber());
-            pstmt.setDate(9, employee.getLastLogin());
-            pstmt.setInt(10, employee.getEmployeeId());
-
-            // Execute the query
-            pstmt.executeUpdate();
-            return Result.SUCCESS;
-        } catch (SQLIntegrityConstraintViolationException e) {
-            return Result.DUPLICATE;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.FAILURE;
-        } finally {
-            // Cleanup all of the connections and resources.
-            try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-   // Obtain an artifact from the database using the Artifact ID.
+    // Obtain an artifact from the database using the Artifact ID.
     public static Artifact getArtifact(int artifactID) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -588,7 +493,7 @@ public class Database {
             pstmt.setInt(7, artifact.getCollectionId());
             pstmt.setString(8, artifact.getDescription());
             pstmt.setInt(9, artifact.getOwnerId());
-            pstmt.setInt(9, artifact.getArtifactId());
+            pstmt.setInt(10, artifact.getArtifactId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -847,7 +752,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Collection "
-                    + "SET Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ? "
+                    + "SET Title = ?, Date = ?, Description = ?, MuseumId = ?, ExhibitionId = ? "
                     + "WHERE CollectionId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -856,7 +761,6 @@ public class Database {
             pstmt.setString(3, collection.getDescription());
             pstmt.setInt(4, collection.getLocationId());
             pstmt.setInt(5, collection.getExhibitionId());
-
             pstmt.setInt(6, collection.getCollectionId());
 
             // Execute the query
@@ -1101,7 +1005,7 @@ public class Database {
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE ArtifactOwner "
                     + "SET Name = ?, PhoneNumber = ? "
-                    + "WHERE ArtifactOwnerId = ?";
+                    + "WHERE OwnerId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
             pstmt.setString(2, obj.getPhoneNumber());
