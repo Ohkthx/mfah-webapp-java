@@ -464,7 +464,7 @@ public class Database {
         }
     }
 
-    // Obtain an artifact from the database using the Artifact ID.
+   // Obtain an artifact from the database using the Artifact ID.
     public static Artifact getArtifact(int artifactID) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -517,7 +517,7 @@ public class Database {
         }
     }
 
-   // Create a new artifact in the database. Fails on duplicates.
+    // Create a new artifact in the database. Fails on duplicates.
     public static Result createArtifact(Artifact artifact) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -588,6 +588,7 @@ public class Database {
             pstmt.setInt(7, artifact.getCollectionId());
             pstmt.setString(8, artifact.getDescription());
             pstmt.setInt(9, artifact.getOwnerId());
+            pstmt.setInt(9, artifact.getArtifactId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -763,7 +764,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Program "
-                    + "(SET Name = ?, Speaker = ?, RoomName = ?, StartDate = ?, EndDate = ?) "
+                    + "SET Name = ?, Speaker = ?, RoomName = ?, StartDate = ?, EndDate = ? "
                     + "WHERE ProgramId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, program.getName());
@@ -846,7 +847,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "EDIT Collection "
-                    + "(Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ?) "
+                    + "Title = ?, Date = ?, Description = ?, LocationId = ?, ExhibitionId = ? "
                     + "WHERE CollectionId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -975,7 +976,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Artist "
-                    + "(SET FirstName = ?, LastName = ?) "
+                    + "SET FirstName = ?, LastName = ? "
                     + "WHERE ArtistId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getFirstName());
@@ -1098,8 +1099,8 @@ public class Database {
             conn = Database.connect();
 
             // Prepare a SQL query to check the credentials
-            String sql = "UPDATE Artist "
-                    + "(SET Name = ?, PhoneNumber = ?) "
+            String sql = "UPDATE ArtifactOwner "
+                    + "SET Name = ?, PhoneNumber = ? "
                     + "WHERE ArtifactOwnerId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
@@ -1227,7 +1228,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Artist "
-                    + "(SET Name = ?, Address = ?, TotalRevenue = ?, OperationalCost = ?) "
+                    + "SET Name = ?, Address = ?, TotalRevenue = ?, OperationalCost = ? "
                     + "WHERE MuseumId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
@@ -1359,7 +1360,7 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "UPDATE Exhibition "
-                    + "(SET Title = ?, StartDate = ?, EndDate = ?, Description = ?, MuseumId = ?) "
+                    + "SET Title = ?, StartDate = ?, EndDate = ?, Description = ?, MuseumId = ? "
                     + "WHERE ExhibitionId = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getTitle());
