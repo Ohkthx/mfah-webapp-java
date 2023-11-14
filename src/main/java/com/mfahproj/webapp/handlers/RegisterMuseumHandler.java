@@ -91,10 +91,10 @@ public class RegisterMuseumHandler implements HttpHandler {
     private static Museum createMuseum(Map<String, String> form) {
         Museum obj = new Museum();
 
-        obj.setName(form.get("title"));
-        obj.setAddress(form.get("description"));
-        obj.setTotalRevenue(Integer.parseInt(form.get("locationId")));
-        obj.setOperationalCost(Integer.parseInt(form.get("exhibitionId")));
+        obj.setName(form.get("name"));
+        obj.setAddress(form.get("address"));
+        obj.setTotalRevenue(Integer.parseInt(form.get("TotalRevenue")));
+        obj.setOperationalCost(Integer.parseInt(form.get("OperationalCost")));
 
         return obj;
     }

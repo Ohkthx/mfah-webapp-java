@@ -37,7 +37,7 @@ public class RegisterArtifactOwnerHandler implements HttpHandler {
             return;
         }
 
-        // Show register form for an artifact owner.
+        // Show register form for an employee.
         String response = Utils.dynamicNavigator(exchange, "artifactOwner/register.html");
 
         exchange.sendResponseHeaders(200, response.length());
@@ -96,5 +96,6 @@ public class RegisterArtifactOwnerHandler implements HttpHandler {
 
         return obj;
     }
+
 
 }

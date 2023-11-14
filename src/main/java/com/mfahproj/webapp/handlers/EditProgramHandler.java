@@ -99,6 +99,10 @@ public class EditProgramHandler implements HttpHandler {
             obj.setSpeaker(form.get("speaker"));
         }
 
+        if (!StringUtils.isNullOrEmpty(form.get("roomName"))) {
+            obj.setRoomName(form.get("roomName"));
+        }
+
         if (!StringUtils.isNullOrEmpty(form.get("startDate"))) {
             Date date = EditProgramHandler.parseDate(form.get("startDate"));
             if (date != null) {
