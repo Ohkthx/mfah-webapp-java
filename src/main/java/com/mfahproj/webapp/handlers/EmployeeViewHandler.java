@@ -60,7 +60,16 @@ public class EmployeeViewHandler implements HttpHandler {
 
         String s = "";
         for (int i = 1; i <= Database.getMaxEmployeeID(); i++) {
-            Employee employeeDetails = Database.getEmployee(i);
+            Employee employeeDetails;
+            try {
+                employeeDetails = Database.getEmployee(i);
+                if (employeeDetails == null) {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                continue;
+            }
+
             // get Employee Supervisor
             Employee supervisor = Database.getEmployee(employeeDetails.getSupervisorId());
             String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());

@@ -1389,7 +1389,7 @@ public class Database {
             }
         }
     }
-    
+
     // Create a new transaction in the database. Fails on duplicates.
     public static Result createTransaction(Transaction transaction) {
         Connection conn = null;

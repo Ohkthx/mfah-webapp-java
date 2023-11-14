@@ -94,7 +94,7 @@ public class EditCollectionHandler implements HttpHandler {
         if (!StringUtils.isNullOrEmpty(form.get("CollectionId"))) {
             obj.setCollectionId(Integer.parseInt(form.get("CollectionId")));
         }
-        
+
         if (!StringUtils.isNullOrEmpty(form.get("Title"))) {
             obj.setTitle(form.get("Title"));
         }

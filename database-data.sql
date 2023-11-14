@@ -99,15 +99,6 @@ VALUES ("Howard", "Fisher", "Gallery Attendant", "713-777-7790", "fisher@mfah.or
 -- Artists
 
 INSERT INTO Artist (FirstName, LastName)
-VALUES ("First", "Artist");
-
-INSERT INTO Artist (FirstName, LastName)
-VALUES ("Second", "Artistt");
-
-INSERT INTO Artist (FirstName, LastName)
-VALUES ("Third", "Artisttt");
-
-INSERT INTO Artist (FirstName, LastName)
 VALUES ("Leonardo", "da Vinci");
 
 INSERT INTO Artist (FirstName, LastName)

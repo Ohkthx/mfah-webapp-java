@@ -128,7 +128,7 @@ public class GenerateHandler implements HttpHandler {
         for (int i = 0; i < amount; i++) {
             if (isEmployee) {
                 // Random member.
-                id = ThreadLocalRandom.current().nextInt(1, 3);
+                id = ThreadLocalRandom.current().nextInt(1, 12);
             }
 
             // Random museum.
@@ -157,7 +157,7 @@ public class GenerateHandler implements HttpHandler {
         for (int i = 0; i < amount; i++) {
             if (isEmployee) {
                 // Random member.
-                id = ThreadLocalRandom.current().nextInt(1, 3);
+                id = ThreadLocalRandom.current().nextInt(1, 12);
             }
 
             // Random museum.
@@ -183,9 +183,9 @@ public class GenerateHandler implements HttpHandler {
 
         // Create n amount of artifacts.
         for (int i = 0; i < amount; i++) {
-            int artistId = ThreadLocalRandom.current().nextInt(1, 4);
-            int ownerId = ThreadLocalRandom.current().nextInt(1, 3);
-            int collectionId = ThreadLocalRandom.current().nextInt(1, 3);
+            int artistId = ThreadLocalRandom.current().nextInt(1, 16);
+            int ownerId = ThreadLocalRandom.current().nextInt(1, 9);
+            int collectionId = ThreadLocalRandom.current().nextInt(1, 6);
 
             artifacts.add(Artifact.generateRandom(artistId, collectionId, ownerId));
         }

@@ -93,7 +93,6 @@ public class EditMuseumHandler implements HttpHandler {
             obj.setMuseumId(Integer.parseInt(form.get("MuseumId")));
         }
 
-
         if (!StringUtils.isNullOrEmpty(form.get("Name"))) {
             obj.setName(form.get("Name"));
         }
