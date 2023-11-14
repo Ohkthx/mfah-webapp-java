@@ -185,7 +185,7 @@ public class Database {
 
             // Prepare a SQL query to update.
             String sql = "UPDATE Members "
-                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ?, LastLogin = ?, MembershipType = ?, ExpirationDate = ?, BirthDate = ? "
+                    + "SET FirstName = ?, LastName = ?, Password = ?, EmailAddress = ?, LastLogin = ?"
                     + "WHERE MemberId = ?";
 
             pstmt = conn.prepareStatement(sql);
@@ -194,10 +194,7 @@ public class Database {
             pstmt.setString(3, member.getPassword());
             pstmt.setString(4, member.getEmailAddress());
             pstmt.setDate(5, member.getLastLogin());
-            pstmt.setString(6, member.getMembershipType());
-            pstmt.setDate(7, member.getExpirationDate());
-            pstmt.setDate(8, member.getBirthDate());
-            pstmt.setInt(9, member.getMemberId());
+            pstmt.setInt(6, member.getMemberId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -671,17 +668,16 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Program "
-                    + "(ProgramId, Name, Speaker, RoomName, StartDate, EndDate, MuseumId) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "(Name, Speaker, RoomName, StartDate, EndDate, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, program.getProgramId());
-            pstmt.setString(2, program.getName());
-            pstmt.setString(3, program.getSpeaker());
-            pstmt.setString(4, program.getRoomName());
-            pstmt.setDate(5, program.getStartDate());
-            pstmt.setDate(6, program.getEndDate());
-            pstmt.setInt(7, program.getMuseumId());
+            pstmt.setString(1, program.getName());
+            pstmt.setString(2, program.getSpeaker());
+            pstmt.setString(3, program.getRoomName());
+            pstmt.setDate(4, program.getStartDate());
+            pstmt.setDate(5, program.getEndDate());
+            pstmt.setInt(6, program.getMuseumId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -806,16 +802,15 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Employee "
-                    + "(collectionId, title, date, description, locationId, exhibitionId) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "(title, date, description, locationId, exhibitionId) "
+                    + "VALUES (?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, collection.getCollectionId());
-            pstmt.setString(2, collection.getTitle());
-            pstmt.setDate(3, collection.getDate());
-            pstmt.setString(4, collection.getDescription());
-            pstmt.setInt(5, collection.getLocationId());
-            pstmt.setInt(6, collection.getExhibitionId());
+            pstmt.setString(1, collection.getTitle());
+            pstmt.setDate(2, collection.getDate());
+            pstmt.setString(3, collection.getDescription());
+            pstmt.setInt(4, collection.getLocationId());
+            pstmt.setInt(5, collection.getExhibitionId());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -892,13 +887,12 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Artist "
-                    + "(ArtistId, FirstName, LastName) "
+                    + "(FirstName, LastName) "
                     + "VALUES (?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, obj.getArtistId());
-            pstmt.setString(2, obj.getFirstName());
-            pstmt.setString(3, obj.getLastName());
+            pstmt.setString(1, obj.getFirstName());
+            pstmt.setString(2, obj.getLastName());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -1017,13 +1011,12 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO ArtifactOwner "
-                    + "(OwnerId, Name, PhoneNumber) "
-                    + "VALUES (?, ?, ?)";
+                    + "(Name, PhoneNumber) "
+                    + "VALUES (?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, obj.getOwnerId());
-            pstmt.setString(2, obj.getName());
-            pstmt.setString(3, obj.getPhoneNumber());
+            pstmt.setString(1, obj.getName());
+            pstmt.setString(2, obj.getPhoneNumber());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -1142,15 +1135,14 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Museum "
-                    + "(MuseumId, Name, Address, TotalRevenue, OperationalCost) "
-                    + "VALUES (?, ?, ?, ?, ?)";
+                    + "(Name, Address, TotalRevenue, OperationalCost) "
+                    + "VALUES (?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, obj.getMuseumId());
-            pstmt.setString(2, obj.getName());
-            pstmt.setString(3, obj.getAddress());
-            pstmt.setInt(4, obj.getTotalRevenue());
-            pstmt.setInt(5, obj.getOperationalCost());
+            pstmt.setString(1, obj.getName());
+            pstmt.setString(2, obj.getAddress());
+            pstmt.setInt(3, obj.getTotalRevenue());
+            pstmt.setInt(4, obj.getOperationalCost());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -1273,13 +1265,12 @@ public class Database {
 
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO ArtifactOwner "
-                    + "(ExhibitionId, Title, StartDate, EndDate, Description, MuseumId) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "(Title, StartDate, EndDate, Description, MuseumId) "
+                    + "VALUES (?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, obj.getExhibitionId());
-            pstmt.setString(2, obj.getTitle());
-            pstmt.setDate(3, obj.getStartDate());
+            pstmt.setString(1, obj.getTitle());
+            pstmt.setDate(2, obj.getStartDate());
             pstmt.setDate(3, obj.getEndDate());
             pstmt.setString(4, obj.getDescription());
             pstmt.setInt(5, obj.getMuseumId());
