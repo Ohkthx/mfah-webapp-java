@@ -45,7 +45,8 @@ public class DeleteArtistHandler implements HttpHandler {
         // Database Deletion here.
         // boolean success = Database.deleteArtist(artistId);
         // String path = success ? "/success" : "/failure";
-        // exchange.getResponseHeaders().add("Location", path);
-        // exchange.sendResponseHeaders(302, -1);
+        String path = "/accessDeny";
+        exchange.getResponseHeaders().add("Location", path);
+        exchange.sendResponseHeaders(302, -1);
     }
 }
