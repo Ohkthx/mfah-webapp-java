@@ -97,7 +97,8 @@ public class App {
         server.createContext("/exhibition-collection",
                 new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
-        // Employee View
+        // Views
+        server.createContext("/artist/view", new MiddlewareHandler(new ArtistViewHandler(), callback));
         server.createContext("/employee/employeeView", new MiddlewareHandler(new EmployeeViewHandler(), callback));
         server.createContext("/employee/employeeViewEditor",
                 new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));

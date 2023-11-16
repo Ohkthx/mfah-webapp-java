@@ -110,15 +110,12 @@
         <div class="form-container">
             {{credentials}}
             <h2>Edit artist.</h2>
-            <form action="/artist/edit" method="post">
-                <label for="artistId">Artist ID:</label>
-                <input type="number" id="artistId" name="artistId" required>
-
+            <form action="/artist/edit?artistId={{artistId}}" method="post">
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName">
+                <input type="text" id="firstName" name="firstName" value="{{firstName}}">
 
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName">
+                <input type="text" id="lastName" name="lastName" value="{{lastName}}">
 
                 <button type="submit">Complete Changes</button>
             </form>

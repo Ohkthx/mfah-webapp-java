@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee - View</title>
+    <title>Artist - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,31 +87,24 @@
 
 <body>
     <header>
-        <h1>Viewing all Employees</h1>
+        <h1>Viewing all Artists</h1>
     </header>
     <nav>
         {{navigationPanel}}
     </nav>
     <main>
         <div class="panes">
-
             <div class="pane">
                 <section>
-                    <h2>Employee Details:</h2>
+                    <h2>Artist Details:</h2>
 
                     <table style="width:100%">
                         <tr>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Job Title</th>
-                            <th>Phone Number</th>
-                            <th>Email Address</th>
-                            <th>Access Level</th>
-                            <th>Supervisor</th>
-                            <th>Last Login</th>
                             <th>Edit Details</th>
                         </tr>
-                        {{employeeDetails}}
+                        {{artistDetails}}
                     </table>
                 </section>
             </div>

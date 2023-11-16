@@ -27,11 +27,44 @@ public class EditArtistHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "artist/edit.html");
+        // Validate the session before sending page.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
 
-        // Edit the placeholders with dynamic text.
-        response = response.replace("{{credentials}}", "");
+        // Extract the ArtistId from the query.
+        boolean invalidArtist = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artistId = -1;
+        try {
+            artistId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtist = true;
+        }
+
+        // Obtain the entity from the database.
+        Artist artist = Database.getArtist(artistId);
+        if (artist == null) {
+            invalidArtist = true;
+        }
+
+        // Update the credentials to something meaningful if there was an error.
+        String response = Utils.dynamicNavigator(exchange, "artist/edit.html");
+        if (invalidArtist) {
+            response = response.replace("{{credentials}}", "<b style='color:red;'>Invalid Id.</b>");
+        } else {
+            response = response.replace("{{credentials}}", "");
+        }
+
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtistHandler.setDefaults(artist, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -41,7 +74,7 @@ public class EditArtistHandler implements HttpHandler {
 
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
-        // Check if a session exists.
+        // Validate the session before sending page.
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee == null) {
@@ -55,13 +88,40 @@ public class EditArtistHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
 
+        // Extract the ArtistId from the query.
+        boolean invalidArtist = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artistId = -1;
+        try {
+            artistId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtist = true;
+        }
+
+        // Obtain the entity from the database.
+        Artist artist = Database.getArtist(artistId);
+        if (artist == null) {
+            invalidArtist = true;
+        }
+
+        if (invalidArtist) {
+            // Send them to the failure page.
+            exchange.getResponseHeaders().add("Location", "/failure");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
         // Parse the form data to edit the artist information.
         Map<String, String> form = Utils.parseForm(formData);
-        Artist artist = Database.getArtist(Integer.parseInt(form.get("artistId")));
         artist = EditArtistHandler.editArtist(artist, form);
 
         // Load edit form.
         String response = Utils.dynamicNavigator(exchange, "artist/edit.html");
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtistHandler.setDefaults(artist, response);
+
         switch (Database.editArtist(artist)) {
             case SUCCESS:
                 // Update the employees session.
@@ -71,11 +131,11 @@ public class EditArtistHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", artist.getFirstName());
+                System.out.printf("%s edited.\n", artist.getFirstName());
                 return;
             default:
-                // Could not create artifact.
-                System.out.printf("%s failed to create.\n", artist.getFirstName());
+                // Could not create artist.
+                System.out.printf("%s failed to edit.\n", artist.getFirstName());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
@@ -84,6 +144,19 @@ public class EditArtistHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+    }
+
+    // Sets the defaults values for a form.
+    private static String setDefaults(Artist artist, String webpage) {
+        if (artist == null) {
+            // Create a default artist with blank values. Credentials will show an error.
+            artist = new Artist(-1, "", "");
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{artistId}}", Integer.toString(artist.getArtistId()));
+        webpage = webpage.replace("{{firstName}}", artist.getFirstName());
+        return webpage.replace("{{lastName}}", artist.getLastName());
     }
 
     // Edits an antifact from the form data provided.

@@ -918,6 +918,49 @@ public class Database {
         }
     }
 
+    // Obtains all artists from the database.
+    public static List<Artist> getAllArtists() {
+        List<Artist> artists = new Vector<Artist>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Artist ORDER BY ArtistId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                int id = results.getInt("ArtistId");
+                String firstName = results.getString("FirstName");
+                String lastName = results.getString("LastName");
+
+                artists.add(new Artist(id, firstName, lastName));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return artists;
+    }
+
     // Obtain a Artist from the database using Id.
     public static Artist getArtist(int ArtistId) {
         Connection conn = null;
