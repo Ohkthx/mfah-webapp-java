@@ -26,11 +26,21 @@ public class EditEmployeeHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show edit form for a new member.
+        // Show edit form for a new employee.
         String response = Utils.dynamicNavigator(exchange, "employee/edit.html");
 
-        // Edit the placeholders with dynamic text.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
+        // Updates placeholder values.
         response = response.replace("{{credentials}}", "");
+        response = EditEmployeeHandler.setDefaults(employee, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -82,6 +92,18 @@ public class EditEmployeeHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+    }
+
+    // Sets the defaults values for a form.
+    private static String setDefaults(Employee employee, String webpage) {
+        if (employee == null) {
+            return webpage;
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{firstName}}", employee.getFirstName());
+        webpage = webpage.replace("{{lastName}}", employee.getLastName());
+        return webpage.replace("{{phoneNumber}}", employee.getPhoneNumber());
     }
 
     // Edits an employee from the form data provided.

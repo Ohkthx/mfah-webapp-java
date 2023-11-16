@@ -26,19 +26,22 @@ public class EditMemberHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-
         // Show edit form for a new member.
         String response = Utils.dynamicNavigator(exchange, "member/edit.html");
 
         String sessionId = Session.extractSessionId(exchange);
         Member member = Session.getMemberSession(sessionId);
-        if (member != null) {
-            // Updates the notifications panel item.
-            response = MemberHandler.setNotifications(member, response);
+        if (member == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
         }
 
-        // Edit the placeholders with dynamic text.
+        // Updates the notifications and placeholder values.
+        response = MemberHandler.setNotifications(member, response);
         response = response.replace("{{credentials}}", "");
+        response = EditMemberHandler.setDefaults(member, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -95,6 +98,18 @@ public class EditMemberHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+    }
+
+    // Sets the defaults values for a form.
+    private static String setDefaults(Member member, String webpage) {
+        if (member == null) {
+            return webpage;
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{firstName}}", member.getFirstName());
+        webpage = webpage.replace("{{lastName}}", member.getLastName());
+        return webpage.replace("{{emailAddress}}", member.getEmailAddress());
     }
 
     // Edits a member from the form data provided.

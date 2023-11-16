@@ -112,16 +112,16 @@
             <h2>Edit your profile and change your details.</h2>
             <form action="/employee/edit" method="post">
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName">
+                <input type="text" id="firstName" name="firstName" value="{{firstName}}">
 
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName">
+                <input type="text" id="lastName" name="lastName" value="{{lastName}}">
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password">
 
                 <label for="phoneNumber">Phone number:</label>
-                <input type="phoneNumber" id="phoneNumber" name="phoneNumber">
+                <input type="phoneNumber" id="phoneNumber" name="phoneNumber" value="{{phoneNumber}}">
 
                 <button type="submit">Complete Changes</button>
             </form>
