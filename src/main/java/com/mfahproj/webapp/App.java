@@ -98,10 +98,13 @@ public class App {
                 new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
         // Views
-        server.createContext("/artist/view", new MiddlewareHandler(new ArtistViewHandler(), callback));
+        server.createContext("/artist/view", new MiddlewareHandler(new ViewArtistHandler(), callback));
         server.createContext("/employee/employeeView", new MiddlewareHandler(new EmployeeViewHandler(), callback));
         server.createContext("/employee/employeeViewEditor",
                 new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
+
+        // Deletes
+        server.createContext("/artist/delete", new MiddlewareHandler(new DeleteArtistHandler(), callback));
 
         // Access Denied webpage
         server.createContext("/accessDeny", new MiddlewareHandler(new AccessDenyHandler(), callback));

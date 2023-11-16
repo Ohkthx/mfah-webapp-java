@@ -11,7 +11,7 @@ import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class ArtistViewHandler implements HttpHandler {
+public class ViewArtistHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -32,7 +32,7 @@ public class ArtistViewHandler implements HttpHandler {
 
         // Send the employee the viewing page.
         String response = Utils.dynamicNavigator(exchange, "artist/view.html");
-        response = response.replace("{{artistDetails}}", ArtistViewHandler.getArtistDetails(sessionId));
+        response = response.replace("{{artistDetails}}", ViewArtistHandler.getArtistDetails(sessionId));
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -47,6 +47,7 @@ public class ArtistViewHandler implements HttpHandler {
                     + String.format("\t<td>%s</td>", a.getFirstName())
                     + String.format("\t<td>%s</td>", a.getLastName())
                     + String.format("\t<td><a href=\"/artist/edit?artistId=%s\">Edit</a></td>", a.getArtistId())
+                    + String.format("\t<td><a href=\"/artist/delete?artistId=%s\">Delete</a></td>", a.getArtistId())
                     + "</tr>";
         }
         return s;
