@@ -27,10 +27,44 @@ public class EditArtifactOwnerHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "artifactOwner/edit.html");
+        // Validate the session before sending page.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
 
-        response = response.replace("{{credentials}}", "");
+        // Extract the ArtifactOwnerId from the query.
+        boolean invalidArtifactOwner = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artifactOwnerId = -1;
+        try {
+            artifactOwnerId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtifactOwner = true;
+        }
+
+        // Obtain the entity from the database.
+        ArtifactOwner artifactOwner = Database.getArtifactOwner(artifactOwnerId);
+        if (artifactOwner == null) {
+            invalidArtifactOwner = true;
+        }
+
+        // Update the credentials to something meaningful if there was an error.
+        String response = Utils.dynamicNavigator(exchange, "artifactOwner/edit.html");
+        if (invalidArtifactOwner) {
+            response = response.replace("{{credentials}}", "<b style='color:red;'>Invalid Id.</b>");
+        } else {
+            response = response.replace("{{credentials}}", "");
+        }
+
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtifactOwnerHandler.setDefaults(artifactOwner, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -40,7 +74,7 @@ public class EditArtifactOwnerHandler implements HttpHandler {
 
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
-        // Check if a session exists.
+        // Validate the session before sending page.
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee == null) {
@@ -54,14 +88,41 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
 
-        // Parse the form data to edit the ArtifactOwner information.
+        // Extract the ArtifactOwnerId from the query.
+        boolean invalidArtifactOwner = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artifactOwnerId = -1;
+        try {
+            artifactOwnerId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtifactOwner = true;
+        }
+
+        // Obtain the entity from the database.
+        ArtifactOwner artifactOwner = Database.getArtifactOwner(artifactOwnerId);
+        if (artifactOwner == null) {
+            invalidArtifactOwner = true;
+        }
+
+        if (invalidArtifactOwner) {
+            // Send them to the failure page.
+            exchange.getResponseHeaders().add("Location", "/failure");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
+        // Parse the form data to edit the artifactOwner information.
         Map<String, String> form = Utils.parseForm(formData);
-        ArtifactOwner owner = Database.getArtifactOwner(Integer.parseInt(form.get("ownerId")));
-        owner = EditArtifactOwnerHandler.editArtifactOwner(owner, form);
+        artifactOwner = EditArtifactOwnerHandler.editArtifactOwner(artifactOwner, form);
 
         // Load edit form.
         String response = Utils.dynamicNavigator(exchange, "artifactOwner/edit.html");
-        switch (Database.editArtifactOwner(owner)) {
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtifactOwnerHandler.setDefaults(artifactOwner, response);
+
+        switch (Database.editArtifactOwner(artifactOwner)) {
             case SUCCESS:
                 // Update the employees session.
                 Session.updateEmployeeSession(sessionId, employee);
@@ -70,11 +131,11 @@ public class EditArtifactOwnerHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", owner.getName());
+                System.out.printf("ArtifactOwner: %s edited.\n", artifactOwner.getName());
                 return;
             default:
-                // Could not create artifact.
-                System.out.printf("%s failed to create.\n", owner.getName());
+                // Could not create artifactOwner.
+                System.out.printf("ArtifactOwner: %s failed to edit.\n", artifactOwner.getName());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
@@ -83,6 +144,20 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+    }
+
+    // Sets the defaults values for a form.
+    private static String setDefaults(ArtifactOwner artifactOwner, String webpage) {
+        if (artifactOwner == null) {
+            // Create a default artifactOwner with blank values. Credentials will show an
+            // error.
+            artifactOwner = new ArtifactOwner(-1, "", "");
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{artifactOwnerId}}", Integer.toString(artifactOwner.getOwnerId()));
+        webpage = webpage.replace("{{name}}", artifactOwner.getName());
+        return webpage.replace("{{phoneNumber}}", artifactOwner.getPhoneNumber());
     }
 
     // Edits an antifact from the form data provided.

@@ -131,11 +131,11 @@ public class EditArtistHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s edited.\n", artist.getFirstName());
+                System.out.printf("Artist: %s edited.\n", artist.getFirstName());
                 return;
             default:
                 // Could not create artist.
-                System.out.printf("%s failed to edit.\n", artist.getFirstName());
+                System.out.printf("Artist: %s failed to edit.\n", artist.getFirstName());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 

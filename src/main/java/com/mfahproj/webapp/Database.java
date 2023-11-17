@@ -1131,6 +1131,50 @@ public class Database {
         }
     }
 
+    // Obtains all artists from the database.
+    public static List<ArtifactOwner> getAllArtifactOwners() {
+        List<ArtifactOwner> owners = new Vector<ArtifactOwner>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM ArtifactOwner ORDER BY OwnerId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                ArtifactOwner owner = new ArtifactOwner();
+                owner.setOwnerId(results.getInt("OwnerId"));
+                owner.setName(results.getString("Name"));
+                owner.setPhoneNumber(results.getString("PhoneNumber"));
+
+                owners.add(owner);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return owners;
+    }
+
     // Obtain a ArtifactOwner from the database using Id.
     public static ArtifactOwner getArtifactOwner(int ArtifactOwnerId) {
         Connection conn = null;

@@ -110,15 +110,12 @@
         <div class="form-container">
             {{credentials}}
             <h2>Edit artifact owner.</h2>
-            <form action="/artifactOwner/edit" method="post">
-                <label for="ownerId">Owner ID:</label>
-                <input type="number" id="ownerId" name="ownerId" required>
-
+            <form action="/artifactOwner/edit?artifactOwnerId={{artifactOwnerId}}" method="post">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" value="{{name}}">
 
                 <label for="phoneNum">Phone Number:</label>
-                <input type="text" id="phoneNum" name="phoneNum">
+                <input type="text" id="phoneNum" name="phoneNum" value="{{phoneNumber}}">
 
                 <button type="submit">Complete Changes</button>
             </form>

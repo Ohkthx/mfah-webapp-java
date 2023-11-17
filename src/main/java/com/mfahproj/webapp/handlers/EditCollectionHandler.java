@@ -134,11 +134,11 @@ public class EditCollectionHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s edited.\n", collection.getTitle());
+                System.out.printf("Collection: %s edited.\n", collection.getTitle());
                 return;
             default:
                 // Could not create collection.
-                System.out.printf("%s failed to edit.\n", collection.getTitle());
+                System.out.printf("Collection: %s failed to edit.\n", collection.getTitle());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
