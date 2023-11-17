@@ -50,8 +50,6 @@ public class RegisterMemberHandler implements HttpHandler {
         Map<String, String> form = Utils.parseForm(formData);
         Member member = RegisterMemberHandler.createMember(form);
 
-        // TODO: Make sure the birthday is valid.
-
         // Load register form.
         String response = Utils.dynamicNavigator(exchange, "member/register.html");
         switch (Database.createMember(member)) {
@@ -67,7 +65,6 @@ public class RegisterMemberHandler implements HttpHandler {
                 return;
             case DUPLICATE:
                 // Duplicate member detected, point them to login page.
-                // TODO: Replace raw HTML with file.
                 System.out.printf("%s is a duplicate member.\n", member.getEmailAddress());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>Member already exists.</b>");
                 break;

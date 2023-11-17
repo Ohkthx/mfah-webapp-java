@@ -139,16 +139,6 @@ CREATE TABLE Program (
 	FOREIGN KEY (MuseumId) REFERENCES Museum(MuseumId)
 );
 
-CREATE TABLE FeedbackSurvey (
-    FeedbackSurveyId INT UNSIGNED AUTO_INCREMENT,
-    MemberId INT UNSIGNED,
-    FeedbackText TEXT,
-    SubmissionTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    PRIMARY KEY (FeedbackSurveyId),
-    FOREIGN KEY (MemberId) REFERENCES Members(MemberId)
-);
-
 CREATE TABLE Notification (
     NotificationId INT UNSIGNED AUTO_INCREMENT,
     MemberId INT UNSIGNED,
@@ -184,17 +174,6 @@ END$$
 DELIMITER ;
 
 
--- DELIMITER $$
--- CREATE TRIGGER update_daily_sales
--- AFTER INSERT ON Transactions
--- FOR EACH ROW
--- BEGIN
---     UPDATE DailySales
---     SET gift_shop_revenue = gift_shop_revenue + Transactions.Price;
--- END$$
--- DELIMITER ;
-
-
 DELIMITER $$
 CREATE TRIGGER membership_expiration_notification
 BEFORE UPDATE ON Members
@@ -218,27 +197,6 @@ BEGIN
     ELSEIF DATEDIFF(expiration_date, today_date) <= 7 THEN
         INSERT INTO Notification (MemberId, NotificationText, NotificationTime)
         VALUES (member_id, 'One week of membership until expiration.', NOW());
-    END IF;
-END$$
-DELIMITER ;
-
-
-DELIMITER $$
-CREATE TRIGGER send_feedback_survey
-AFTER INSERT ON Transactions
-FOR EACH ROW
-BEGIN
-    DECLARE visitor_id INT;
-    DECLARE visit_date DATE;
-    DECLARE today_date DATE;
-
-    SET visitor_id = NEW.MemberId;
-    SELECT PurchaseDate INTO visit_date FROM Transactions WHERE MemberId = visitor_id AND PurchaseDate = CURDATE();
-    SET today_date = NOW();
-
-    IF visit_date = today_date THEN
-        INSERT INTO FeedbackSurvey (MemberId, FeedbackText, SubmissionTime)
-        VALUES (visitor_id, 'Feedback Survey Sent', NOW());
     END IF;
 END$$
 DELIMITER ;

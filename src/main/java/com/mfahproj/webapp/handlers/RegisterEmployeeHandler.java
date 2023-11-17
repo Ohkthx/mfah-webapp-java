@@ -46,8 +46,6 @@ public class RegisterEmployeeHandler implements HttpHandler {
         Map<String, String> form = Utils.parseForm(formData);
         Employee employee = RegisterEmployeeHandler.createEmployee(form);
 
-        // TODO: Make sure the supervisor Id and museum Id are valid.
-
         // Load register form.
         String response = Utils.dynamicNavigator(exchange, "employee/register.html");
         switch (Database.createEmployee(employee)) {

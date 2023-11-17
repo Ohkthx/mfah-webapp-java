@@ -2,13 +2,13 @@ package com.mfahproj.webapp.models;
 
 public class Program {
 
-    private String name;
+    private String name = "";
     private int programId = -1;
-    private String speaker;
-    private String roomName;
-    private java.sql.Date startDate;
-    private java.sql.Date endDate;
-    private int museumId;
+    private String speaker = "";
+    private String roomName = "";
+    private java.sql.Date startDate = new java.sql.Date(System.currentTimeMillis());
+    private java.sql.Date endDate = new java.sql.Date(System.currentTimeMillis());
+    private int museumId = 1;
 
     // Create a blank program.
     public Program() {

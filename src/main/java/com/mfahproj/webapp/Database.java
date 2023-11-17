@@ -611,6 +611,54 @@ public class Database {
         }
     }
 
+    // Obtains all programs from the database.
+    public static List<Program> getAllPrograms() {
+        List<Program> programs = new Vector<Program>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Program ORDER BY ProgramId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Program program = new Program();
+                program.setProgramId(results.getInt("ProgramId"));
+                program.setName(results.getString("Name"));
+                program.setSpeaker(results.getString("Speaker"));
+                program.setRoomName(results.getString("RoomName"));
+                program.setStartDate(results.getDate("StartDate"));
+                program.setEndDate(results.getDate("EndDate"));
+                program.setMuseumId(results.getInt("MuseumId"));
+
+                programs.add(program);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return programs;
+    }
+
     // Obtain a Program from the database using Id.
     public static Program getProgram(int programId) {
         Connection conn = null;

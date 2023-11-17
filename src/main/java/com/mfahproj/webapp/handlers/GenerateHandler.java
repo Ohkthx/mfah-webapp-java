@@ -85,7 +85,6 @@ public class GenerateHandler implements HttpHandler {
         int id = isEmployee ? employee.getEmployeeId() : member.getMemberId();
 
         // Could not parse successfully.
-        // TODO: Handle this more elegantly.
         if (!GenerateHandler.generate(form, isEmployee, id)) {
             System.out.println("Failed to create random items.");
             exchange.getResponseHeaders().add("Location", "/failure");

@@ -110,28 +110,21 @@
         <div class="form-container">
             {{credentials}}
             <h2>Edit Program.</h2>
-            <form action="/program/edit" method="post">
-
-                <label for="programId">Program ID:</label>
-                <input type="number" id="programId" name="programId" required>
-
+            <form action="/program/edit?programId={{programId}}" method="post">
                 <label for="name">Program Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="{{name}}" required>
 
                 <label for="speaker">Speaker Name:</label>
-                <input type="text" id="speaker" name="speaker" required>
+                <input type="text" id="speaker" name="speaker" value="{{speaker}}" required>
 
                 <label for="roomName">Room Name:</label>
-                <input type="text" id="roomName" name="roomName" required>
+                <input type="text" id="roomName" name="roomName" value="{{roomName}}" required>
 
                 <label for="startDate">Program Start Date:</label>
-                <input type="date" id="startDate" name="startDate">
+                <input type="date" id="startDate" name="startDate" value="{{startDate}}">
 
                 <label for="endDate">Program End Date:</label>
-                <input type="date" id="endDate" name="endDate">
-
-                <label for="museumId">Museum ID:</label>
-                <input type="number" id="museumId" name="museumId">
+                <input type="date" id="endDate" name="endDate" value="{{endDate}}">
 
                 <button type="submit">Complete Changes</button>
             </form>

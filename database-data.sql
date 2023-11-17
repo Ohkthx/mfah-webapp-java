@@ -205,3 +205,9 @@ VALUES ("European Art", CURDATE(), "The collection of European art comprises imp
 
 INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
 VALUES ("Photography", CURDATE(), "The Museum's photography collection comprises more than 35,000 items spanning the full history of the medium, from invention to present day.", 5, 5);
+
+
+-- Programs
+
+INSERT INTO Program (Name, StartDate, EndDate, Speaker, RoomName, MuseumId)
+VALUES ("Learn how to look like you know about art like a critic.", CURDATE(), CURDATE(), "Bob Ross", "Lobby", 1);

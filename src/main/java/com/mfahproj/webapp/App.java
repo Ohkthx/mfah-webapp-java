@@ -105,12 +105,14 @@ public class App {
         server.createContext("/employee/employeeViewEditor",
                 new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
         server.createContext("/exhibition/view", new MiddlewareHandler(new ViewExhibitionHandler(), callback));
+        server.createContext("/program/view", new MiddlewareHandler(new ViewProgramHandler(), callback));
 
         // Deletes
         server.createContext("/artifactOwner/delete", new MiddlewareHandler(new DeleteArtistHandler(), callback));
         server.createContext("/artist/delete", new MiddlewareHandler(new DeleteArtistHandler(), callback));
         server.createContext("/collection/delete", new MiddlewareHandler(new DeleteCollectionHandler(), callback));
         server.createContext("/exhibition/delete", new MiddlewareHandler(new DeleteExhibitionHandler(), callback));
+        server.createContext("/program/delete", new MiddlewareHandler(new DeleteProgramHandler(), callback));
 
         // Access Denied webpage
         server.createContext("/accessDeny", new MiddlewareHandler(new AccessDenyHandler(), callback));
