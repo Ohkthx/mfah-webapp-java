@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Museum - View</title>
+    <title>Artifact - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,25 +87,29 @@
 
 <body>
     <header>
-        <h1>Viewing all Museums</h1>
+        <h1>Viewing all Artifacts</h1>
     </header>
     <nav>
         {{navigationPanel}}
     </nav>
     <main>
         <section>
-            <h3>If you're looking to register a new Museum, <a href="/museum/register">Create New Museum</a></h3>
+            <h3>If you're looking to register a new Artifact, <a href="/artifact/register">Create New Artifact</a></h3>
         </section>
         <section>
-            <h2>Museum Details:</h2>
+            <h2>Artifact Details:</h2>
 
             <table style="width:100%">
                 <tr>
-                    <th>Name</th>
-                    <th>Address</th>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Date</th>
+                    <th>Place</th>
+                    <th>Medium</th>
                     <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
-                {{museumDetails}}
+                {{artifactDetails}}
             </table>
         </section>
     </main>

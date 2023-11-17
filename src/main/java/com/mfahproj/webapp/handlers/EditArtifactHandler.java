@@ -30,11 +30,44 @@ public class EditArtifactHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        // Validate the session before sending page.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
 
-        // Edit the placeholders with dynamic text.
-        response = response.replace("{{credentials}}", "");
+        // Extract the ArtifactId from the query.
+        boolean invalidArtifact = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artifactId = -1;
+        try {
+            artifactId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtifact = true;
+        }
+
+        // Obtain the entity from the database.
+        Artifact artifact = Database.getArtifact(artifactId);
+        if (artifact == null) {
+            invalidArtifact = true;
+        }
+
+        // Update the credentials to something meaningful if there was an error.
+        String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        if (invalidArtifact) {
+            response = response.replace("{{credentials}}", "<b style='color:red;'>Invalid Id.</b>");
+        } else {
+            response = response.replace("{{credentials}}", "");
+        }
+
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtifactHandler.setDefaults(artifact, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -44,7 +77,7 @@ public class EditArtifactHandler implements HttpHandler {
 
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
-        // Check if a session exists.
+        // Validate the session before sending page.
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee == null) {
@@ -58,13 +91,40 @@ public class EditArtifactHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
 
+        // Extract the ArtifactId from the query.
+        boolean invalidArtifact = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int artifactId = -1;
+        try {
+            artifactId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidArtifact = true;
+        }
+
+        // Obtain the entity from the database.
+        Artifact artifact = Database.getArtifact(artifactId);
+        if (artifact == null) {
+            invalidArtifact = true;
+        }
+
+        if (invalidArtifact) {
+            // Send them to the failure page.
+            exchange.getResponseHeaders().add("Location", "/failure");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
         // Parse the form data to edit the artifact information.
         Map<String, String> form = Utils.parseForm(formData);
-        Artifact artifact = Database.getArtifact(Integer.parseInt(form.get("ArtifactId")));
         artifact = EditArtifactHandler.editArtifact(artifact, form);
 
         // Load edit form.
         String response = Utils.dynamicNavigator(exchange, "artifact/edit.html");
+        // Update the default form data by swapping out the placeholders.
+        response = EditArtifactHandler.setDefaults(artifact, response);
+
         switch (Database.editArtifact(artifact)) {
             case SUCCESS:
                 // Update the employees session.
@@ -74,11 +134,11 @@ public class EditArtifactHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", artifact.getTitle());
+                System.out.printf("Artifact: %s edited.\n", artifact.getTitle());
                 return;
             default:
                 // Could not create artifact.
-                System.out.printf("%s failed to create.\n", artifact.getTitle());
+                System.out.printf("Artifact: %s failed to edit.\n", artifact.getTitle());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
@@ -87,6 +147,24 @@ public class EditArtifactHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
+    }
+
+    // Sets the defaults values for a form.
+    private static String setDefaults(Artifact artifact, String webpage) {
+        if (artifact == null) {
+            // Create a default artifact with blank values. Credentials will show an error.
+            artifact = new Artifact();
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{artifactId}}", Integer.toString(artifact.getArtifactId()));
+        webpage = webpage.replace("{{title}}", artifact.getTitle());
+        webpage = webpage.replace("{{artist}}", Integer.toString(artifact.getArtistId()));
+        webpage = webpage.replace("{{date}}", artifact.getDate().toString());
+        webpage = webpage.replace("{{place}}", artifact.getPlace());
+        webpage = webpage.replace("{{dimensions}}", artifact.getDimensions());
+        webpage = webpage.replace("{{description}}", artifact.getDescription());
+        return webpage.replace("{{medium}}", artifact.getMedium());
     }
 
     // Edits an antifact from the form data provided.

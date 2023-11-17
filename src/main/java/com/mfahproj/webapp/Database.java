@@ -464,6 +464,57 @@ public class Database {
         }
     }
 
+    // Obtains all artifacts from the database.
+    public static List<Artifact> getAllArtifacts() {
+        List<Artifact> artifacts = new Vector<Artifact>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Artifact ORDER BY ArtifactId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Artifact artifact = new Artifact();
+                artifact.setArtifactId(results.getInt("ArtifactId"));
+                artifact.setTitle(results.getString("Title"));
+                artifact.setArtistId(results.getInt("ArtistId"));
+                artifact.setDate(results.getDate("Date"));
+                artifact.setPlace(results.getString("Place"));
+                artifact.setMedium(results.getString("Medium"));
+                artifact.setDimensions(results.getString("Dimensions"));
+                artifact.setCollectionId(results.getInt("CollectionId"));
+                artifact.setDescription(results.getString("Description"));
+                artifact.setOwnerId(results.getInt("OwnerId"));
+
+                artifacts.add(artifact);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return artifacts;
+    }
+
     // Obtain an artifact from the database using the Artifact ID.
     public static Artifact getArtifact(int artifactID) {
         Connection conn = null;

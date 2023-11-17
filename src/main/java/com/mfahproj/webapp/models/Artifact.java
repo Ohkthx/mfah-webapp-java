@@ -5,15 +5,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Artifact {
 
     private int ArtifactId = -1;
-    private String Title;
-    private int ArtistId;
-    private java.sql.Date Date;
-    private String Place;
-    private String Medium;
-    private String Dimensions;
-    private int CollectionId;
-    private String Description;
-    private int OwnerId;
+    private String Title = "";
+    private int ArtistId = 1;
+    private java.sql.Date Date = new java.sql.Date(System.currentTimeMillis());
+    private String Place = "";
+    private String Medium = "";
+    private String Dimensions = "";
+    private int CollectionId = 1;
+    private String Description = "";
+    private int OwnerId = 1;
 
     // Create a blank Artifact.
     public Artifact() {

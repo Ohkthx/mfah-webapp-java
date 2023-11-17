@@ -110,36 +110,24 @@
         <div class="form-container">
             {{credentials}}
             <h2>Edit artifact.</h2>
-            <form action="/artifact/edit" method="post">
-                <label for="ArtifactId">Artifact ID:</label>
-                <input type="number" id="ArtifactId" name="ArtifactId" required>
-
+            <form action="/artifact/edit?artifactId={{artifactId}}" method="post">
                 <label for="Title">Artifact Title:</label>
-                <input type="text" id="Title" name="Title">
-
-                <label for="ArtistId">Artist ID:</label>
-                <input type="number" id="ArtistId" name="ArtistId">
+                <input type="text" id="Title" name="Title" value="{{title}}">
 
                 <label for="Date">Creation Date:</label>
-                <input type="Date" id="Date" name="Date">
+                <input type="Date" id="Date" name="Date" value="{{date}}">
 
                 <label for="Place">Place of Origin:</label>
-                <input type="Place" id="Place" name="Place">
+                <input type="Place" id="Place" name="Place" value="{{place}}">
 
                 <label for="Medium">Artifact Medium:</label>
-                <input type="Medium" id="Medium" name="Medium">
+                <input type="Medium" id="Medium" name="Medium" value="{{medium}}">
 
                 <label for="Dimensions">Dimensions:</label>
-                <input type="Dimensions" id="Dimensions" name="Dimensions">
-
-                <label for="CollectionId">Collection ID:</label>
-                <input type="number" id="CollectionId" name="CollectionId">
+                <input type="Dimensions" id="Dimensions" name="Dimensions" value="{{dimensions}}">
 
                 <label for="Description">Description:</label>
-                <input type="text" id="Description" name="Description">
-
-                <label for="OwnerId">Owner ID:</label>
-                <input type="number" id="OwnerId" name="OwnerId">
+                <input type="text" id="Description" name="Description" value="{{description}}">
 
                 <button type="submit">Complete Changes</button>
             </form>
