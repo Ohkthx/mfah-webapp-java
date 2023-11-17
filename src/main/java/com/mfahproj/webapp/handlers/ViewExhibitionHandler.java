@@ -6,12 +6,12 @@ import java.io.OutputStream;
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
-import com.mfahproj.webapp.models.Artist;
+import com.mfahproj.webapp.models.Exhibition;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class ViewArtistHandler implements HttpHandler {
+public class ViewExhibitionHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -31,23 +31,30 @@ public class ViewArtistHandler implements HttpHandler {
         }
 
         // Send the employee the viewing page.
-        String response = Utils.dynamicNavigator(exchange, "artist/view.html");
-        response = response.replace("{{artistDetails}}", ViewArtistHandler.getArtistDetails());
+        String response = Utils.dynamicNavigator(exchange, "exhibition/view.html");
+        response = response.replace("{{exhibitionDetails}}", ViewExhibitionHandler.getExhibitionDetails());
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
 
-    // Populates a table with individual artist values.
-    private static String getArtistDetails() {
+    // Populates a table with individual exhibition values.
+    private static String getExhibitionDetails() {
         String s = "";
-        for (Artist a : Database.getAllArtists()) {
+        for (Exhibition a : Database.getAllExhibitions()) {
             s += "<tr>"
-                    + String.format("\n<td>%s</td>", a.getFirstName())
-                    + String.format("\n<td>%s</td>", a.getLastName())
-                    + String.format("\n<td><a href=\"/artist/edit?artistId=%s\">Edit</a></td>", a.getArtistId())
-                    + String.format("\n<td><a href=\"/artist/delete?artistId=%s\">Delete</a></td>", a.getArtistId())
+                    + String.format("\n<td>%s</td>", a.getTitle())
+                    + String.format("\n<td>%s</td>", a.getStartDate().toString())
+                    + String.format("\n<td>%s</td>", a.getEndDate().toString())
+                    + "\n<td>View in edit.</td>"
+                    // + String.format("\n<td>Description too long, edit to view.</td>",
+                    // a.getDescription())
+                    + String.format("\n<td>%s</td>", Integer.toString(a.getMuseumId()))
+                    + String.format("\n<td><a href=\"/exhibition/edit?exhibitionId=%s\">Edit</a></td>",
+                            a.getExhibitionId())
+                    + String.format("\n<td><a href=\"/exhibition/delete?exhibitionId=%s\">Delete</a></td>",
+                            a.getExhibitionId())
                     + "</tr>";
         }
         return s;

@@ -3,11 +3,11 @@ package com.mfahproj.webapp.models;
 public class Exhibition {
 
     private int exhibitionId = -1;
-    private String title;
-    private java.sql.Date startDate;
-    private java.sql.Date endDate;
-    private String description;
-    private int museumId;
+    private String title = "";
+    private java.sql.Date startDate = new java.sql.Date(System.currentTimeMillis());
+    private java.sql.Date endDate = new java.sql.Date(System.currentTimeMillis());
+    private String description = "";
+    private int museumId = 1;
 
     // Create a blank exhibition.
     public Exhibition() {

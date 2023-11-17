@@ -110,24 +110,21 @@
         <div class="form-container">
             {{credentials}}
             <h2>Edit Exhibition.</h2>
-            <form action="/exhibition/edit" method="post">
-                <label for="ExhibitionId">Exhibition ID:</label>
-                <input type="number" id="ExhibitionId" name="ExhibitionId">
-
+            <form action="/exhibition/edit?exhibitionId={{exhibitionId}}" method="post">
                 <label for="Title">Collection Title:</label>
-                <input type="text" id="Title" name="Title">
+                <input type="text" id="Title" name="Title" value="{{title}}">
 
                 <label for="StartDate">Start Date:</label>
-                <input type="Date" id="StartDate" name="StartDate">
+                <input type="Date" id="StartDate" name="StartDate" value="{{startDate}}">
 
                 <label for="EndDate">End Date:</label>
-                <input type="Date" id="EndDate" name="EndDate">
+                <input type="Date" id="EndDate" name="EndDate" value="{{endDate}}">
 
                 <label for="Description">Description:</label>
-                <input type="text" id="Description" name="Description">
+                <textarea id="Description" name="Description" rows="4" cols="64">{{description}}</textarea>
 
                 <label for="MuseumId">Museum ID:</label>
-                <input type="number" id="MuseumId" name="MuseumId">
+                <input type="number" id="MuseumId" name="MuseumId" value="{{museumId}}">
 
                 <button type="submit">Complete Changes</button>
             </form>

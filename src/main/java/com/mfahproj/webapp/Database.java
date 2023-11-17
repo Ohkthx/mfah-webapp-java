@@ -1432,6 +1432,53 @@ public class Database {
         }
     }
 
+    // Obtains all artists from the database.
+    public static List<Exhibition> getAllExhibitions() {
+        List<Exhibition> exhibitions = new Vector<Exhibition>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Exhibition ORDER BY ExhibitionId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Exhibition exhibition = new Exhibition();
+                exhibition.setExhibitionId(results.getInt("ExhibitionId"));
+                exhibition.setTitle(results.getString("Title"));
+                exhibition.setStartDate(results.getDate("StartDate"));
+                exhibition.setEndDate(results.getDate("EndDate"));
+                exhibition.setDescription(results.getString("Description"));
+                exhibition.setMuseumId(results.getInt("MuseumId"));
+
+                exhibitions.add(exhibition);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return exhibitions;
+    }
+
     // Obtain an exhibition from the database using Id.
     public static Exhibition getExhibition(int exhibitionId) {
         Connection conn = null;
@@ -1455,7 +1502,7 @@ public class Database {
             }
 
             Exhibition obj = new Exhibition();
-            obj.setMuseumId(results.getInt("ExhibitionId"));
+            obj.setExhibitionId(results.getInt("ExhibitionId"));
             obj.setTitle(results.getString("Title"));
             obj.setStartDate(results.getDate("StartDate"));
             obj.setEndDate(results.getDate("EndDate"));

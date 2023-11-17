@@ -33,7 +33,7 @@ public class ViewArtifactOwnerHandler implements HttpHandler {
         // Send the employee the viewing page.
         String response = Utils.dynamicNavigator(exchange, "artifactOwner/view.html");
         response = response.replace("{{artifactOwnerDetails}}",
-                ViewArtifactOwnerHandler.getArtifactOwnerDetails(sessionId));
+                ViewArtifactOwnerHandler.getArtifactOwnerDetails());
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -41,7 +41,7 @@ public class ViewArtifactOwnerHandler implements HttpHandler {
     }
 
     // Populates a table with individual artifactOwner values.
-    private static String getArtifactOwnerDetails(String session) {
+    private static String getArtifactOwnerDetails() {
         String s = "";
         for (ArtifactOwner a : Database.getAllArtifactOwners()) {
             s += "<tr>"

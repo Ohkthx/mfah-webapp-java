@@ -32,7 +32,7 @@ public class ViewCollectionHandler implements HttpHandler {
 
         // Send the employee the viewing page.
         String response = Utils.dynamicNavigator(exchange, "collection/view.html");
-        response = response.replace("{{collectionDetails}}", ViewCollectionHandler.getCollectionDetails(sessionId));
+        response = response.replace("{{collectionDetails}}", ViewCollectionHandler.getCollectionDetails());
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
@@ -40,13 +40,13 @@ public class ViewCollectionHandler implements HttpHandler {
     }
 
     // Populates a table with individual collection values.
-    private static String getCollectionDetails(String session) {
+    private static String getCollectionDetails() {
         String s = "";
         for (Collection a : Database.getAllCollections()) {
             s += "<tr>"
                     + String.format("\t<td>%s</td>", a.getTitle())
                     + String.format("\t<td>%s</td>", a.getDate())
-                    + String.format("\t<td>%s</td>", a.getDescription())
+                    + "\n<td>View in edit.</td>"
                     + String.format("\t<td>%s</td>", a.getLocationId())
                     + String.format("\t<td>%s</td>", a.getExhibitionId())
                     + String.format("\t<td><a href=\"/collection/edit?collectionId=%s\">Edit</a></td>",
