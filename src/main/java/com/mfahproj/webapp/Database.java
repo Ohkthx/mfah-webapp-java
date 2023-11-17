@@ -704,6 +704,52 @@ public class Database {
         }
     }
 
+    // Obtains all collections from the database.
+    public static List<Collection> getAllCollections() {
+        List<Collection> collections = new Vector<Collection>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Collection ORDER BY CollectionId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Collection collection = new Collection();
+                collection.setCollectionId(results.getInt("CollectionId"));
+                collection.setTitle(results.getString("Title"));
+                collection.setDate(results.getDate("Date"));
+                collection.setDescription(results.getString("Description"));
+                collection.setLocationId(results.getInt("MuseumId"));
+                collection.setExhibitionId(results.getInt("ExhibitionId"));
+                collections.add(collection);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return collections;
+    }
+
     // Obtain a Collection from the database using Id.
     public static Collection getCollection(int collectionId) {
         Connection conn = null;

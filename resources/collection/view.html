@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artist - View</title>
+    <title>Collection - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,23 +87,24 @@
 
 <body>
     <header>
-        <h1>Viewing all Artists</h1>
+        <h1>Viewing all Collections</h1>
     </header>
     <nav>
         {{navigationPanel}}
     </nav>
     <main>
         <section>
-            <h2>Artist Details:</h2>
+            <h2>Collection Details:</h2>
 
             <table style="width:100%">
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Edit Details</th>
-                    <th>Delete</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Exhibition</th>
                 </tr>
-                {{artistDetails}}
+                {{collectionDetails}}
             </table>
         </section>
     </main>

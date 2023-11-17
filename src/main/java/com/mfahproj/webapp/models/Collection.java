@@ -3,11 +3,11 @@ package com.mfahproj.webapp.models;
 public class Collection {
 
     private int collectionId = -1;
-    private String title;
-    private java.sql.Date date;
-    private String description;
-    private int locationId;
-    private int exhibitionId;
+    private String title = "";
+    private java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+    private String description = "";
+    private int locationId = 1;
+    private int exhibitionId = 1;
 
     // Create a blank collection.
     public Collection() {
