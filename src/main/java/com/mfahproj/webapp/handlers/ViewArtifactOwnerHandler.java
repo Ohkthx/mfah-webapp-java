@@ -49,8 +49,6 @@ public class ViewArtifactOwnerHandler implements HttpHandler {
                     + String.format("\t<td>%s</td>", a.getPhoneNumber())
                     + String.format("\t<td><a href=\"/artifactOwner/edit?artifactOwnerId=%s\">Edit</a></td>",
                             a.getOwnerId())
-                    + String.format("\t<td><a href=\"/artifactOwner/delete?artifactOwnerId=%s\">Delete</a></td>",
-                            a.getOwnerId())
                     + "</tr>";
         }
         return s;

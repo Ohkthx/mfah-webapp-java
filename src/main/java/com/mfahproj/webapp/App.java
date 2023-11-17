@@ -105,6 +105,7 @@ public class App {
         server.createContext("/employee/employeeViewEditor",
                 new MiddlewareHandler(new EmployeeViewEditorHandler(), callback));
         server.createContext("/exhibition/view", new MiddlewareHandler(new ViewExhibitionHandler(), callback));
+        server.createContext("/museum/view", new MiddlewareHandler(new ViewMuseumHandler(), callback));
         server.createContext("/program/view", new MiddlewareHandler(new ViewProgramHandler(), callback));
 
         // Deletes

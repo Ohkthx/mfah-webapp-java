@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exhibition - View</title>
+    <title>Museum - View</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,25 +87,22 @@
 
 <body>
     <header>
-        <h1>Viewing all Exhibitions</h1>
+        <h1>Viewing all Museums</h1>
     </header>
     <nav>
         {{navigationPanel}}
     </nav>
     <main>
         <section>
-            <h2>Exhibition Details:</h2>
+            <h2>Museum Details:</h2>
 
             <table style="width:100%">
                 <tr>
-                    <th>Title</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Description</th>
-                    <th>Museum</th>
+                    <th>Name</th>
+                    <th>Address</th>
                     <th>Edit</th>
                 </tr>
-                {{exhibitionDetails}}
+                {{museumDetails}}
             </table>
         </section>
     </main>

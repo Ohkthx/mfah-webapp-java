@@ -1325,8 +1325,8 @@ public class Database {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
             pstmt.setString(2, obj.getAddress());
-            pstmt.setInt(3, obj.getTotalRevenue());
-            pstmt.setInt(4, obj.getOperationalCost());
+            pstmt.setDouble(3, obj.getTotalRevenue());
+            pstmt.setDouble(4, obj.getOperationalCost());
 
             // Execute the query
             pstmt.executeUpdate();
@@ -1347,6 +1347,52 @@ public class Database {
                 e.printStackTrace();
             }
         }
+    }
+
+    // Obtains all museums from the database.
+    public static List<Museum> getAllMuseums() {
+        List<Museum> museums = new Vector<Museum>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Museum ORDER BY MuseumId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Museum museum = new Museum();
+                museum.setMuseumId(results.getInt("MuseumId"));
+                museum.setName(results.getString("Name"));
+                museum.setAddress(results.getString("Address"));
+                museum.setTotalRevenue(results.getDouble("TotalRevenue"));
+                museum.setOperationalCost(results.getDouble("OperationalCost"));
+
+                museums.add(museum);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return museums;
     }
 
     // Obtain a Museum from the database using Id.
@@ -1375,8 +1421,8 @@ public class Database {
             obj.setMuseumId(results.getInt("MuseumId"));
             obj.setName(results.getString("Name"));
             obj.setAddress(results.getString("Address"));
-            obj.setTotalRevenue(results.getInt("TotalRevenue"));
-            obj.setOperationalCost(results.getInt("OperationalCost"));
+            obj.setTotalRevenue(results.getDouble("TotalRevenue"));
+            obj.setOperationalCost(results.getDouble("OperationalCost"));
 
             return obj;
         } catch (Exception e) {
@@ -1413,8 +1459,8 @@ public class Database {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
             pstmt.setString(2, obj.getAddress());
-            pstmt.setInt(3, obj.getTotalRevenue());
-            pstmt.setInt(4, obj.getOperationalCost());
+            pstmt.setDouble(3, obj.getTotalRevenue());
+            pstmt.setDouble(4, obj.getOperationalCost());
             pstmt.setInt(5, obj.getMuseumId());
 
             // Execute the query

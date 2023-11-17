@@ -50,7 +50,6 @@ public class ViewProgramHandler implements HttpHandler {
                     + String.format("\n<td>%s</td>", a.getStartDate().toString())
                     + String.format("\n<td>%s</td>", a.getEndDate().toString())
                     + String.format("\n<td><a href=\"/program/edit?programId=%s\">Edit</a></td>", a.getProgramId())
-                    + String.format("\n<td><a href=\"/program/delete?programId=%s\">Delete</a></td>", a.getProgramId())
                     + "</tr>";
         }
         return s;

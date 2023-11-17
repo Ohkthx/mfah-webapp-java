@@ -9,8 +9,8 @@ import java.util.Map;
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
-import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.Museum;
+import com.mfahproj.webapp.models.Employee;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -27,11 +27,44 @@ public class EditMuseumHandler implements HttpHandler {
 
     // Handles GET requests from the client.
     private void get(HttpExchange exchange) throws IOException {
-        // Show edit form for a new member.
-        String response = Utils.dynamicNavigator(exchange, "museum/edit.html");
+        // Validate the session before sending page.
+        String sessionId = Session.extractSessionId(exchange);
+        Employee employee = Session.getEmployeeSession(sessionId);
+        if (employee == null) {
+            // They are not logged in, send to login page.
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
 
-        // Edit the placeholders with dynamic text.
-        response = response.replace("{{credentials}}", "");
+        // Extract the MuseumId from the query.
+        boolean invalidMuseum = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int museumId = -1;
+        try {
+            museumId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidMuseum = true;
+        }
+
+        // Obtain the entity from the database.
+        Museum museum = Database.getMuseum(museumId);
+        if (museum == null) {
+            invalidMuseum = true;
+        }
+
+        // Update the credentials to something meaningful if there was an error.
+        String response = Utils.dynamicNavigator(exchange, "museum/edit.html");
+        if (invalidMuseum) {
+            response = response.replace("{{credentials}}", "<b style='color:red;'>Invalid Id.</b>");
+        } else {
+            response = response.replace("{{credentials}}", "");
+        }
+
+        // Update the default form data by swapping out the placeholders.
+        response = EditMuseumHandler.setDefaults(museum, response);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -41,7 +74,7 @@ public class EditMuseumHandler implements HttpHandler {
 
     // Handles POST requests from the client.
     private void post(HttpExchange exchange) throws IOException {
-        // Check if a session exists.
+        // Validate the session before sending page.
         String sessionId = Session.extractSessionId(exchange);
         Employee employee = Session.getEmployeeSession(sessionId);
         if (employee == null) {
@@ -55,14 +88,41 @@ public class EditMuseumHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(isr);
         String formData = br.readLine();
 
-        // Parse the form data to edit the Museum information.
+        // Extract the MuseumId from the query.
+        boolean invalidMuseum = false;
+        String query = exchange.getRequestURI().getQuery();
+        query = query.replaceAll("[^0-9]", "");
+
+        int museumId = -1;
+        try {
+            museumId = Integer.parseInt(query);
+        } catch (Exception e) {
+            invalidMuseum = true;
+        }
+
+        // Obtain the entity from the database.
+        Museum museum = Database.getMuseum(museumId);
+        if (museum == null) {
+            invalidMuseum = true;
+        }
+
+        if (invalidMuseum) {
+            // Send them to the failure page.
+            exchange.getResponseHeaders().add("Location", "/failure");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
+        // Parse the form data to edit the museum information.
         Map<String, String> form = Utils.parseForm(formData);
-        Museum obj = Database.getMuseum(Integer.parseInt(form.get("MuseumId")));
-        obj = EditMuseumHandler.editObj(obj, form);
+        museum = EditMuseumHandler.editMuseum(museum, form);
 
         // Load edit form.
         String response = Utils.dynamicNavigator(exchange, "museum/edit.html");
-        switch (Database.editMuseum(obj)) {
+        // Update the default form data by swapping out the placeholders.
+        response = EditMuseumHandler.setDefaults(museum, response);
+
+        switch (Database.editMuseum(museum)) {
             case SUCCESS:
                 // Update the employees session.
                 Session.updateEmployeeSession(sessionId, employee);
@@ -71,11 +131,11 @@ public class EditMuseumHandler implements HttpHandler {
                 exchange.getResponseHeaders().add("Location", "/success");
                 exchange.sendResponseHeaders(302, -1);
 
-                System.out.printf("%s created.\n", obj.getName());
+                System.out.printf("Museum: %s edited.\n", museum.getName());
                 return;
             default:
-                // Could not create collection.
-                System.out.printf("%s failed to create.\n", obj.getName());
+                // Could not create museum.
+                System.out.printf("Museum: %s failed to edit.\n", museum.getName());
                 response = response.replace("{{credentials}}", "<b style='color:red;'>An unknown error occurred.</b>");
         }
 
@@ -86,30 +146,42 @@ public class EditMuseumHandler implements HttpHandler {
         }
     }
 
+    // Sets the defaults values for a form.
+    private static String setDefaults(Museum museum, String webpage) {
+        if (museum == null) {
+            // Create a default museum with blank values. Credentials will show an error.
+            museum = new Museum();
+        }
+
+        // Replace the placeholder data.
+        webpage = webpage.replace("{{museumId}}", Integer.toString(museum.getMuseumId()));
+        return webpage.replace("{{name}}", museum.getName());
+    }
+
     // Edits an antifact from the form data provided.
-    private static Museum editObj(Museum obj, Map<String, String> form) {
+    private static Museum editMuseum(Museum museum, Map<String, String> form) {
 
         if (!StringUtils.isNullOrEmpty(form.get("MuseumId"))) {
-            obj.setMuseumId(Integer.parseInt(form.get("MuseumId")));
+            museum.setMuseumId(Integer.parseInt(form.get("MuseumId")));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("Name"))) {
-            obj.setName(form.get("Name"));
+            museum.setName(form.get("Name"));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("Address"))) {
-            obj.setAddress(form.get("Address"));
+            museum.setAddress(form.get("Address"));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("TotalRevenue"))) {
-            obj.setTotalRevenue(Integer.parseInt(form.get("TotalRevenue")));
+            museum.setTotalRevenue(Integer.parseInt(form.get("TotalRevenue")));
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("OperationalCost"))) {
-            obj.setOperationalCost(Integer.parseInt(form.get("OperationalCost")));
+            museum.setOperationalCost(Integer.parseInt(form.get("OperationalCost")));
         }
 
-        return obj;
+        return museum;
     }
 
 }

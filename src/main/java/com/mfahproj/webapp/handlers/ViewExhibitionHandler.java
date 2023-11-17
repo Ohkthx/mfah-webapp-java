@@ -53,8 +53,6 @@ public class ViewExhibitionHandler implements HttpHandler {
                     + String.format("\n<td>%s</td>", Integer.toString(a.getMuseumId()))
                     + String.format("\n<td><a href=\"/exhibition/edit?exhibitionId=%s\">Edit</a></td>",
                             a.getExhibitionId())
-                    + String.format("\n<td><a href=\"/exhibition/delete?exhibitionId=%s\">Delete</a></td>",
-                            a.getExhibitionId())
                     + "</tr>";
         }
         return s;

@@ -3,10 +3,10 @@ package com.mfahproj.webapp.models;
 public class Museum {
 
     private int museumId = -1;
-    private String name;
-    private String address;
-    private int totalRevenue;
-    private int operationalCost;
+    private String name = "";
+    private String address = "";
+    private double totalRevenue = 0.0;
+    private double operationalCost = 0.0;
 
     // Create a blank museum.
     public Museum() {
@@ -14,11 +14,11 @@ public class Museum {
 
     // Used to create a new museum.
     // museumId is created by AUTOINCREMENT.
-    public Museum(String name, String address, int totalRevenue, int operationalCost) {
+    public Museum(String name, String address, double totalRevenue, double operationalCost) {
         this(-1, name, address, totalRevenue, operationalCost);
     }
 
-    public Museum(int museumId, String name, String address, int totalRevenue, int operationalCost) {
+    public Museum(int museumId, String name, String address, double totalRevenue, double operationalCost) {
         this.setMuseumId(museumId);
         this.setName(name);
         this.setAddress(address);
@@ -48,7 +48,7 @@ public class Museum {
 
     // Address getter.
     public String getAddress() {
-        return this.name;
+        return this.address;
     }
 
     // Address setter.
@@ -57,22 +57,22 @@ public class Museum {
     }
 
     // TotalRevenue getter.
-    public int getTotalRevenue() {
+    public double getTotalRevenue() {
         return this.totalRevenue;
     }
 
     // TotalRevenue setter.
-    public void setTotalRevenue(int totalRevenue) {
+    public void setTotalRevenue(double totalRevenue) {
         this.totalRevenue = totalRevenue;
     }
 
     // OperationalCost getter.
-    public int getOperationalCost() {
+    public double getOperationalCost() {
         return this.totalRevenue;
     }
 
     // OperationalCost setter.
-    public void setOperationalCost(int operationCost) {
+    public void setOperationalCost(double operationCost) {
         this.operationalCost = operationCost;
     }
 

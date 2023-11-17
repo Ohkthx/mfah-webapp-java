@@ -47,7 +47,6 @@ public class ViewArtistHandler implements HttpHandler {
                     + String.format("\n<td>%s</td>", a.getFirstName())
                     + String.format("\n<td>%s</td>", a.getLastName())
                     + String.format("\n<td><a href=\"/artist/edit?artistId=%s\">Edit</a></td>", a.getArtistId())
-                    + String.format("\n<td><a href=\"/artist/delete?artistId=%s\">Delete</a></td>", a.getArtistId())
                     + "</tr>";
         }
         return s;
