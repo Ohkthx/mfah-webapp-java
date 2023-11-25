@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,10 +68,7 @@ public class EditArtifactHandler implements HttpHandler {
         // Update the default form data by swapping out the placeholders.
         response = EditArtifactHandler.setDefaults(artifact, response);
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -143,10 +139,7 @@ public class EditArtifactHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Sets the defaults values for a form.

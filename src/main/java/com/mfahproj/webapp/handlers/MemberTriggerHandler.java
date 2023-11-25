@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
@@ -36,11 +35,7 @@ public class MemberTriggerHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "member/trigger.html");
         response = MemberHandler.setNotifications(member, response);
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
-        return;
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.

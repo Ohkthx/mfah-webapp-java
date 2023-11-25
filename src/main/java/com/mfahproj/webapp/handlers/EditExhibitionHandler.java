@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,10 +69,7 @@ public class EditExhibitionHandler implements HttpHandler {
         // Update the default form data by swapping out the placeholders.
         response = EditExhibitionHandler.setDefaults(exhibition, response);
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -144,10 +140,7 @@ public class EditExhibitionHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Sets the defaults values for a form.
@@ -179,7 +172,7 @@ public class EditExhibitionHandler implements HttpHandler {
         return webpage;
     }
 
-    // Edits an antifact from the form data provided.
+    // Edits an exhibition from the form data provided.
     private static Exhibition editExhibition(Exhibition exhibition, Map<String, String> form) {
 
         if (!StringUtils.isNullOrEmpty(form.get("ExhibitionId"))) {

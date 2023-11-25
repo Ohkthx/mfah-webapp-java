@@ -14,7 +14,6 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -44,10 +43,7 @@ public class GenerateHandler implements HttpHandler {
                 response = MemberHandler.setNotifications(member, response);
             }
 
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+            Utils.sendResponse(exchange, response);
             return;
         }
 
@@ -72,11 +68,8 @@ public class GenerateHandler implements HttpHandler {
         // Non-logged in clients should not access this post request.
         if (employee == null && member == null) {
             String response = Utils.dynamicNavigator(exchange, "/login");
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
 
+            Utils.sendResponse(exchange, response);
             return;
         }
 

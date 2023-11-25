@@ -8,7 +8,6 @@ import com.mfahproj.webapp.models.Notification;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 public class MemberHandler implements HttpHandler {
@@ -24,10 +23,7 @@ public class MemberHandler implements HttpHandler {
             response = response.replace("{{memberDetails}}", MemberHandler.getDetails(member));
             response = MemberHandler.setNotifications(member, response);
 
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+            Utils.sendResponse(exchange, response);
             return;
         }
 

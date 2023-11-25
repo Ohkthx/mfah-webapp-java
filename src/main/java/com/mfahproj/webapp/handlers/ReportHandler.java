@@ -14,7 +14,6 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +38,8 @@ public class ReportHandler implements HttpHandler {
             String response = Utils.dynamicNavigator(exchange, "employee/report.html");
 
             response = response.replace("{{report}}", "");
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+
+            Utils.sendResponse(exchange, response);
             return;
         }
 
@@ -175,10 +172,7 @@ public class ReportHandler implements HttpHandler {
 
         }
 
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Report handler

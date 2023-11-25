@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
@@ -22,10 +21,8 @@ public class AboutHandler implements HttpHandler {
             // Updates the notifications panel item.
             response = MemberHandler.setNotifications(member, response);
         }
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 
 }

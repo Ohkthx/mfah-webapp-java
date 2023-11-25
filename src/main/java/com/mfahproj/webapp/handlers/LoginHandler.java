@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Map;
 
 import com.mfahproj.webapp.Database;
@@ -31,10 +30,7 @@ public class LoginHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "login.html");
         response = response.replace("{{credentials}}", "");
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -91,10 +87,7 @@ public class LoginHandler implements HttpHandler {
         // Load the HTML file to display.
         String response = Utils.dynamicNavigator(exchange, "login.html");
         response = response.replace("{{credentials}}", "<b style='color:red;'>Invalid credentials.</b>");
-        exchange.sendResponseHeaders(200, response.length());
-        try (
-                OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 }

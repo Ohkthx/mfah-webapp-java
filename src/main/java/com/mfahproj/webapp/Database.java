@@ -50,7 +50,7 @@ public class Database {
             String sortOrder = request.getParameter("sortOrder"); // 'ASC' or 'DESC'
 
             try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-                String query = "SELECT * FROM employee ORDER BY " + sortField + " " + sortOrder;
+                String query = "SELECT * FROM Employee ORDER BY " + sortField + " " + sortOrder;
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     statement.executeQuery();
                     // Process and send the results to front-end

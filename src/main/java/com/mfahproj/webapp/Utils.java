@@ -2,6 +2,7 @@ package com.mfahproj.webapp;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -120,5 +121,20 @@ public class Utils {
         String navigation = String.join("\n", elements);
         String resource = Utils.readResourceFile(filename);
         return resource.replace("{{navigationPanel}}", navigation);
+    }
+
+    // Wraps sending a response to account for 'too many bytes to write' error.
+    public static void sendResponse(HttpExchange exchange, String response) {
+        try (OutputStream os = exchange.getResponseBody()) {
+            byte[] responseBytes = response.getBytes();
+            exchange.sendResponseHeaders(200, responseBytes.length);
+            os.write(responseBytes);
+        } catch (Exception e) {
+            exchange.getResponseHeaders().add("Location", "/failure");
+            try {
+                exchange.sendResponseHeaders(302, -1);
+            } catch (Exception e2) {
+            }
+        }
     }
 }

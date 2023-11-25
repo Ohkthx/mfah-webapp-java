@@ -42,11 +42,8 @@ public class ExhibitionCollectionHandler implements HttpHandler {
             return;
         } else {
             String response = Utils.dynamicNavigator(exchange, "login.html");
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
 
+            Utils.sendResponse(exchange, response);
             return;
         }
     }

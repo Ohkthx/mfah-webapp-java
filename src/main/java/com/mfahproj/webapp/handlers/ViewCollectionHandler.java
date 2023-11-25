@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 
 import com.mfahproj.webapp.Database;
@@ -36,10 +35,8 @@ public class ViewCollectionHandler implements HttpHandler {
         // Send the employee the viewing page.
         String response = Utils.dynamicNavigator(exchange, "collection/view.html");
         response = response.replace("{{collectionDetails}}", ViewCollectionHandler.getCollectionDetails());
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 
     // Populates a table with individual collection values.

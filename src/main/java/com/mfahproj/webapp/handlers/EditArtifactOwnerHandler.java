@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Map;
 
 import com.mfahproj.webapp.Database;
@@ -66,10 +65,7 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         // Update the default form data by swapping out the placeholders.
         response = EditArtifactOwnerHandler.setDefaults(artifactOwner, response);
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -140,10 +136,7 @@ public class EditArtifactOwnerHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Sets the defaults values for a form.

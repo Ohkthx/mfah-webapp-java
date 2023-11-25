@@ -73,10 +73,7 @@ public class EmployeeViewEditorHandler implements HttpHandler {
 
         response = response.replace("{{supervisorInfo}}", supervisorOptions);
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -129,10 +126,7 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Edits an employee from the form data provided.

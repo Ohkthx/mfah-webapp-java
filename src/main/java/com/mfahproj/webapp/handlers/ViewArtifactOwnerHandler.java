@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
@@ -34,10 +33,8 @@ public class ViewArtifactOwnerHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "artifactOwner/view.html");
         response = response.replace("{{artifactOwnerDetails}}",
                 ViewArtifactOwnerHandler.getArtifactOwnerDetails());
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 
     // Populates a table with individual artifactOwner values.

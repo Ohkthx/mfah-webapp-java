@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
@@ -36,20 +35,11 @@ public class ArtistWorkHandler implements HttpHandler {
                     "        </div>";
 
             response = response.replace("{{dropdownmenu}}", forMember);
-
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+            Utils.sendResponse(exchange, response);
         } else {
             String response = Utils.dynamicNavigator(exchange, "login.html");
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+            Utils.sendResponse(exchange, response);
         }
-
-        return;
     }
 
     public String getArtist() {

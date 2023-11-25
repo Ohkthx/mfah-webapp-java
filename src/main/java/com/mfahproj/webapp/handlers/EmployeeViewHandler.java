@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 
 import com.mfahproj.webapp.Database;
@@ -42,10 +41,8 @@ public class EmployeeViewHandler implements HttpHandler {
         String response = Utils.dynamicNavigator(exchange, "employee/employeeView.html");
         response = response.replace("{{employeeDetails}}", EmployeeViewHandler.getEmployeeDetails(sessionId));
         response = response.replace("{{emailAddress}}", employee.getFirstName());
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 
     // get employee details

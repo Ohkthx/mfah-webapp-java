@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,10 +33,7 @@ public class RegisterMemberHandler implements HttpHandler {
         // Edit the placeholders with dynamic text.
         response = response.replace("{{credentials}}", "");
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -75,10 +71,7 @@ public class RegisterMemberHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Creates a new member from the form data provided.

@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -54,12 +53,7 @@ public class NotificationsHandler implements HttpHandler {
             response = response.replace("{{sections}}", html_sections);
         }
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
-        return;
-
+        Utils.sendResponse(exchange, response);
     }
 
     // Sort notifications based on if they have been checked or not, then on date.

@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
@@ -33,10 +32,8 @@ public class ViewArtistHandler implements HttpHandler {
         // Send the employee the viewing page.
         String response = Utils.dynamicNavigator(exchange, "artist/view.html");
         response = response.replace("{{artistDetails}}", ViewArtistHandler.getArtistDetails());
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+
+        Utils.sendResponse(exchange, response);
     }
 
     // Populates a table with individual artist values.

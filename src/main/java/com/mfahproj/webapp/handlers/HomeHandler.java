@@ -1,7 +1,6 @@
 package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
@@ -43,12 +42,9 @@ public class HomeHandler implements HttpHandler {
             } else {
                 response = response.replace("{{dropdownmenu}}", "");
             }
+        }
 
-        }
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
 }

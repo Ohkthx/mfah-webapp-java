@@ -3,7 +3,6 @@ package com.mfahproj.webapp.handlers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Map;
 
 import com.mfahproj.webapp.Database;
@@ -40,10 +39,7 @@ public class RegisterArtifactOwnerHandler implements HttpHandler {
         // Show register form for an artifact owner.
         String response = Utils.dynamicNavigator(exchange, "artifactOwner/register.html");
 
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Handles POST requests from the client.
@@ -81,10 +77,7 @@ public class RegisterArtifactOwnerHandler implements HttpHandler {
         }
 
         // Send the response based on the error.
-        exchange.sendResponseHeaders(200, response.length());
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
-        }
+        Utils.sendResponse(exchange, response);
     }
 
     // Creates a new ArtifactOwner from the form data provided.

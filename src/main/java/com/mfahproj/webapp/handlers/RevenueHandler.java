@@ -9,7 +9,6 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Utils;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class RevenueHandler implements HttpHandler {
     @Override
@@ -35,18 +34,12 @@ public class RevenueHandler implements HttpHandler {
 
             response = response.replace("{{dropdownmenu}}", forMember);
 
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
+            Utils.sendResponse(exchange, response);
             return;
         } else {
             String response = Utils.dynamicNavigator(exchange, "login.html");
-            exchange.sendResponseHeaders(200, response.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
 
+            Utils.sendResponse(exchange, response);
             return;
         }
     }
