@@ -13,6 +13,8 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
+import com.mfahproj.webapp.models.Exhibition;
+import com.mfahproj.webapp.models.Museum;
 import com.mfahproj.webapp.models.Collection;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
@@ -162,8 +164,31 @@ public class EditCollectionHandler implements HttpHandler {
         webpage = webpage.replace("{{title}}", collection.getTitle());
         webpage = webpage.replace("{{date}}", collection.getDate().toString());
         webpage = webpage.replace("{{description}}", collection.getDescription());
-        webpage = webpage.replace("{{locationId}}", Integer.toString(collection.getLocationId()));
-        return webpage.replace("{{exhibitionId}}", Integer.toString(collection.getExhibitionId()));
+
+        // Drop down for museums to select.
+        String dropdown = "";
+        for (Museum m : Database.getAllMuseums()) {
+            String selected = "";
+            if (m.getMuseumId() == collection.getLocationId()) {
+                selected = "selected ";
+            }
+
+            dropdown += String.format("<option %svalue=%d>%s</option>", selected, m.getMuseumId(), m.getName());
+        }
+        webpage = webpage.replace("{{museumInfo}}", dropdown);
+
+        // Drop down for exhibitions to select.
+        dropdown = "";
+        for (Exhibition e : Database.getAllExhibitions()) {
+            String selected = "";
+            if (e.getExhibitionId() == collection.getExhibitionId()) {
+                selected = "selected ";
+            }
+
+            dropdown += String.format("<option %svalue=%d>%s</option>", selected, e.getExhibitionId(), e.getTitle());
+        }
+        webpage = webpage.replace("{{exhibitionInfo}}", dropdown);
+        return webpage;
     }
 
     // Edits an antifact from the form data provided.

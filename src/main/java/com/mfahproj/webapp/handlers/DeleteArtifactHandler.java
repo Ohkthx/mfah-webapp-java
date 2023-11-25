@@ -2,6 +2,7 @@ package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
 
+import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
@@ -39,13 +40,13 @@ public class DeleteArtifactHandler implements HttpHandler {
             invalidArtifact = true;
         }
 
-        System.out.println("Nothing to do here yet for Artifact " + artifactId);
-        System.out.println("Artifact is valid: " + !invalidArtifact);
-
         // Database Deletion here.
-        // boolean success = Database.deleteArtifact(artifactId);
-        // String path = success ? "/success" : "/failure";
-        String path = "/accessDeny";
+        String path = "/failure";
+        if (!invalidArtifact) {
+            boolean success = Database.deleteEntity("Artifact", "ArtifactId", artifactId);
+            path = success ? "/success" : "/failure";
+        }
+
         exchange.getResponseHeaders().add("Location", path);
         exchange.sendResponseHeaders(302, -1);
     }
