@@ -188,7 +188,7 @@ public class ReportHandler implements HttpHandler {
             query.append(" SUM(CASE WHEN age >= 55 THEN 1 ELSE 0 END) AS Seniors");
             query.append(" FROM (");
             query.append(" SELECT");
-            query.append(" DATEDIFF(CURDATE(), birth_date) / 365 AS age\"");
+            query.append(" DATEDIFF(CURDATE(), BirthDate) / 365 AS age");
             query.append(" FROM");
             query.append(" Members");
             query.append(") AS age_calculated;");
