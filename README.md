@@ -19,7 +19,7 @@ The following are credentials for logging in for testing purposes.
 
 |Email|Password|Type|Access/Membership|
 |-|-|-|-|
-|director@mfah.org|PartyChick5!|EMPLOYEE|MANAGER|
+|director@mfah.org|director|EMPLOYEE|MANAGER|
 |supervisor@mfah.org|password1234|EMPLOYEE|SUPERVISOR|
 |normal@mfah.org|password1234|EMPLOYEE|NORMAL|
 |employee@mfah.org|employee|EMPLOYEE|NORMAL|
@@ -28,11 +28,14 @@ The following are credentials for logging in for testing purposes.
 
 ## Checkpoint Requirements
 
-- [ ] User authentication for different user roles.
+- [X] User authentication for different user roles.
     - [X] Member login.
     - [X] Employee login.
-        - [ ] Access levels with different views. (Partial Complete)
-- [ ] Data entry forms - to add new data, modify existing data, and 'delete' data.
+        - [X] Access levels with different views.
+- [X] Access Levels
+    - Director can only modify other employees.
+    - Members of the museum cannot access employee items.
+- [X] Data entry forms - to add new data, modify existing data, and 'delete' data.
     - [X] Register
         - [X] Members
         - [X] Employees
@@ -45,26 +48,20 @@ The following are credentials for logging in for testing purposes.
     - [X] Updating last login times.
         - [X] Members
         - [X] Employees 
-    - [ ] Others.
-- [ ] Triggers - At least 2.
+    - [X] Reports.
+- [X] Triggers - At least 2.
     - [X] Notifications for membership expiration.
-    - [ ] Notifications for senior citizen membership upgrade.
-- [ ] Data queries - At least 3.
+    - [X] Notifications for senior citizen membership upgrade.
+- [X] Data queries - At least 3.
     - [X] Obtaining members / employees credentials for logging in.
     - [X] Obtaining notifications for members.
     - [X] Creating pseudo data for Tickets, Transactions, and Artifacts.
-    - [ ] Others, add here as implemented.
-- [ ] Data reports - At least 3.
-    - [X] Certain roles (access level) have access to this, not all preferably.
-        - [X] Director role used to generate reports.
-    - [ ] Reporting tools exist inside the database systems already.
-    - [ ] Generated when requested.
+    - [X] Viewing, editing, deleting all entities.
+- [X] Data reports - At least 3.
+    - [X] Generated when requested.
     - [X] Required SQL queries in the background.
         - [X] Time Interval required.
-        - [ ] Needs to come from more than one table.
-    - [ ] Report builder
-    - [ ] Report designer
-    - [ ] Report viewer
+        - [X] Needs to come from more than one table.
 
 ## Configuration
 

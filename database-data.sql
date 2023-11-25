@@ -53,48 +53,51 @@ VALUES ("Victoria", "Preston", "REGULAR", CURDATE() + INTERVAL 1 YEAR, CURDATE()
 -- Employees
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Gary", "Tinterow", "Director", "713-777-7777", "director@mfah.org", "PartyChick5!", 250000, 1, NULL, "MANAGER", CURRENT_TIMESTAMP());
-
-UPDATE Employee SET SupervisorId = 1 WHERE EmployeeId = 1;
+VALUES ("ADMIN", "ADMIN", "ADMIN", "000-000-0000", "admin@mfah.org", "password", 0, 1, NULL, "ADMIN", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Iam", "Human", "Supervisor", "713-777-7778", "supervisor@mfah.org", "password1234", 100000, 2, 1, "SUPERVISOR", CURRENT_TIMESTAMP());
+VALUES ("Gary", "Tinterow", "Director", "713-777-7777", "director@mfah.org", "director", 250000, 1, NULL, "MANAGER", CURRENT_TIMESTAMP());
+
+UPDATE Employee SET SupervisorId = 2 WHERE EmployeeId = 2;
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("A'nother", "Pearson", "Clerk", "713-777-7779", "normal@mfah.org", "password1234", 50000, 3, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Iam", "Human", "Supervisor", "713-777-7778", "supervisor@mfah.org", "password1234", 100000, 2, 2, "SUPERVISOR", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Sum", "Employee", "Janitor", "713-777-7780", "employee@mfah.org", "employee", 50000, 4, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("A'nother", "Pearson", "Clerk", "713-777-7779", "normal@mfah.org", "password1234", 50000, 3, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Eleanor", "Gallagher", "Curator", "713-777-7781", "gallagher@mfah.org", "EG!MFAH", 60000, 1, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Sum", "Employee", "Janitor", "713-777-7780", "employee@mfah.org", "employee", 50000, 4, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Lucas", "Hawkins", "Archivist", "713-777-7782", "hawkins@mfah.org", "LH!MFAH", 60000, 5, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Eleanor", "Gallagher", "Curator", "713-777-7781", "gallagher@mfah.org", "EG!MFAH", 60000, 1, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Cassandra", "Wong", "Conservator", "713-777-7783", "wong@mfah.org", "CW!MFAH", 60000, 4, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Lucas", "Hawkins", "Archivist", "713-777-7782", "hawkins@mfah.org", "LH!MFAH", 60000, 5, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Dexter", "Mendez", "Registrar", "713-777-7784", "mendez@mfah.org", "DM!MFAH", 60000, 3, 1, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Cassandra", "Wong", "Conservator", "713-777-7783", "wong@mfah.org", "CW!MFAH", 60000, 4, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Isabella", "Fleming", "Exhibition Designer", "713-777-7785", "fleming@mfah.org", "IF!MFAH", 70000, 2, 1, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Dexter", "Mendez", "Registrar", "713-777-7784", "mendez@mfah.org", "DM!MFAH", 60000, 3, 2, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Oscar", "Rodriguez", "Museum Educator", "713-777-7786", "rodriguez@mfah.org", "OR!MFAH", 70000, 5, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Isabella", "Fleming", "Exhibition Designer", "713-777-7785", "fleming@mfah.org", "IF!MFAH", 70000, 2, 2, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Gavin", "Barnes", "Archaeologist", "713-777-7787", "barnes@mfah.org", "GB!MFAH", 80000, 1, 1, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Oscar", "Rodriguez", "Museum Educator", "713-777-7786", "rodriguez@mfah.org", "OR!MFAH", 70000, 5, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Penelope", "Chen", "Exhibition Coordinator", "713-777-7788", "chen@mfah.org", "PC!MFAH", 70000, 2, 1, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Gavin", "Barnes", "Archaeologist", "713-777-7787", "barnes@mfah.org", "GB!MFAH", 80000, 1, 2, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Fiona", "Evans", "Visitor Services Coordinator", "713-777-7789", "evans@mfah.org", "FE!MFAH", 60000, 1, 1, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Penelope", "Chen", "Exhibition Coordinator", "713-777-7788", "chen@mfah.org", "PC!MFAH", 70000, 2, 2, "NORMAL", CURRENT_TIMESTAMP());
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
-VALUES ("Howard", "Fisher", "Gallery Attendant", "713-777-7790", "fisher@mfah.org", "HF!MFAH", 60000, 2, 2, "NORMAL", CURRENT_TIMESTAMP());
+VALUES ("Fiona", "Evans", "Visitor Services Coordinator", "713-777-7789", "evans@mfah.org", "FE!MFAH", 60000, 1, 2, "NORMAL", CURRENT_TIMESTAMP());
+
+INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
+VALUES ("Howard", "Fisher", "Gallery Attendant", "713-777-7790", "fisher@mfah.org", "HF!MFAH", 60000, 2, 3, "NORMAL", CURRENT_TIMESTAMP());
 
 -- Artists
 

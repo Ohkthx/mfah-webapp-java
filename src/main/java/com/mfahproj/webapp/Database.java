@@ -101,6 +101,45 @@ public class Database {
         return employee == null ? false : true;
     }
 
+    public static boolean deleteEmployee(String tableName, String field, int entityId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+            for (Employee n : Database.getAllEmployees()) {
+                if (n.getSupervisorId() == entityId) {
+                    String sql = String.format("UPDATE %s SET %s = 0 WHERE %s = ?", tableName, field, field, entityId);
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setInt(1, entityId);
+                    pstmt.executeUpdate();
+                }
+            }
+            String sql = String.format("DELETE FROM %s WHERE EmployeeId = ?", tableName, entityId);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, entityId);
+            pstmt.executeUpdate();
+
+            // Execute the query
+            return pstmt.executeUpdate() != 0 ? true : false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Removes an entity from the database.
     public static boolean deleteEntity(String tableName, String field, int entityId) {
         Connection conn = null;
@@ -591,7 +630,6 @@ public class Database {
             // Create the list of notifications.
             while (results.next()) {
                 Employee employee = new Employee();
-                System.out.printf("Supervisors: %d\n", employees.size());
                 employee.setEmployeeId(results.getInt("EmployeeId"));
                 employee.setFirstName(results.getString("FirstName"));
                 employee.setLastName(results.getString("LastName"));

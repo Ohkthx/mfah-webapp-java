@@ -17,8 +17,6 @@ public class EmployeeViewHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
             get(exchange);
-        } else if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-            post(exchange);
         }
     }
 
@@ -34,7 +32,7 @@ public class EmployeeViewHandler implements HttpHandler {
             return;
         }
 
-        if (!employee.getAccessLevel().equalsIgnoreCase("MANAGER")) {
+        if (employee.getAccessLevel().equalsIgnoreCase("NORMAL")) {
             exchange.getResponseHeaders().add("Location", "/accessDeny");
             exchange.sendResponseHeaders(302, -1);
             return;
@@ -50,10 +48,6 @@ public class EmployeeViewHandler implements HttpHandler {
         }
     }
 
-    private void post(HttpExchange exchange) throws IOException {
-
-    }
-
     // get employee details
     private static String getEmployeeDetails(String session) {
         // Map of supervisors to display in the table.
@@ -67,6 +61,11 @@ public class EmployeeViewHandler implements HttpHandler {
             // get Employee Supervisor
             // parse employeeId as a parameter through URL
             Employee supervisor = supervisors.get(e.getSupervisorId());
+            if (supervisor == null) {
+                // Accounts for admin account.
+                continue;
+            }
+
             String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());
 
             s += "<tr>"
