@@ -1,5 +1,6 @@
 package com.mfahproj.webapp;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,12 @@ import java.util.Date;
 
 import com.mfahproj.webapp.models.*;
 import com.mysql.cj.util.StringUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class Database {
     // Result of a database query / insertion / update.
@@ -32,6 +39,24 @@ public class Database {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    @WebServlet("/employee/employeeView")
+    public class EmployeeSortServlet extends HttpServlet {
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String sortField = request.getParameter("sortField");
+            String sortOrder = request.getParameter("sortOrder"); // 'ASC' or 'DESC'
+
+            try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+                String query = "SELECT * FROM employee ORDER BY " + sortField + " " + sortOrder;
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    ResultSet resultSet = statement.executeQuery();
+                    // Process and send the results to front-end
+                }
+            } catch (SQLException e) {
+                // Handle SQL exceptions
+            }
         }
     }
 
@@ -462,6 +487,59 @@ public class Database {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static List<Employee> getAllSupervisors() {
+        List<Employee> employees = new Vector<Employee>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM employee WHERE accessLevel != 'normal';");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Employee employee = new Employee();
+                System.out.printf("Supervisors: %d\n", employees.size());
+                employee.setEmployeeId(results.getInt("EmployeeId"));
+                employee.setFirstName(results.getString("FirstName"));
+                employee.setLastName(results.getString("LastName"));
+                employee.setJobTitle(results.getString("JobTitle"));
+                employee.setPhoneNumber(results.getString("PhoneNumber"));
+                employee.setEmailAddress(results.getString("EmailAddress"));
+                employee.setPassword(results.getString("Password"));
+                employee.setSalary(results.getDouble("Salary"));
+                employee.setMuseumId(results.getInt("MuseumId"));
+                employee.setSupervisorId(results.getInt("SupervisorId"));
+                employee.setAccessLevel(results.getString("AccessLevel"));
+                employee.setLastLogin(results.getDate("LastLogin"));
+
+                employees.add(employee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return employees;
     }
 
     // Obtains all artifacts from the database.

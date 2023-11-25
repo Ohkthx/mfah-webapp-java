@@ -8,14 +8,16 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
+import com.mfahproj.webapp.models.Museum;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import javax.xml.crypto.Data;
+
 public class EmployeeViewEditorHandler implements HttpHandler {
 
     HashMap<String, String> storeQuery = new HashMap<>();
-    static boolean editError = false;
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -52,6 +54,26 @@ public class EmployeeViewEditorHandler implements HttpHandler {
         response = response.replace("{{credentials}}",
                 "Editing Employee : " + Database.getEmployee(Integer.parseInt(query)).getFirstName() +
                         " " + Database.getEmployee(Integer.parseInt(query)).getLastName());
+
+        //autofill form information
+        response = response.replace("{{employeeFirstName}}",Database.getEmployee(Integer.parseInt(query)).getFirstName());
+        response = response.replace("{{employeeLastName}}",Database.getEmployee(Integer.parseInt(query)).getLastName());
+        response = response.replace("{{jobTitle}}",Database.getEmployee(Integer.parseInt(query)).getJobTitle());
+        response = response.replace("{{phoneNumber}}",Database.getEmployee(Integer.parseInt(query)).getPhoneNumber());
+        response = response.replace("{{emailAddress}}",Database.getEmployee(Integer.parseInt(query)).getEmailAddress());
+        response = response.replace("{{accessLevel}}",Database.getEmployee(Integer.parseInt(query)).getAccessLevel());
+
+
+        String supervisorOptions = "";
+        for (Employee m : Database.getAllSupervisors()) {
+            String selected = "";
+
+            if(m.getEmployeeId() == Database.getEmployee(Integer.parseInt(query)).getSupervisorId())
+                selected = " selected";
+            supervisorOptions += String.format("<option value=%d %s> %s %s</option>", m.getEmployeeId(), selected, m.getFirstName(), m.getLastName());
+        }
+
+        response = response.replace("{{supervisorInfo}}", supervisorOptions);
 
         exchange.sendResponseHeaders(200, response.length());
         try (OutputStream os = exchange.getResponseBody()) {
@@ -140,14 +162,13 @@ public class EmployeeViewEditorHandler implements HttpHandler {
 
         if (!StringUtils.isNullOrEmpty(form.get("accessLevel"))) {
             var input = form.get("accessLevel").toLowerCase();
-            System.out.println(input);
             if (input.equals("manager") || input.equals("supervisor") || input.equals("normal"))
                 employee.setAccessLevel(form.get("accessLevel").toUpperCase());
 
         }
 
-        if (!StringUtils.isNullOrEmpty(form.get("supervisor"))) {
-            employee.setSupervisorId(Integer.parseInt(form.get("supervisor")));
+        if (!StringUtils.isNullOrEmpty(form.get("supervisorId"))) {
+            employee.setSupervisorId(Integer.parseInt(form.get("supervisorId")));
 
         }
         return employee;
