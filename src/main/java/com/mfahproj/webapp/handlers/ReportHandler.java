@@ -178,27 +178,6 @@ public class ReportHandler implements HttpHandler {
         }
 
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        else if (type.equals("MDR")) {
-
-            StringBuilder query = new StringBuilder();
-            query.append("SELECT SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) AS Children,");
-            query.append(" SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) AS Teens,");
-            query.append(" SUM(CASE WHEN age BETWEEN 20 AND 54 THEN 1 ELSE 0 END) AS Adults,");
-            query.append(" SUM(CASE WHEN age >= 55 THEN 1 ELSE 0 END) AS Seniors");
-            query.append(" FROM (");
-            query.append(" SELECT");
-            query.append(" DATEDIFF(CURDATE(), BirthDate) / 365 AS age");
-            query.append(" FROM");
-            query.append(" Members");
-            query.append(") AS age_calculated;");
-            
-            response = Utils.dynamicNavigator(exchange, "employee/report.html");
-            response = response.replace("{{report}}", getDemographicsReport(query.toString()));
-
-
-        }
-
 
         exchange.sendResponseHeaders(200, response.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
@@ -206,29 +185,6 @@ public class ReportHandler implements HttpHandler {
         }
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public static String getDemographicsReport(String query) {
-        StringBuilder report = new StringBuilder();
-        List<MemberDemographicsReport> mdReports = Database.getMemberDemographicsReport(query);
-        report.append("<h1> Member Demographics Report: <h1>");
-        report.append("<table>");
-        report.append("<tr>");
-        report.append("<th>Children</th>");
-        report.append("<th>Teens</th>");
-        report.append("<th>Adults</th>");
-        report.append("<th>Seniors</th>");
-        report.append("</tr>");
-        for (MemberDemographicsReport mdr : mdReports) {
-            report.append("<tr>");
-            report.append("<td>").append(mdr.getChildren()).append("</td>");
-            report.append("<td>").append(mdr.getTeens()).append("</td>");
-            report.append("<td>").append(mdr.getAdults()).append("</td>");
-            report.append("<td>").append(mdr.getSeniors()).append("</td>");
-            report.append("</tr>");
-        }
-        report.append("</table>");
-        return report.toString();
-    }
 
     // Report handler
     public static String getArtifactInventoryReport(String query) {
