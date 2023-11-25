@@ -97,6 +97,11 @@ public class App {
         server.createContext("/exhibition-collection",
                 new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
 
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!
+        server.createContext("/demographics", new MiddlewareHandler(new DemographicsHandler(), callback));
+
+
         // Views
         server.createContext("/artifact/view", new MiddlewareHandler(new ViewArtifactHandler(), callback));
         server.createContext("/artifactOwner/view", new MiddlewareHandler(new ViewArtifactOwnerHandler(), callback));

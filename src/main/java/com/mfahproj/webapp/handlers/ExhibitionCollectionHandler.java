@@ -28,6 +28,8 @@ public class ExhibitionCollectionHandler implements HttpHandler {
                     "                <a href='/artistwork'>Artistwork</a>" +
                     "                <a href='/revenue'>Revenue</a>" +
                     "                <a href='/exhibition-collection'>Exhibition Collections</a>" +
+                    "                <a href='/demographics'>Demographics</a>" +
+
                     "            </div>" +
                     "        </div>";
 

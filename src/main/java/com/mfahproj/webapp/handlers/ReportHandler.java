@@ -7,6 +7,7 @@ import com.mfahproj.webapp.models.ArtifactInventoryReport;
 import com.mfahproj.webapp.models.Employee;
 import com.mfahproj.webapp.models.ExhibitionAttendanceReport;
 import com.mfahproj.webapp.models.MuseumRevenueReport;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -174,11 +175,14 @@ public class ReportHandler implements HttpHandler {
 
         }
 
+
+
         exchange.sendResponseHeaders(200, response.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
+
 
     // Report handler
     public static String getArtifactInventoryReport(String query) {
