@@ -44,14 +44,15 @@ public class Database {
 
     @WebServlet("/employee/employeeView")
     public class EmployeeSortServlet extends HttpServlet {
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
             String sortField = request.getParameter("sortField");
             String sortOrder = request.getParameter("sortOrder"); // 'ASC' or 'DESC'
 
             try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
                 String query = "SELECT * FROM employee ORDER BY " + sortField + " " + sortOrder;
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
-                    ResultSet resultSet = statement.executeQuery();
+                    statement.executeQuery();
                     // Process and send the results to front-end
                 }
             } catch (SQLException e) {
@@ -315,6 +316,59 @@ public class Database {
                 e.printStackTrace();
             }
         }
+    }
+
+    // Obtains all employees from the database.
+    public static List<Employee> getAllEmployees() {
+        List<Employee> employees = new Vector<Employee>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Employee ORDER BY EmployeeId ASC");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Employee employee = new Employee();
+                employee.setEmployeeId(results.getInt("EmployeeId"));
+                employee.setMuseumId(results.getInt("MuseumId"));
+                employee.setFirstName(results.getString("FirstName"));
+                employee.setLastName(results.getString("LastName"));
+                employee.setJobTitle(results.getString("JobTitle"));
+                employee.setPhoneNumber(results.getString("PhoneNumber"));
+                employee.setEmailAddress(results.getString("EmailAddress"));
+                employee.setPassword(results.getString("Password"));
+                employee.setSalary(results.getDouble("Salary"));
+                employee.setSupervisorId(results.getInt("SupervisorId"));
+                employee.setAccessLevel(results.getString("AccessLevel"));
+                employee.setLastLogin(results.getDate("LastLogin"));
+
+                employees.add(employee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return employees;
     }
 
     // Obtain a user from the database using Id.
@@ -625,7 +679,7 @@ public class Database {
             conn = Database.connect();
 
             // Execute the query.
-            pstmt = conn.prepareStatement("SELECT * FROM employee WHERE accessLevel != 'normal';");
+            pstmt = conn.prepareStatement("SELECT * FROM Employee WHERE AccessLevel != 'NORMAL'");
             results = pstmt.executeQuery();
 
             // Create the list of notifications.

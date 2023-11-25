@@ -8,12 +8,9 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Employee;
-import com.mfahproj.webapp.models.Museum;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
-import javax.xml.crypto.Data;
 
 public class EmployeeViewEditorHandler implements HttpHandler {
 
@@ -51,26 +48,27 @@ public class EmployeeViewEditorHandler implements HttpHandler {
 
         String response = Utils.dynamicNavigator(exchange, "employee/employeeViewEditor.html");
 
+        Employee employeeEdit = Database.getEmployee(Integer.parseInt(query));
         response = response.replace("{{credentials}}",
-                "Editing Employee : " + Database.getEmployee(Integer.parseInt(query)).getFirstName() +
-                        " " + Database.getEmployee(Integer.parseInt(query)).getLastName());
+                "Editing Employee : " + employeeEdit.getFirstName() +
+                        " " + employeeEdit.getLastName());
 
-        //autofill form information
-        response = response.replace("{{employeeFirstName}}",Database.getEmployee(Integer.parseInt(query)).getFirstName());
-        response = response.replace("{{employeeLastName}}",Database.getEmployee(Integer.parseInt(query)).getLastName());
-        response = response.replace("{{jobTitle}}",Database.getEmployee(Integer.parseInt(query)).getJobTitle());
-        response = response.replace("{{phoneNumber}}",Database.getEmployee(Integer.parseInt(query)).getPhoneNumber());
-        response = response.replace("{{emailAddress}}",Database.getEmployee(Integer.parseInt(query)).getEmailAddress());
-        response = response.replace("{{accessLevel}}",Database.getEmployee(Integer.parseInt(query)).getAccessLevel());
-
+        // autofill form information
+        response = response.replace("{{employeeFirstName}}", employeeEdit.getFirstName());
+        response = response.replace("{{employeeLastName}}", employeeEdit.getLastName());
+        response = response.replace("{{jobTitle}}", employeeEdit.getJobTitle());
+        response = response.replace("{{phoneNumber}}", employeeEdit.getPhoneNumber());
+        response = response.replace("{{emailAddress}}", employeeEdit.getEmailAddress());
+        response = response.replace("{{accessLevel}}", employeeEdit.getAccessLevel());
 
         String supervisorOptions = "";
         for (Employee m : Database.getAllSupervisors()) {
             String selected = "";
 
-            if(m.getEmployeeId() == Database.getEmployee(Integer.parseInt(query)).getSupervisorId())
+            if (m.getEmployeeId() == employeeEdit.getSupervisorId())
                 selected = " selected";
-            supervisorOptions += String.format("<option value=%d %s> %s %s</option>", m.getEmployeeId(), selected, m.getFirstName(), m.getLastName());
+            supervisorOptions += String.format("<option value=%d %s> %s %s</option>", m.getEmployeeId(), selected,
+                    m.getFirstName(), m.getLastName());
         }
 
         response = response.replace("{{supervisorInfo}}", supervisorOptions);
