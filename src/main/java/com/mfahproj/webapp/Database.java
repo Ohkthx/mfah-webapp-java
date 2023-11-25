@@ -108,15 +108,12 @@ public class Database {
         try {
             // Connect to the database
             conn = Database.connect();
-            for (Employee n : Database.getAllEmployees()) {
-                if (n.getSupervisorId() == entityId) {
-                    String sql = String.format("UPDATE %s SET %s = 0 WHERE %s = ?", tableName, field, field, entityId);
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setInt(1, entityId);
-                    pstmt.executeUpdate();
-                }
-            }
-            String sql = String.format("DELETE FROM %s WHERE EmployeeId = ?", tableName, entityId);
+            String sql = String.format("UPDATE %s SET %s = 1 WHERE %s = ?", tableName, field, field, entityId);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, entityId);
+            pstmt.executeUpdate();
+            pstmt.close();
+            sql = String.format("DELETE FROM %s WHERE EmployeeId = ?", tableName, entityId);
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, entityId);
             pstmt.executeUpdate();
