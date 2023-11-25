@@ -2,11 +2,13 @@ package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Exhibition;
+import com.mfahproj.webapp.models.Museum;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -41,6 +43,12 @@ public class ViewExhibitionHandler implements HttpHandler {
 
     // Populates a table with individual exhibition values.
     private static String getExhibitionDetails() {
+        // Map of museums to display in the table.
+        HashMap<Integer, Museum> museums = new HashMap<Integer, Museum>();
+        for (Museum museum : Database.getAllMuseums()) {
+            museums.put(museum.getMuseumId(), museum);
+        }
+
         String s = "";
         for (Exhibition a : Database.getAllExhibitions()) {
             s += "<tr>"
@@ -50,7 +58,7 @@ public class ViewExhibitionHandler implements HttpHandler {
                     + "\n<td>View in edit.</td>"
                     // + String.format("\n<td>Description too long, edit to view.</td>",
                     // a.getDescription())
-                    + String.format("\n<td>%s</td>", Integer.toString(a.getMuseumId()))
+                    + String.format("\n<td>%s</td>", museums.get(a.getMuseumId()).getName())
                     + String.format("\n<td><a href=\"/exhibition/edit?exhibitionId=%s\">Edit</a></td>",
                             a.getExhibitionId())
                     + "</tr>";

@@ -13,6 +13,7 @@ import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Exhibition;
+import com.mfahproj.webapp.models.Museum;
 import com.mfahproj.webapp.models.Employee;
 import com.mysql.cj.util.StringUtils;
 import com.sun.net.httpserver.HttpExchange;
@@ -150,20 +151,32 @@ public class EditExhibitionHandler implements HttpHandler {
     }
 
     // Sets the defaults values for a form.
-    private static String setDefaults(Exhibition artist, String webpage) {
-        if (artist == null) {
+    private static String setDefaults(Exhibition exhibition, String webpage) {
+        if (exhibition == null) {
             // Create a default exhibition with blank values. Credentials will show an
             // error.
-            artist = new Exhibition();
+            exhibition = new Exhibition();
         }
 
         // Replace the placeholder data.
-        webpage = webpage.replace("{{exhibitionId}}", Integer.toString(artist.getExhibitionId()));
-        webpage = webpage.replace("{{title}}", artist.getTitle());
-        webpage = webpage.replace("{{startDate}}", artist.getStartDate().toString());
-        webpage = webpage.replace("{{endDate}}", artist.getEndDate().toString());
-        webpage = webpage.replace("{{description}}", artist.getDescription());
-        return webpage.replace("{{museumId}}", Integer.toString(artist.getMuseumId()));
+        webpage = webpage.replace("{{exhibitionId}}", Integer.toString(exhibition.getExhibitionId()));
+        webpage = webpage.replace("{{title}}", exhibition.getTitle());
+        webpage = webpage.replace("{{startDate}}", exhibition.getStartDate().toString());
+        webpage = webpage.replace("{{endDate}}", exhibition.getEndDate().toString());
+        webpage = webpage.replace("{{description}}", exhibition.getDescription());
+
+        // Drop down for museums to select.
+        String dropdown = "";
+        for (Museum m : Database.getAllMuseums()) {
+            String selected = "";
+            if (m.getMuseumId() == exhibition.getMuseumId()) {
+                selected = "selected ";
+            }
+
+            dropdown += String.format("<option %svalue=%d>%s</option>", selected, m.getMuseumId(), m.getName());
+        }
+        webpage = webpage.replace("{{museumInfo}}", dropdown);
+        return webpage;
     }
 
     // Edits an antifact from the form data provided.
