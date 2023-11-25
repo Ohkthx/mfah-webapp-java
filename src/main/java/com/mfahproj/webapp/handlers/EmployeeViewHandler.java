@@ -53,7 +53,6 @@ public class EmployeeViewHandler implements HttpHandler {
 
     }
 
-    // should add a Database.editEmployee() method here so managers can edit.
 
     // get employee details
     private static String getEmployeeDetails(String session) {
@@ -71,6 +70,7 @@ public class EmployeeViewHandler implements HttpHandler {
             }
 
             // get Employee Supervisor
+            //parse employeeId as a parameter through URL
             Employee supervisor = Database.getEmployee(employeeDetails.getSupervisorId());
             String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());
 
