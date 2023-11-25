@@ -1569,7 +1569,7 @@ public class Database {
             // Prepare a SQL query to check the credentials
             String sql = "INSERT INTO Museum "
                     + "(Name, Address, TotalRevenue, OperationalCost) "
-                    + "VALUES (?, ?, ?, ?)";
+                    + "VALUES (?, ?, 0, 0)";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
