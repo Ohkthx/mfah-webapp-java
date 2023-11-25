@@ -86,8 +86,8 @@ public class RegisterMuseumHandler implements HttpHandler {
 
         obj.setName(form.get("Name"));
         obj.setAddress(form.get("Address"));
-        obj.setTotalRevenue(Integer.parseInt(form.get("TotalRevenue")));
-        obj.setOperationalCost(Integer.parseInt(form.get("OperationalCost")));
+        obj.setTotalRevenue(0);
+        obj.setOperationalCost(0);
 
         return obj;
     }
