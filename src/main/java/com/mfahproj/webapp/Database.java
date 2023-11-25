@@ -100,6 +100,37 @@ public class Database {
         return employee == null ? false : true;
     }
 
+    // Removes an entity from the database.
+    public static boolean deleteEntity(String tableName, String field, int entityId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+
+            String sql = String.format("DELETE FROM %s WHERE %s = ?", tableName, field);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, entityId);
+
+            // Execute the query
+            return pstmt.executeUpdate() != 0 ? true : false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Obtain a user from the database using credentials.
     public static Member getMember(String email, String password) {
         Connection conn = null;

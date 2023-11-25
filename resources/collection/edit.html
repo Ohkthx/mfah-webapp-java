@@ -120,11 +120,11 @@
                 <label for="Description">Description:</label>
                 <textarea id="Description" name="Description" rows="4" cols="64">{{description}}</textarea>
 
-                <label for="LocationId">Location ID:</label>
-                <input type="number" id="LocationId" name="LocationId" value="{{locationId}}">
+                <label for="LocationId">Museum</label>
+                <select name="LocationId" id="LocationId">{{museumInfo}}</select>
 
-                <label for="ExhibitionId">Exhibition ID:</label>
-                <input type="number" id="ExhibitionId" name="ExhibitionId" value="{{exhibitionId}}">
+                <label for="ExhibitionId">Exhibition:</label>
+                <select name="ExhibitionId" id="ExhibitionId">{{exhibitionInfo}}</select>
 
                 <button type="submit">Complete Changes</button>
             </form>

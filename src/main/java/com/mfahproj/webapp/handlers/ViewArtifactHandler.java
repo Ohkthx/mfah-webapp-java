@@ -2,11 +2,13 @@ package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
 import com.mfahproj.webapp.Utils;
 import com.mfahproj.webapp.models.Artifact;
+import com.mfahproj.webapp.models.Artist;
 import com.mfahproj.webapp.models.Employee;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -41,11 +43,17 @@ public class ViewArtifactHandler implements HttpHandler {
 
     // Populates a table with individual artifact values.
     private static String getArtifactDetails() {
+        HashMap<Integer, Artist> artists = new HashMap<Integer, Artist>();
+        for (Artist artist : Database.getAllArtists()) {
+            artists.put(artist.getArtistId(), artist);
+        }
+
         String s = "";
         for (Artifact a : Database.getAllArtifacts()) {
+            Artist artist = artists.get(a.getArtistId());
             s += "<tr>"
                     + String.format("\n<td>%s</td>", a.getTitle())
-                    + String.format("\n<td>%s</td>", a.getArtistId())
+                    + String.format("\n<td>%s %s</td>", artist.getFirstName(), artist.getLastName())
                     + String.format("\n<td>%s</td>", a.getDate().toString())
                     + String.format("\n<td>%s</td>", a.getPlace())
                     + String.format("\n<td>%s</td>", a.getMedium())
