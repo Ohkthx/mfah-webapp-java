@@ -2,6 +2,7 @@ package com.mfahproj.webapp.handlers;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import com.mfahproj.webapp.Database;
 import com.mfahproj.webapp.Session;
@@ -53,37 +54,32 @@ public class EmployeeViewHandler implements HttpHandler {
 
     }
 
-
     // get employee details
     private static String getEmployeeDetails(String session) {
+        // Map of supervisors to display in the table.
+        HashMap<Integer, Employee> supervisors = new HashMap<Integer, Employee>();
+        for (Employee supervisor : Database.getAllSupervisors()) {
+            supervisors.put(supervisor.getEmployeeId(), supervisor);
+        }
 
         String s = "";
-        for (int i = 1; i <= Database.getMaxEmployeeID(); i++) {
-            Employee employeeDetails;
-            try {
-                employeeDetails = Database.getEmployee(i);
-                if (employeeDetails == null) {
-                    throw new Exception();
-                }
-            } catch (Exception e) {
-                continue;
-            }
-
+        for (Employee e : Database.getAllEmployees()) {
             // get Employee Supervisor
-            //parse employeeId as a parameter through URL
-            Employee supervisor = Database.getEmployee(employeeDetails.getSupervisorId());
+            // parse employeeId as a parameter through URL
+            Employee supervisor = supervisors.get(e.getSupervisorId());
             String supName = String.format("%s %s", supervisor.getFirstName(), supervisor.getLastName());
 
             s += "<tr>"
-                    + String.format("\t<td>%s</td>", employeeDetails.getFirstName())
-                    + String.format("\t<td>%s</td>", employeeDetails.getLastName())
-                    + String.format("\t<td>%s</td>", employeeDetails.getJobTitle())
-                    + String.format("\t<td>%s</td>", employeeDetails.getPhoneNumber())
-                    + String.format("\t<td>%s</td>", employeeDetails.getEmailAddress())
-                    + String.format("\t<td>%s</td>", employeeDetails.getAccessLevel())
+                    + String.format("\t<td>%s</td>", e.getFirstName())
+                    + String.format("\t<td>%s</td>", e.getLastName())
+                    + String.format("\t<td>%s</td>", e.getJobTitle())
+                    + String.format("\t<td>%s</td>", e.getPhoneNumber())
+                    + String.format("\t<td>%s</td>", e.getEmailAddress())
+                    + String.format("\t<td>%s</td>", e.getAccessLevel())
                     + String.format("\t<td>%s</td>", supName)
-                    + String.format("\t<td>%s</td>", employeeDetails.getLastLogin())
-                    + String.format("\t<td><a href=\"/employee/employeeViewEditor?employeeId=%s\">Edit</a></td>", i)
+                    + String.format("\t<td>%s</td>", e.getLastLogin())
+                    + String.format("\t<td><a href=\"/employee/employeeViewEditor?employeeId=%s\">Edit</a></td>",
+                            e.getEmployeeId())
                     + "</tr>";
         }
         return s;
