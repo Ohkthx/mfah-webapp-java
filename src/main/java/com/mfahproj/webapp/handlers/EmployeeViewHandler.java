@@ -33,7 +33,7 @@ public class EmployeeViewHandler implements HttpHandler {
             return;
         }
 
-        if (!employee.getAccessLevel().equalsIgnoreCase("MANAGER")) {
+        if (employee.getAccessLevel().equalsIgnoreCase("NORMAL")) {
             exchange.getResponseHeaders().add("Location", "/accessDeny");
             exchange.sendResponseHeaders(302, -1);
             return;

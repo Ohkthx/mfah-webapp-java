@@ -100,6 +100,47 @@ public class Database {
         return employee == null ? false : true;
     }
 
+    public static boolean deleteEmployee(String tableName, String field, int entityId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Connect to the database
+            conn = Database.connect();
+            for(Employee n : Database.getAllEmployees())
+            {
+                if(n.getSupervisorId() ==  entityId) {
+                    String sql = String.format("UPDATE %s SET %s = 0 WHERE %s = ?", tableName, field, field , entityId);
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setInt(1, entityId);
+                    pstmt.executeUpdate();
+                }
+            }
+            String sql = String.format("DELETE FROM %s WHERE EmployeeId = ?", tableName, entityId);
+            System.out.println(sql);
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, entityId);
+            pstmt.executeUpdate();
+
+            // Execute the query
+            return pstmt.executeUpdate() != 0 ? true : false;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Removes an entity from the database.
     public static boolean deleteEntity(String tableName, String field, int entityId) {
         Connection conn = null;
@@ -518,6 +559,59 @@ public class Database {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static List<Employee> getAllEmployees() {
+        List<Employee> employees = new Vector<Employee>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet results = null;
+
+        try {
+            // Connect to the database.
+            conn = Database.connect();
+
+            // Execute the query.
+            pstmt = conn.prepareStatement("SELECT * FROM Employee;");
+            results = pstmt.executeQuery();
+
+            // Create the list of notifications.
+            while (results.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmployeeId(results.getInt("EmployeeId"));
+                employee.setFirstName(results.getString("FirstName"));
+                employee.setLastName(results.getString("LastName"));
+                employee.setJobTitle(results.getString("JobTitle"));
+                employee.setPhoneNumber(results.getString("PhoneNumber"));
+                employee.setEmailAddress(results.getString("EmailAddress"));
+                employee.setPassword(results.getString("Password"));
+                employee.setSalary(results.getDouble("Salary"));
+                employee.setMuseumId(results.getInt("MuseumId"));
+                employee.setSupervisorId(results.getInt("SupervisorId"));
+                employee.setAccessLevel(results.getString("AccessLevel"));
+                employee.setLastLogin(results.getDate("LastLogin"));
+
+                employees.add(employee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Cleanup all of the connections and resources.
+            try {
+                if (results != null)
+                    results.close();
+                if (pstmt != null)
+                    pstmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return employees;
     }
 
     public static List<Employee> getAllSupervisors() {
