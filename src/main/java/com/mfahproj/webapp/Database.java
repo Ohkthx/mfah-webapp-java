@@ -108,17 +108,15 @@ public class Database {
         try {
             // Connect to the database
             conn = Database.connect();
-            for(Employee n : Database.getAllEmployees())
-            {
-                if(n.getSupervisorId() ==  entityId) {
-                    String sql = String.format("UPDATE %s SET %s = 0 WHERE %s = ?", tableName, field, field , entityId);
+            for (Employee n : Database.getAllEmployees()) {
+                if (n.getSupervisorId() == entityId) {
+                    String sql = String.format("UPDATE %s SET %s = 0 WHERE %s = ?", tableName, field, field, entityId);
                     pstmt = conn.prepareStatement(sql);
                     pstmt.setInt(1, entityId);
                     pstmt.executeUpdate();
                 }
             }
             String sql = String.format("DELETE FROM %s WHERE EmployeeId = ?", tableName, entityId);
-            System.out.println(sql);
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, entityId);
             pstmt.executeUpdate();
@@ -615,59 +613,6 @@ public class Database {
         }
     }
 
-    public static List<Employee> getAllEmployees() {
-        List<Employee> employees = new Vector<Employee>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet results = null;
-
-        try {
-            // Connect to the database.
-            conn = Database.connect();
-
-            // Execute the query.
-            pstmt = conn.prepareStatement("SELECT * FROM Employee;");
-            results = pstmt.executeQuery();
-
-            // Create the list of notifications.
-            while (results.next()) {
-                Employee employee = new Employee();
-
-                employee.setEmployeeId(results.getInt("EmployeeId"));
-                employee.setFirstName(results.getString("FirstName"));
-                employee.setLastName(results.getString("LastName"));
-                employee.setJobTitle(results.getString("JobTitle"));
-                employee.setPhoneNumber(results.getString("PhoneNumber"));
-                employee.setEmailAddress(results.getString("EmailAddress"));
-                employee.setPassword(results.getString("Password"));
-                employee.setSalary(results.getDouble("Salary"));
-                employee.setMuseumId(results.getInt("MuseumId"));
-                employee.setSupervisorId(results.getInt("SupervisorId"));
-                employee.setAccessLevel(results.getString("AccessLevel"));
-                employee.setLastLogin(results.getDate("LastLogin"));
-
-                employees.add(employee);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            // Cleanup all of the connections and resources.
-            try {
-                if (results != null)
-                    results.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return employees;
-    }
-
     public static List<Employee> getAllSupervisors() {
         List<Employee> employees = new Vector<Employee>();
         Connection conn = null;
@@ -685,7 +630,6 @@ public class Database {
             // Create the list of notifications.
             while (results.next()) {
                 Employee employee = new Employee();
-                System.out.printf("Supervisors: %d\n", employees.size());
                 employee.setEmployeeId(results.getInt("EmployeeId"));
                 employee.setFirstName(results.getString("FirstName"));
                 employee.setLastName(results.getString("LastName"));

@@ -138,9 +138,8 @@ public class EmployeeViewEditorHandler implements HttpHandler {
     // Edits an employee from the form data provided.
     private static Employee editEmployee(Employee employee, Map<String, String> form) {
 
-        if(form.get("deleteEmployee").equals("yes"))
-        {
-            Database.deleteEmployee("employee" , "SupervisorId" , employee.getEmployeeId());
+        if (form.get("deleteEmployee").equals("yes")) {
+            Database.deleteEmployee("Employee", "SupervisorId", employee.getEmployeeId());
         }
 
         if (!StringUtils.isNullOrEmpty(form.get("firstName"))) {
