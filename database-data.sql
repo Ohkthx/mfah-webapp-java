@@ -53,6 +53,9 @@ VALUES ("Victoria", "Preston", "REGULAR", CURDATE() + INTERVAL 1 YEAR, CURDATE()
 -- Employees
 
 INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
+VALUES ("ADMIN", "ADMIN", "ADMIN", "000-000-0000", "admin@mfah.org", "password", 0, 1, NULL, "ADMIN", CURRENT_TIMESTAMP());
+
+INSERT INTO Employee (FirstName, LastName, JobTitle, PhoneNumber, EmailAddress, Password, Salary, MuseumId, SupervisorId, AccessLevel, LastLogin)
 VALUES ("Gary", "Tinterow", "Director", "713-777-7777", "director@mfah.org", "PartyChick5!", 250000, 1, NULL, "MANAGER", CURRENT_TIMESTAMP());
 
 UPDATE Employee SET SupervisorId = 1 WHERE EmployeeId = 1;
