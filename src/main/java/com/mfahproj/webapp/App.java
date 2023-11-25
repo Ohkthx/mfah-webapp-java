@@ -37,7 +37,7 @@ public class App {
             App.setRoutes(httpsServer, callback);
             httpsServer.setExecutor(Executors.newCachedThreadPool());
             httpsServer.start();
-            System.out.printf("Started HTTPS server on port %d.\n", config.webappHttpsPort);
+            System.out.printf("Started HTTPS server: https://localhost:%d\n", config.webappHttpsPort);
         }
 
         // Create HTTP server and set routes.
@@ -45,7 +45,7 @@ public class App {
         App.setRoutes(httpServer, callback);
         httpServer.setExecutor(Executors.newCachedThreadPool());
         httpServer.start();
-        System.out.printf("Started HTTP server on port %d.\n", config.webappHttpPort);
+        System.out.printf("Started HTTP server: http://localhost:%d\n", config.webappHttpPort);
     }
 
     // Assign routes to the server.
@@ -90,17 +90,13 @@ public class App {
         server.createContext("/artifactOwner/edit", new MiddlewareHandler(new EditArtifactOwnerHandler(), callback));
         server.createContext("/exhibition/edit", new MiddlewareHandler(new EditExhibitionHandler(), callback));
 
-        // Reports
+        // Reports / Queries
         server.createContext("/employee/report", new MiddlewareHandler(new ReportHandler(), callback));
         server.createContext("/artistwork", new MiddlewareHandler(new ArtistWorkHandler(), callback));
         server.createContext("/revenue", new MiddlewareHandler(new RevenueHandler(), callback));
         server.createContext("/exhibition-collection",
                 new MiddlewareHandler(new ExhibitionCollectionHandler(), callback));
-
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!
         server.createContext("/demographics", new MiddlewareHandler(new DemographicsHandler(), callback));
-
 
         // Views
         server.createContext("/artifact/view", new MiddlewareHandler(new ViewArtifactHandler(), callback));

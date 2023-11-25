@@ -2237,38 +2237,36 @@ public class Database {
         return list;
     }
 
-
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static List<MemberDemographics> getMemberDemographics() {
         List<MemberDemographics> list = new ArrayList<>();
 
-        try(Connection conn = Database.connect();
-            PreparedStatement pstmt = conn.prepareStatement(
-                "SELECT" +
-                " SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) AS Children," +
-                " SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) AS Teens,"+
-                " SUM(CASE WHEN age BETWEEN 20 AND 54 THEN 1 ELSE 0 END) AS Adults,"+
-                " SUM(CASE WHEN age >= 55 THEN 1 ELSE 0 END) AS Seniors"+
-                " FROM ("+
-                    " SELECT"+
-                        " DATEDIFF(CURDATE(), BirthDate) / 365 AS age"+
-                    " FROM"+
-                        " Members"+
-                ") AS age_calculated;")) {
+        try (Connection conn = Database.connect();
+                PreparedStatement pstmt = conn.prepareStatement(
+                        "SELECT" +
+                                " SUM(CASE WHEN age <= 12 THEN 1 ELSE 0 END) AS Children," +
+                                " SUM(CASE WHEN age BETWEEN 13 AND 19 THEN 1 ELSE 0 END) AS Teens," +
+                                " SUM(CASE WHEN age BETWEEN 20 AND 54 THEN 1 ELSE 0 END) AS Adults," +
+                                " SUM(CASE WHEN age >= 55 THEN 1 ELSE 0 END) AS Seniors" +
+                                " FROM (" +
+                                " SELECT" +
+                                " DATEDIFF(CURDATE(), BirthDate) / 365 AS age" +
+                                " FROM" +
+                                " Members" +
+                                ") AS age_calculated;")) {
 
-        ResultSet results = pstmt.executeQuery();
-        
-        while (results.next()) {
-            list.add(new MemberDemographics(results.getInt("Children"), results.getInt("Teens"), 
-            results.getInt("Adults"), results.getInt("Seniors")));
-        }
+            ResultSet results = pstmt.executeQuery();
+
+            while (results.next()) {
+                list.add(new MemberDemographics(results.getInt("Children"), results.getInt("Teens"),
+                        results.getInt("Adults"), results.getInt("Seniors")));
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
     }
-
 
     // Museun Revenue Report
     public static List<MuseumRevenueReport> getMuseumRevenueReport(String query) {

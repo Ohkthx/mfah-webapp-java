@@ -11,9 +11,8 @@ import com.mfahproj.webapp.Utils;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class DemographicsHandler implements HttpHandler{
-@Override
-    
+public class DemographicsHandler implements HttpHandler {
+    @Override
     public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
         String sessionId = Session.extractSessionId(exchange);
         Member member = Session.getMemberSession(sessionId);

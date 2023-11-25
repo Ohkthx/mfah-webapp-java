@@ -33,31 +33,28 @@ The following are credentials for logging in for testing purposes.
     - [X] Employee login.
         - [X] Access levels with different views.
 - [X] Access Levels
-    - Director can only modify other employees.
+    - (Employee: Director ("MANAGER" Role)) Modify other employees.
     - Members of the museum cannot access employee items.
 - [X] Data entry forms - to add new data, modify existing data, and 'delete' data.
-    - [X] Register
-        - [X] Members
-        - [X] Employees
+    - [X] Registeration of new entities (Members, Employees, Museum Date: Employee req.)
     - [X] Login portal 
-        - [X] Members
-        - [X] Employees
-    - [X] Profile edits
-        - [X] Members
-        - [X] Employees 
-    - [X] Updating last login times.
-        - [X] Members
-        - [X] Employees 
+    - [X] Profile edits (Members and Employees while logged in)
+    - [X] Updating last login times upon accessing new pages.
     - [X] Reports.
 - [X] Triggers - At least 2.
-    - [X] Notifications for membership expiration.
-    - [X] Notifications for senior citizen membership upgrade.
+    - [X] (Member) Notifications for membership expiration.
+    - [X] (Member) Notifications for senior citizen membership upgrade.
 - [X] Data queries - At least 3.
     - [X] Obtaining members / employees credentials for logging in.
     - [X] Obtaining notifications for members.
     - [X] Creating pseudo data for Tickets, Transactions, and Artifacts.
     - [X] Viewing, editing, deleting all entities.
-- [X] Data reports - At least 3.
+    - [X] From logged in, homepage:
+        - [X] Artist Work
+        - [X] Revenue
+        - [X] Exhibition Collections
+        - [X] Demographics
+- [X] Data reports - At least 3. Requires employee to be logged in.
     - [X] Generated when requested.
     - [X] Required SQL queries in the background.
         - [X] Time Interval required.

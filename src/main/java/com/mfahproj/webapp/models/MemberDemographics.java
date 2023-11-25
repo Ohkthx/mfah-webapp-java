@@ -7,10 +7,10 @@ public class MemberDemographics {
     private int seniors;
 
     public MemberDemographics() {
-        children =0;
-        teens =0;
-        adults =0;
-        seniors =0;
+        children = 0;
+        teens = 0;
+        adults = 0;
+        seniors = 0;
     }
 
     public MemberDemographics(int ch, int te, int ad, int se) {
@@ -23,6 +23,7 @@ public class MemberDemographics {
     public int getChildren() {
         return children;
     }
+
     public void setChildren(int children) {
         this.children = children;
     }
@@ -30,6 +31,7 @@ public class MemberDemographics {
     public int getTeens() {
         return teens;
     }
+
     public void setTeens(int teens) {
         this.teens = teens;
     }
@@ -37,6 +39,7 @@ public class MemberDemographics {
     public int getAdults() {
         return adults;
     }
+
     public void setAdults(int adults) {
         this.adults = adults;
     }
@@ -44,6 +47,7 @@ public class MemberDemographics {
     public int getSeniors() {
         return seniors;
     }
+
     public void setSeniors(int seniors) {
         this.seniors = seniors;
     }
@@ -51,10 +55,10 @@ public class MemberDemographics {
     @Override
     public String toString() {
         return "MemberDemographicsReport{" +
-        "children=" + children +
-        ", teens=" + teens +
-        ", adults=" + adults +
-        ", seniors=" + seniors + "}";
+                "children=" + children +
+                ", teens=" + teens +
+                ", adults=" + adults +
+                ", seniors=" + seniors + "}";
     }
 
 }

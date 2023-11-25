@@ -175,14 +175,11 @@ public class ReportHandler implements HttpHandler {
 
         }
 
-
-
         exchange.sendResponseHeaders(200, response.getBytes().length);
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(response.getBytes());
         }
     }
-
 
     // Report handler
     public static String getArtifactInventoryReport(String query) {
