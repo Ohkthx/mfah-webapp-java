@@ -1574,8 +1574,6 @@ public class Database {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, obj.getName());
             pstmt.setString(2, obj.getAddress());
-            pstmt.setDouble(3, obj.getTotalRevenue());
-            pstmt.setDouble(4, obj.getOperationalCost());
 
             // Execute the query
             pstmt.executeUpdate();
