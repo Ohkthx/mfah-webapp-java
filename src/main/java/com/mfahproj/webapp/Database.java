@@ -2272,29 +2272,6 @@ public class Database {
         return list;
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public static List<MemberDemographicsReport> getMemberDemographicsReport(String query) {
-        List<MemberDemographicsReport> list = new ArrayList<>();
-        try (
-            Connection conn = Database.connect();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery()
-        ) {
-            while (rs.next()) {
-                int children = rs.getInt("children");
-                int teens = rs.getInt("teens");
-                int adults = rs.getInt("adults");
-                int seniors = rs.getInt("seniors");
-
-                list.add(new MemberDemographicsReport(children, teens, adults, seniors));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-
 
     // Museun Revenue Report
     public static List<MuseumRevenueReport> getMuseumRevenueReport(String query) {
