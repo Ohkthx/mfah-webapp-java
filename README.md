@@ -15,11 +15,11 @@ Current features:
 
 ## Running the application
 
-**Requirements**:
+__**Requirements**__
 - Maven installed, builds the application.
 - Java installed, runs the HTTP server.
 
-**Obtaining the repository**
+__**Obtaining the repository**__
 - Clone the repository and change into its directory.
 
 ```
@@ -27,7 +27,14 @@ git clone https://github.com/Ohkthx/mfah-webapp-java
 cd mfah-webapp-java
 ```
 
-**Compiling and Running**
+__**Configuration**__
+
+Environment variables used to start the HTTP server and give access to database located in `app.config`. Copy `app.config-sample` to `app.config` and make your edits. This needs to be updated to fit your environment. Be sure to load the database with the following two sources. Be sure to report any changes regarding the schema.
+
+- [database_template.sql](https://github.com/Ohkthx/mfah-webapp-java/blob/main/database_template.sql), updated schema for the database.
+- [database-data.sql](https://github.com/Ohkthx/mfah-webapp-java/blob/main/database-data.sql), basic data to make login portal functional. View in my depth to see login credentials.
+
+__**Compiling and Running**__
 - Windows: Execute `runme.bat`
 - Linux / MacOS: Execute `runme.sh`
 
@@ -64,7 +71,7 @@ The following are credentials for logging in for testing purposes, there are add
 
 ## Queries / Reports
 
-**Queries**
+__**Queries**__
 - Member / Employee authentication (username / password checking)
 - Member / Employee profile view of personal information
 - Member: Checking notifications
@@ -75,7 +82,7 @@ The following are credentials for logging in for testing purposes, there are add
     - Exhibition Collections, exhibitions and their collections assigned
     - Demographics, amount of members that fit in the following categories 'child', 'teen', 'adult', 'senior'
 
-**Reports**
+__**Reports**__
 - Exhibition Schedule Report (Requires Employee)
     - Utilizes Exhibition, Collection, and Transaction tables.
     - Shows the exhibitions and the transactions associated with them.
@@ -119,13 +126,6 @@ The following are credentials for logging in for testing purposes, there are add
     - [X] Required SQL queries in the background.
         - [X] Time Interval required.
         - [X] Needs to come from more than one table.
-
-## Configuration
-
-Environment variables used to start the HTTP server and give access to database located in `app.config`. Copy `app.config-sample` to `app.config` and make your edits. This needs to be updated to fit your environment. Be sure to load the database with the following two sources. Be sure to report any changes regarding the schema.
-
-- [database_template.sql](https://github.com/Ohkthx/mfah-webapp-java/blob/main/database_template.sql), updated schema for the database.
-- [database-data.sql](https://github.com/Ohkthx/mfah-webapp-java/blob/main/database-data.sql), basic data to make login portal functional. View in my depth to see login credentials.
 
 ## Building
 
