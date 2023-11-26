@@ -13,18 +13,78 @@ Current features:
 - Artifact creation, needs to be added to employee role.
 - Generate reports from employee homepage using directors account.
 
-## Testing Logins
+## Running the application
 
-The following are credentials for logging in for testing purposes.
+**Requirements**:
+- Maven installed, builds the application.
+- Java installed, runs the HTTP server.
 
-|Email|Password|Type|Access/Membership|
-|-|-|-|-|
-|director@mfah.org|director|EMPLOYEE|MANAGER|
-|supervisor@mfah.org|password1234|EMPLOYEE|SUPERVISOR|
-|normal@mfah.org|password1234|EMPLOYEE|NORMAL|
-|employee@mfah.org|employee|EMPLOYEE|NORMAL|
-|regular@test.com|regular|MEMBER|REGULAR|
-|member@test.com|member|MEMBER|SEASONAL|
+**Obtaining the repository**
+- Clone the repository and change into its directory.
+
+```
+git clone https://github.com/Ohkthx/mfah-webapp-java
+cd mfah-webapp-java
+```
+
+**Compiling and Running**
+- Windows: Execute `runme.bat`
+- Linux / MacOS: Execute `runme.sh`
+
+## Types of date that can be added, modified, and edited
+
+|Entity|Create|View|Edit|Delete|Notes|
+|-|-|-|-|-|-|
+|Member|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Login as the member and modify profile|
+|Employee|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Login as the employee and modify profile|
+|Employee|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Login as Manager (director) to manage|
+|Aritfact|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Requires employee (employee)|
+|Aritfact Owner|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+|Aritist|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+|Program|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+|Collection|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+|Exhibition|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+|Museum|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:||Requires Employee (employee)|
+
+## User Roles
+
+The following are credentials for logging in for testing purposes, there are additional users.
+
+|Email|Password|Type|Access/Membership|Notes|
+|-|-|-|-|-|
+|director@mfah.org|director|EMPLOYEE|MANAGER|Can do everything employee can, but also edit employees.|
+|employee@mfah.org|employee|EMPLOYEE|NORMAL|Normal exmployee view, can edit aspects of the museum.|
+|member@test.com|member|MEMBER|SEASONAL|Will demonstrate 2 triggers (Notifcations) after logging in.|
+
+## Semantic Constraints / Triggers
+- Members who have 1 week, 1 day, or day-of until expiration are flagged and a notification is created.
+    - Member receives a notification each time they log-in explaining one of the three expiration periods.
+- Members are upgraded to 'SENIOR' membership when their age exceeds 55 years and are not currently a SENIOR. A notification is generated when this occurs.
+    - Member receives a notification when they log-in only a single time explaining their membership change.
+
+## Queries / Reports
+
+**Queries**
+- Member / Employee authentication (username / password checking)
+- Member / Employee profile view of personal information
+- Member: Checking notifications
+- Employee: Viewing entities to edit
+- From homepage (logged in)
+    - Artist Artwork, Artifacts and their Artists
+    - Revenue, museum revenue
+    - Exhibition Collections, exhibitions and their collections assigned
+    - Demographics, amount of members that fit in the following categories 'child', 'teen', 'adult', 'senior'
+
+**Reports**
+- Exhibition Schedule Report (Requires Employee)
+    - Utilizes Exhibition, Collection, and Transaction tables.
+    - Shows the exhibitions and the transactions associated with them.
+- Artifact Inventory Report (Requires Employee)
+    - Utilizes Artifact and Collection tables.
+    - Shows Artifacts and the Collections they currently belong to.
+- Museum Revenue Report (Requires Employee)
+    - Utilizes Museum and Transaction tables.
+    - Shows the Total Revenue the Musueum Generated from transactions.
 
 ## Checkpoint Requirements
 

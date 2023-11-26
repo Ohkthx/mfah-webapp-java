@@ -21,7 +21,7 @@ INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthD
 VALUES ("Regular", "Test-Member", "REGULAR", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 20 YEAR, "regular@test.com", "regular", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin) 
-VALUES ("Member", "Test-Member", "SEASONAL", CURDATE() + INTERVAL 25 DAY, CURDATE() - INTERVAL 25 YEAR, "member@test.com", "member", CURRENT_TIMESTAMP);
+VALUES ("Member", "Test-Member", "SEASONAL", CURDATE() + INTERVAL 5 DAY, CURDATE() - INTERVAL 58 YEAR, "member@test.com", "member", CURRENT_TIMESTAMP);
 
 INSERT INTO Members (FirstName, LastName, MembershipType, ExpirationDate, BirthDate, EmailAddress, Password, LastLogin)
 VALUES ("Spongebob", "Squarepants", "SEASONAL", CURDATE() + INTERVAL 1 MONTH, CURDATE() - INTERVAL 30 YEAR, "spongebob@krustykrab.com", "ilovesquidward", CURRENT_TIMESTAMP);
@@ -208,6 +208,12 @@ VALUES ("European Art", CURDATE(), "The collection of European art comprises imp
 
 INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
 VALUES ("Photography", CURDATE(), "The Museum's photography collection comprises more than 35,000 items spanning the full history of the medium, from invention to present day.", 5, 5);
+
+INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
+VALUES ("American Avant Garde", CURDATE(), "A collection of innovative techniques utlized by American artists from the early 21st century.", 4, 4);
+
+INSERT INTO Collection (Title, Date, Description, MuseumId, ExhibitionId)
+VALUES ("Finger Painting", CURDATE(), "A collection of figerprinting murals and art pieces from vistors of the museum.", 5, 6);
 
 
 -- Programs

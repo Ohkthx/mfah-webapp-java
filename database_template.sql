@@ -163,7 +163,7 @@ BEGIN
     SET age = TIMESTAMPDIFF(YEAR, NEW.BirthDate, CURDATE());
     
     -- Update if age is senior citizen age.
-    IF age >= 55 THEN
+    IF age >= 55 AND NEW.MembershipType != 'SENIOR' THEN
             SET NEW.MembershipType = 'SENIOR';
 
             -- Insert into Notifications table
