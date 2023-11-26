@@ -4,16 +4,6 @@ Java, HTML, and MySQL group project to demonstrate learning requirements for Dat
 
 Objective of this task was to create a database system for the Houston Museum of Fine Arts that manages Members, Employees, Artifacts, Artists, Artist Owners, Transactions, Programs, Collections, Exhibitions, and the Museum itself. Employees have access to modify the Museum's entities directly with different employee access levels give differing access. Members can access their own profiles and edit it. Members are used to demonstrate our database triggers in the form of notifications based on their account status at the time of log-in.
 
-Current features:
-- Login and Registration Portals
-- Members / Employees can edit select profile details.
-- Home screens for Members and Employees.
-- Access controls / unique views depending on Member or Employee.
-- Session timeouts.
-- Generating Pseudo Data for Database population: Tickets, Transactions, and Artifacts.
-- Notifications enabled for Members.
-- Artifact creation, needs to be added to employee role.
-- Generate reports from employee homepage using directors account.
 
 ## Running the application
 
